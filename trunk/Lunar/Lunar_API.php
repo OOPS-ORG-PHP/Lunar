@@ -42,7 +42,7 @@ Class Lunar_API {
 	protected $ddi = array ('쥐', '소', '호랑이', '토끼', '용', '뱀', '말', '양', '원숭이', '닭', '개', '돼지');
 
 	/**#@+
-	 * 입춘 데이터
+	 * 병자년 경인월 신미일 기해시 입춘 데이터
 	 * @var integer
 	 */
 	protected $unityear  = 1996;
@@ -93,12 +93,12 @@ Class Lunar_API {
 	 * 정월 초하루 합삭 시간
 	 * @var integer
 	 */
-	protected $unitmyear = 1996;
+	protected $unitmyear  = 1996;
 	protected $unitmmonth = 2;
-	protected $unitmday = 19;
-	protected $unitmhour = 8;
-	protected $unitmmin = 30;
-	protected $unitmsec = 0;
+	protected $unitmday   = 19;
+	protected $unitmhour  = 8;
+	protected $unitmmin   = 30;
+	protected $unitmsec   = 0;
 	protected $moonlength = 42524;
 	/**#@-*/
 	/**#@-*/
@@ -184,9 +184,23 @@ Class Lunar_API {
 	/**#@-*/
 	// }}}
 
+	// {{{ +-- protected (int) div ($a, $b)
+	/**
+	 * 나누기
+	 *
+	 * @access protected
+	 * @return int
+	 * @param int
+	 * @param int
+	 */
+	protected function div ($a, $b) {
+		return (int) ($a / $b);
+	}
+	// }}}
+
 	// {{{ +-- protected (int) disptimeday ($year, $month, $day)
 	/**
-	 * 1월 1일부터 해당 일자까지의 날자수
+	 * year의 1월 1일부터 해당 일자까지의 날자수
 	 *
 	 * @access public
 	 * @return int 날자수
@@ -319,7 +333,7 @@ Class Lunar_API {
 
 	// {{{ +-- protected (int) getminbytime ($uy, $umm, $ud, $uh, $umin, $y1, $mo1, $d1, $h1, $mm1)
 	/**
-	 * 특점시점에서 특정시점까지의 분
+	 * uy,umm,ud,uh,umin과 y1,mo1,d1,h1,mm1사이의 시간(분)
 	 * 
 	 * @access protected
 	 * @return int 분
@@ -334,24 +348,10 @@ Class Lunar_API {
 	}
 	// }}}
 
-	// {{{ +-- protected (int) div ($a, $b)
-	/**
-	 * 나누기
-	 *
-	 * @access protected
-	 * @return int
-	 * @param int
-	 * @param int
-	 */
-	protected function div ($a, $b) {
-		return (int) ($a / $b);
-	}
-	// }}}
-
 	// {{{ +-- protected (array) getdatebymin ($tmin, $uyear, $umonth, $uday, $uhour, $umin)
 	/**
-	 * 1996년 2월 4일 22시 8분부터 tmin분 떨어진 날자와 시간을
-	 * 구하는 프로시져
+	 * uyear,umonth,uday,uhour,umin으로부터 tmin(분)떨이진 시점의
+	 * 년월일시분(태양력) 구하는 프로시져
 	 *
 	 * @access public
 	 * @return array
@@ -427,8 +427,23 @@ Class Lunar_API {
 
 	// {{{ +-- protected (array) sydtoso24yd ($soloryear, $solormonth, $solorday, $solorhour, $solormin)
 	/**
+	 * 그레고리력의 년월시일분으로 60년의 배수, 세차, 월건(태양력),
+	 * 일진, 시주를 구함
+	 *
 	 * @access public
 	 * @return array
+	 *       <ul>
+	 *           <li>[0] => 60년의 배수
+	 *           <li>[1] => 60간지의 연도 배열 번호
+	 *           <li>[2] => 60간지의 월 배열 번호
+	 *           <li>[3] => 60간지의 일 배열 번호
+	 *           <li>[4] => 60간지의 시 배열 번호
+	 *       </ul>
+	 * @param int
+	 * @param int
+	 * @param int
+	 * @param int
+	 * @param int
 	 */
 	protected function sydtoso24yd ($soloryear, $solormonth, $solorday, $solorhour, $solormin) {
 		$displ2min = $this->getminbytime (
@@ -440,10 +455,13 @@ Class Lunar_API {
 			$solormonth, $solorday
 		);
 
+		// 무인년(1996)입춘시점부터 해당일시까지 경과년수
 		$so24 = $this->div ($displ2min, 525949);
 
 		if ( $displ2min >= 0 )
 			$so24++;
+
+		// 년주 구하기
 		$so24year = ($so24 % 60) * -1;
 		$so24year += 12;
 		if ( $so24year < 0 )
@@ -465,6 +483,7 @@ Class Lunar_API {
 				$so24month = $i;
 		};
 
+		// 월주 구하기
 		$i = $so24month;
 		$t = $so24year % 10 ;
 		$t %= 5 ;
@@ -475,6 +494,7 @@ Class Lunar_API {
 
 		$so24day = $displ2day % 60;
 
+		// 일주 구하기
 		$so24day *= -1;
 		$so24day += 7;
 		if ( $so24day < 0 )
@@ -550,6 +570,9 @@ Class Lunar_API {
 	/**
 	 * 절기 시간 구하기
 	 *
+	 * 그레고리력의 년월일시분이 들어있는 절기의 이름번호,
+	 * 년월일시분을 얻음
+	 *
 	 * @access protected
 	 * @return array
 	 */
@@ -622,6 +645,8 @@ Class Lunar_API {
 
 	// {{{ +-- protected (int) degreelow ($d)
 	/**
+	 * 미지의 각도를 0~360도 이내로 만듬
+	 *
 	 * @access protected
 	 * @return int
 	 * @param int
@@ -644,21 +669,23 @@ Class Lunar_API {
 
 	// {{{ +-- protected (int) moonsundegree ($day)
 	/**
+	 * 태양황력과 달황경의 차이 (1996 기준)
+	 *
 	 * @access protected
 	 * @return int
 	 * @param int
 	 */
 	protected function moonsundegree ($day) {
-		$sl = (float) ($day * 0.98564736 + 278.956807);
-		$smin = 282.869498 + 0.00004708 * $day;
-		$sminangle = 3.14159265358979 * ($sl - $smin) / 180;
-		$sd = 1.919 * sin ($sminangle) + 0.02 * sin (2 * $sminangle);
-		$sreal = $this->degreelow ($sl + $sd);
+		$sl = (float) ($day * 0.98564736 + 278.956807);                // 평균 황경
+		$smin = 282.869498 + 0.00004708 * $day;                        // 근일점 황경
+		$sminangle = 3.14159265358979 * ($sl - $smin) / 180;           // 근점이각
+		$sd = 1.919 * sin ($sminangle) + 0.02 * sin (2 * $sminangle);  // 황경차
+		$sreal = $this->degreelow ($sl + $sd);                         // 진황경
 
-		$ml = 27.836584 + 13.17639648 * $day;
-		$mmin = 280.425774 + 0.11140356 * $day;
-		$mminangle = 3.14159265358979 * ($ml - $mmin) / 180;
-		$msangle = 202.489407 - 0.05295377 * $day;
+		$ml = 27.836584 + 13.17639648 * $day;                          // 평균 황경
+		$mmin = 280.425774 + 0.11140356 * $day;                        // 근지점 황경
+		$mminangle = 3.14159265358979 * ($ml - $mmin) / 180;           // 근점이각
+		$msangle = 202.489407 - 0.05295377 * $day;                     // 교점황경
 		$msdangle = 3.14159265358979 * ($ml - $msangle) / 180;
 		$md = 5.06889 * sin ($mminangle)
 			+ 0.146111 * sin (2 * $mminangle)
@@ -668,8 +695,8 @@ Class Lunar_API {
 			+ 0.048889 * sin ($mminangle - $sminangle)
 			- 0.129722 * sin (2 * $msdangle)
 			- 0.011111 * sin (2 * $msdangle - $mminangle)
-			- 0.012778 * sin (2 * $msdangle + $mminangle);
-		$mreal = $this->degreelow ($ml + $md);
+			- 0.012778 * sin (2 * $msdangle + $mminangle);             // 황경차
+		$mreal = $this->degreelow ($ml + $md);                         // 진황경
 		$re = $this->degreelow ($mreal - $sreal);
 
 		return $re;
@@ -678,6 +705,9 @@ Class Lunar_API {
 
 	// {{{ +-- protected (array) getlunarfirst ($syear, $smonth, $sday)
 	/**
+	 * 그레고리력 년월일이 들어있는 태음월의 시작합삭일지, 망일시,
+	 * 끝합삭일시를 구함
+	 *
 	 * @access protected
 	 * @return array
 	 * @param int 년
@@ -928,6 +958,7 @@ Class Lunar_API {
 			= $this->solartolunar ($outgiyear, $outgimonth, $outgiday);
 
 		if ( $lyear2 == $lyear && $lmonth == $lmonth2 ) {
+			// 평달, 윤달
 			$tmin = -1440 * $lday + 10;
 			list ($syear, $smonth, $sday, $hour, $min)
 				= $this->getdatebymin ($tmin, $outgiyear, $outgimonth, $outgiday, 0, 0);
@@ -943,6 +974,7 @@ Class Lunar_API {
 				}
 			}
 		} else {
+			// ㅈ우기가 두번든 달의 전후
 			list ($lyear2, $lmonth2, $lday2, $lnp, $lnp2)
 				= $this->solartolunar ($year1, $month1, $day1);
 			if ( $lyear2 == $lyear && $lmonth == $lmonth2 ) {
@@ -958,6 +990,8 @@ Class Lunar_API {
 
 	// {{{ +-- protected (int) getweekday ($syear, $smonth, $sday)
 	/**
+	 * 그레고리력 날자를 요일의 배열 번호로 변환
+	 *
 	 * @access protected
 	 * @return int
 	 * @param int 년
@@ -989,7 +1023,7 @@ Class Lunar_API {
 
 	// {{{ +-- protected (int) get28sday ($syear, $smonth, $sday)
 	/**
-	 * 특정일의 28수를 구한다.
+	 * 그레고리력의 날자에 대한 28수를 구함
 	 *
 	 * @access protected
 	 * @return int
