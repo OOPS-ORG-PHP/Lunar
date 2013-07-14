@@ -12,7 +12,7 @@
  * @package     Lunar
  * @author      JoungKyun.Kim <http://oops.org>
  * @copyright   (c) 1997-2013 OOPS.org
- * @license     http://afnmp3.homeip.net:81/~kohyc/calendar/index.cgi
+ * @license     http://afnmp3.homeip.net/~kohyc/calendar/index.cgi
  * @version     SVN: $Id$
  * @link        http://pear.oops.org/package/Lunar
  * @since       File available since release 0.0.1
