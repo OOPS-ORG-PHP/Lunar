@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package version="2.0" packagerversion="1.7.2" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
+	<!-- $Id$ -->
+	<name>Lunar</name>
+	<channel>pear.oops.org</channel>
+	<summary>Solar/Lunar Convert API</summary>
+	<description>Solar/Lunar convert API. Original algorithm is by 고영창 (http://afnmp3.homeip.net/~kohyc/calendar/)</description>
+	<lead>
+		<name>JoungKyun.Kim</name>
+		<user>joungkyun</user>
+		<email>joungkyun@gmail.com</email>
+		<active>yes</active>
+	</lead>
+	<date>2013-07-14</date>
+	<time>18:19:32</time>
+	<version>
+		<release>1.0.0</release>
+		<api>1.0.0</api>
+	</version>
+	<stability>
+		<release>stable</release>
+		<api>stable</api>
+	</stability>
+	<license uri="http://www.opensource.org/licenses/bsd-license.php">BSD</license>
+	<notes>* 1.0.0 release
+</notes>
+	<contents>
+		<dir name="/">
+			<file role="php" md5sum="d8b2e47d3fe5672a8ec9e38b3cc03d02" name="Lunar/Lunar_API.php" />
+			<file role="php" md5sum="b3c1d227d5e291ee3c6f2d28230fab70" name="Lunar.php" />
+		</dir>
+	</contents>
+	<dependencies>
+		<required>
+			<php>
+				<min>5.1.0</min>
+			</php>
+			<pearinstaller>
+				<min>1.4.3</min>
+			</pearinstaller>
+		</required>
+	</dependencies>
+	<phprelease />
+	<changelog>
+		<release>
+			<version>
+				<release>1.0.0</release>
+				<api>1.0.0</api>
+			</version>
+			<stability>
+				<release>stable</release>
+				<api>stable</api>
+			</stability>
+			<date>2013-07-14</date>
+			<license uri="http://www.opensource.org/licenses/bsd-license.php">BSD</license>
+			<notes>* release 1.0.0
+</notes>
+		</release>
+	</changelog>
+</package>
