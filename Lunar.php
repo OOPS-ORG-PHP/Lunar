@@ -123,6 +123,25 @@ Class Lunar extends Lunar_API {
 	}
 	// }}}
 
+	// {{{ +-- public (bool) is_yoon ($y)
+	/**
+	 * 윤년 체크
+	 *
+	 * @access public
+	 * @return bool
+	 * @param int 년도
+	 */
+	public function is_yoon ($y) {
+		if ( ! ($y % 400) )
+			return true;
+
+		if ( ! ($y % 4 ) && ($y % 100) )
+			return true;
+
+		return false;
+	}
+	// }}}
+
 	// {{{ +-- public (object) tolunar ($v = null)
 	/**
 	 * 양력 날자를 음력으로 변환
@@ -408,6 +427,23 @@ Class Lunar extends Lunar_API {
 		);
 	}
 	// }}}
+
+	// {{{ +-- public (string) ganji_ref ($no, $mode = false)
+	/**
+	 * @access public
+	 * @return string
+	 * @param int ganji index number
+	 * @param bool 출력 모드 (false => 한글, true => 한자)
+	 */
+	public function ganji_ref ($no, $mode = false) {
+		if ( $no > 59 )
+			$no -= 60;
+
+		$m = $mode ? 'hganji' : 'ganji';
+		return $this->{$m}[$no];
+	}
+	// }}}
+
 }
 
 /*
