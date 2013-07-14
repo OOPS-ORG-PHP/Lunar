@@ -109,6 +109,7 @@ Class Lunar extends Lunar_API {
 	}
 	// }}}
 
+	// {{{ +-- public (object) tolunar ($v = null)
 	/**
 	 * 양력 날자를 음력으로 변환
 	 *
@@ -171,7 +172,9 @@ Class Lunar extends Lunar_API {
 			'ddi'        => $this->ddi[$k2]
 		);
 	}
+	// }}}
 
+	// {{{ +-- public (object) tosolar ($v = null, $yoon = false)
 	/**
 	 * 음력 날자를 양력으로 변환
 	 *
@@ -231,7 +234,9 @@ Class Lunar extends Lunar_API {
 			'ddi'        => $this->ddi[$k2]
 		);
 	}
+	// }}}
 
+	// {{{ +-- public (object) dayfortune ($v = null)
 	/**
 	 * 일진 데이터를 구한다.
 	 *
@@ -260,7 +265,9 @@ Class Lunar extends Lunar_API {
 			'hday' => $this->hganji[$day],
 		);
 	}
+	// }}}
 
+	// {{{ +-- public (object) s28day ($v = null)
 	/**
 	 * 특정일의 28수를 구한다.
 	 *
@@ -293,6 +300,7 @@ Class Lunar extends Lunar_API {
 			'h' => $this->s28days[$r]
 		);
 	}
+	// }}}
 
 	// {{{ +-- public (array) seasondate ($v = null)
 	/**
@@ -382,11 +390,13 @@ Class Lunar extends Lunar_API {
 	// }}}
 }
 
-#$m = new Lunar;
-
-#$r = $m->tolunar ($argv[1]);
-#print_r ($r);
-#$m->tosolar ($argv[1]);
-
-#print_r ($m->dayfortune ($argv[1]));
+/*
+ * Local variables:
+ * tab-width: 4
+ * c-basic-offset: 4
+ * End:
+ * vim: set filetype=php noet sw=4 ts=4 fdm=marker:
+ * vim600: noet sw=4 ts=4 fdm=marker
+ * vim<600: noet sw=4 ts=4
+ */
 ?>
