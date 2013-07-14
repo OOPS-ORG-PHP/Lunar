@@ -47,7 +47,7 @@ echo <<<EOF
 연     {$z->year}
 월     {$z->month} ($bmon$yoon) {$tune->month}({$tune->hmonth})월
 일     {$z->day} {$tune->day}({$tune->hday})일
-간지   {$z->ganji} ({$z->hganji})
+간지   {$z->ganji} ({$z->hganji}) ({$tune->year})
 띠     {$z->ddi}
 28수   {$s28->k} ({$s28->h})
 

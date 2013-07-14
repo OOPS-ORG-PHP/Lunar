@@ -6,7 +6,21 @@
  * 이 패키지는 양력/음력간의 변환을 제공하는 API로, 고영창님의 '진짜만세력'
  * 0.92 버전을 PHP Class화 한 후 front end API를 추가한 것이다.
  *
- * 이 변환 API는 -2085(BC 2086년) 부터 2298년까지 유효하다.
+ * 이 변환 API는 다음과 같다. -2085(BC 2086년) 부터 2298년까지 유효하다.
+ *   32bit: -2087-02-09(음력 -2087-01-01) ~ 6078-01-29(음 6077-12-29)
+ *          -2087-07-05(음력 -2087-05-29) 이전은 계산이 무지 느려짐..
+ *   64bit: -9999-01-01 ~ 9999-12-31
+ *          API 날자 입력 형식떄문에 연도를 4자리로 제한. 아마 64bit 계산이
+ *          가능한 지점까지 가능할 듯..
+ *
+ * 계산 처리 시간상, 과거 2000년전과 미래 100년후의 시간은 왠만하면 웹에서는
+ * 사용하는 것을 권장하지 않음!
+ *
+ * 주의!
+ *
+ * 이 API를 사용하기 전에 '진짜 만세력'을 검색하여 '진짜 만세력'의 특징을
+ * 잘 알고 사용하기 바란다. '진짜 만세력'은 계산에 의한 값이기 때문에 DB화
+ * 된 만세력과는 약간의 차이가 발생할 수 있다!
  *
  * @category    Calendar
  * @package     Lunar
@@ -31,7 +45,7 @@ require_once 'Lunar/Lunar_API.php';
  * 이 패키지는 양력/음력간의 변환을 제공하는 API로, 고영창님의 '진짜만세력'
  * 0.92 버전을 PHP Class화 한 후 front end API를 추가한 것이다.
  *
- * 이 변환 API는 -2085(BC 2086년) 부터 2298년까지 유효하다.
+ * 이 변환 API는 -2085(BC 2086년) 부터 6077년까지 유효하다.
  *
  * @package     Lunar
  */
@@ -64,7 +78,7 @@ Class Lunar extends Lunar_API {
 					array_shift ($match);
 					list ($y, $m, $d) = $match;
 				} else {
-					throw new myException ('Invalid Date Format', E_USER_WARNING);
+					throw new Exception ('Invalid Date Format', E_USER_WARNING);
 					return false;
 				}
 			}
@@ -76,7 +90,7 @@ Class Lunar extends Lunar_API {
 				$d = (int) date ('d', $fixed);
 			} else {
 				if ( $m > 12 || $d > 31 ) {
-					throw new myException ('Invalid Date Format', E_USER_WARNING);
+					throw new Exception ('Invalid Date Format', E_USER_WARNING);
 					return false;
 				}
 			}
@@ -152,6 +166,9 @@ Class Lunar extends Lunar_API {
 		$k1 = ($year + 6) % 10;
 		$k2 = ($year + 8) % 12;
 
+		if ( $k1 < 0 ) $k1 += 10;
+		if ( $k2 < 0 ) $k2 += 12;
+
 		return (object) array (
 			'date'       => $this->regdate ($r),
 			'dangi'      => $year + 2333,
@@ -215,6 +232,9 @@ Class Lunar extends Lunar_API {
 
 		$k1 = ($y + 6) % 10;
 		$k2 = ($y + 8) % 12;
+
+		if ( $k1 < 0 ) $k1 += 10;
+		if ( $k2 < 0 ) $k2 += 12;
 
 		return (object) array (
 			'date'       => $this->regdate ($r),
