@@ -45,12 +45,19 @@ require_once 'Lunar/Lunar_API.php';
  * 이 패키지는 양력/음력간의 변환을 제공하는 API로, 고영창님의 '진짜만세력'
  * 0.92 버전을 PHP Class화 한 후 front end API를 추가한 것이다.
  *
- * 이 변환 API는 -2085(BC 2086년) 부터 6077년까지 유효하다.
+ * 이 변환 API는 다음과 같다. -2085(BC 2086년) 부터 2298년까지 유효하다.
+ *   32bit: -2087-02-09(음력 -2087-01-01) ~ 6078-01-29(음 6077-12-29)
+ *          -2087-07-05(음력 -2087-05-29) 이전은 계산이 무지 느려짐..
+ *   64bit: -9999-01-01 ~ 9999-12-31
+ *          API 날자 입력 형식떄문에 연도를 4자리로 제한. 아마 64bit 계산이
+ *          가능한 지점까지 가능할 듯..
+ *
+ * 계산 처리 시간상, 과거 2000년전과 미래 100년후의 시간은 왠만하면 웹에서는
+ * 사용하는 것을 권장하지 않음!
  *
  * @package     Lunar
  */
 Class Lunar extends Lunar_API {
-
 	// {{{ +-- public (array) toargs ($v)
 	/**
 	 * @access public
@@ -300,10 +307,19 @@ Class Lunar extends Lunar_API {
 
 	// {{{ +-- public (object) dayfortune ($v = null)
 	/**
-	 * 일진 데이터를 구한다.
+	 * 세차(년)/월건(월)/일진(일) 데이터를 구한다.
 	 *
 	 * @access public
 	 * @return object
+	 *    <ul>
+	 *        <li>data => YYYY-MM-DD 형식의 양력 날자</li>
+	 *        <li>year => 세차</li>
+	 *        <li>month => 월건 (태양력)</li>
+	 *        <li>day => 일진</li>
+	 *        <li>hyear => 한자 세차</li>
+	 *        <li>hmonth => 한자 월건 (태양력)</li>
+	 *        <li>hday => 한자 일진</li>
+	 *    </ul>
 	 * @param int|string 날자형식
 	 *    <ul>
 	 *        <li>unixstmap (1970년 12월 15일 이후부터 가능)</li>
@@ -335,11 +351,20 @@ Class Lunar extends Lunar_API {
 	 *
 	 * @access public
 	 * @return object
+	 *    <ul>
+	 *        <li>data => index number</li>
+	 *        <li>k => 한글 28수</li>
+	 *        <li>h => 한자 28수</li>
+	 *    </ul>
 	 * @param int|string 날자형식
 	 *    <ul>
 	 *        <li>unixstmap (1970년 12월 15일 이후부터 가능)</li>
 	 *        <li>Ymd or Y-m-d</li>
 	 *        <li>null data (현재 시간<li>
+	 *        <li>Recursion s28day return value:<br>
+	 *        loop에서 s28day method를 반복해서 호출할 경우 return value를 이용할
+	 *        경우, return value의 index값을 이용하여 계산을 하지 않아 속도가 빠름.
+	 *        </li>
 	 *    </ul>
 	 */
 	public function s28day ($v = null) {
@@ -369,7 +394,45 @@ Class Lunar extends Lunar_API {
 	 * 절기 시간 구하기
 	 *
 	 * @access public
-	 * @return array
+	 * @return object
+	 *    <ul>
+	 *        <li>center : 현달 초입
+	 *            <ul>
+	 *                <li>name  => 절기 이름</li>
+	 *                <li>hname => 절기 한자 이름</li>
+	 *                <li>hyear => AD/BC 형식 연도</li>
+	 *                <li>year  => 절기 연도</li>
+	 *                <li>month => 절기 월</li>
+	 *                <li>day   => 절기 일</li>
+	 *                <li>hour  => 절기 시</li>
+	 *                <li>min   => 절기 분</li>
+	 *            </ul>
+	 *        </li>
+	 *        <li>ccenter: 현달 중기
+	 *            <ul>
+	 *                <li>name  => 절기 이름</li>
+	 *                <li>hname => 절기 한자 이름</li>
+	 *                <li>hyear => AD/BC 형식 연도</li>
+	 *                <li>year  => 절기 연도</li>
+	 *                <li>month => 절기 월</li>
+	 *                <li>day   => 절기 일</li>
+	 *                <li>hour  => 절기 시</li>
+	 *                <li>min   => 절기 분</li>
+	 *            </ul>
+	 *        </li>
+	 *        <li>ncenter: 다음달 초입
+	 *            <ul>
+	 *                <li>name  => 절기 이름</li>
+	 *                <li>hname => 절기 한자 이름</li>
+	 *                <li>hyear => AD/BC 형식 연도</li>
+	 *                <li>year  => 절기 연도</li>
+	 *                <li>month => 절기 월</li>
+	 *                <li>day   => 절기 일</li>
+	 *                <li>hour  => 절기 시</li>
+	 *                <li>min   => 절기 분</li>
+	 *            </ul>
+	 *        </li>
+	 *    </ul>
 	 * @param int|string 날자형식
 	 *    <ul>
 	 *        <li>unixstmap (1970년 12월 15일 이후부터 가능)</li>
@@ -427,6 +490,28 @@ Class Lunar extends Lunar_API {
 	 *
 	 * @access public
 	 * @return object
+	 *    <ul>
+	 *        <li>new : 합삭
+	 *            <ul>
+	 *                <li>hyear => 합삭 AD/BC 형식 연도</li>
+	 *                <li>year  => 합삭 연도</li>
+	 *                <li>month => 합삭 월</li>
+	 *                <li>day   => 합삭 일</li>
+	 *                <li>hour  => 합삭 시</li>
+	 *                <li>min   => 합삭 분</li>
+	 *            </ul>
+	 *        </li>
+	 *        <li>full : 망
+	 *            <ul>
+	 *                <li>hyear => 망 AD/BC 형식 연도</li>
+	 *                <li>year  => 망 연도</li>
+	 *                <li>month => 망 월</li>
+	 *                <li>day   => 망 일</li>
+	 *                <li>hour  => 망 시</li>
+	 *                <li>min   => 망 분</li>
+	 *            </ul>
+	 *        </li>
+	 *    </ul>
 	 * @param int|string 날자형식
 	 *    <ul>
 	 *        <li>unixstmap (1970년 12월 15일 이후부터 가능)</li>
@@ -466,6 +551,9 @@ Class Lunar extends Lunar_API {
 
 	// {{{ +-- public (string) ganji_ref ($no, $mode = false)
 	/**
+	 * dayfortune method의 ganji index 반환값을 이용하여, ganji
+	 * 값을 구함
+	 *
 	 * @access public
 	 * @return string
 	 * @param int ganji index number
