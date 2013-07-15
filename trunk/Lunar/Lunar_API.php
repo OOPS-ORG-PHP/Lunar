@@ -1,4 +1,30 @@
 <?php
+/**
+ * Project: EDB_CUBRID :: CUBRID abstraction layer
+ * File:    EDB/EDB_CUBRID.php
+ *
+ * 이 패키지는 양력/음력간의 변환을 제공하는 API로, 고영창님의 '진짜만세력'
+ * 0.92 버전을 PHP Class화 한 후 front end API를 추가한 것이다.
+ *
+ * @category    Calendar
+ * @package     Lunar
+ * @subpackage	Lunar Core API
+ * @author      JoungKyun.Kim <http://oops.org>
+ * @copyright   (c) 1997-2013 OOPS.org
+ * @license     http://afnmp3.homeip.net/~kohyc/calendar/index.cgi
+ * @version     SVN: $Id$
+ * @link        http://pear.oops.org/package/Lunar
+ * @filesource
+ */
+
+/**
+ * CUBRID engine for EDB API
+ *
+ * 이 패키지는 양력/음력간의 변환을 제공하는 API로, 고영창님의 '진짜만세력'
+ * 0.92 버전을 PHP Class화 한 후 front end API를 추가한 것이다.
+ *
+ * @package     Lunar
+ */
 
 Class Lunar_API {
 	// {{{ +-- protected prpperties
@@ -432,13 +458,13 @@ Class Lunar_API {
 	 *
 	 * @access public
 	 * @return array
-	 *       <ul>
-	 *           <li>[0] => 60년의 배수</li>
-	 *           <li>[1] => 60간지의 연도 배열 번호</li>
-	 *           <li>[2] => 60간지의 월 배열 번호</li>
-	 *           <li>[3] => 60간지의 일 배열 번호</li>
-	 *           <li>[4] => 60간지의 시 배열 번호</li>
-	 *       </ul>
+	 * 
+	 *   - [0] => 60년의 배수
+	 *   - [1] => 60간지의 연도 배열 번호
+	 *   - [2] => 60간지의 월 배열 번호
+	 *   - [3] => 60간지의 일 배열 번호
+	 *   - [4] => 60간지의 시 배열 번호
+	 *
 	 * @param int
 	 * @param int
 	 * @param int

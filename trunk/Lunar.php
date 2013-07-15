@@ -6,12 +6,18 @@
  * 이 패키지는 양력/음력간의 변환을 제공하는 API로, 고영창님의 '진짜만세력'
  * 0.92 버전을 PHP Class화 한 후 front end API를 추가한 것이다.
  *
- * 이 변환 API는 다음과 같다. -2085(BC 2086년) 부터 2298년까지 유효하다.
- *   32bit: -2087-02-09(음력 -2087-01-01) ~ 6078-01-29(음 6077-12-29)
- *          -2087-07-05(음력 -2087-05-29) 이전은 계산이 무지 느려짐..
- *   64bit: -9999-01-01 ~ 9999-12-31
- *          API 날자 입력 형식떄문에 연도를 4자리로 제한. 아마 64bit 계산이
- *          가능한 지점까지 가능할 듯..
+ * 이 변환 API의 유효기간은 다음과 같다.
+ *
+ * <pre>
+ *   * 32bit
+ *     + -2087-02-09(음력 -2087-01-01) ~ 6078-01-29(음 6077-12-29)
+ *     + -2087-07-05(음력 -2087-05-29) 이전은 계산이 무지 느려짐..
+ *
+ *   * 64bit
+ *     + -9999-01-01 ~ 9999-12-31
+ *     + API 날자 입력 형식떄문에 연도를 4자리로 제한. 아마 64bit 계산이
+ *       가능한 지점까지 가능할 듯..
+ * </pre>
  *
  * 계산 처리 시간상, 과거 2000년전과 미래 100년후의 시간은 왠만하면 웹에서는
  * 사용하는 것을 권장하지 않음!
@@ -45,12 +51,18 @@ require_once 'Lunar/Lunar_API.php';
  * 이 패키지는 양력/음력간의 변환을 제공하는 API로, 고영창님의 '진짜만세력'
  * 0.92 버전을 PHP Class화 한 후 front end API를 추가한 것이다.
  *
- * 이 변환 API는 다음과 같다. -2085(BC 2086년) 부터 2298년까지 유효하다.
- *   32bit: -2087-02-09(음력 -2087-01-01) ~ 6078-01-29(음 6077-12-29)
- *          -2087-07-05(음력 -2087-05-29) 이전은 계산이 무지 느려짐..
- *   64bit: -9999-01-01 ~ 9999-12-31
- *          API 날자 입력 형식떄문에 연도를 4자리로 제한. 아마 64bit 계산이
- *          가능한 지점까지 가능할 듯..
+ * 이 변환 API의 유효기간은 다음과 같다.
+ *
+ * <pre>
+ *   * 32bit
+ *     + -2087-02-09(음력 -2087-01-01) ~ 6078-01-29(음 6077-12-29)
+ *     + -2087-07-05(음력 -2087-05-29) 이전은 계산이 무지 느려짐..
+ *
+ *   * 64bit
+ *     + -9999-01-01 ~ 9999-12-31
+ *     + API 날자 입력 형식떄문에 연도를 4자리로 제한. 아마 64bit 계산이
+ *       가능한 지점까지 가능할 듯..
+ * </pre>
  *
  * 계산 처리 시간상, 과거 2000년전과 미래 100년후의 시간은 왠만하면 웹에서는
  * 사용하는 것을 권장하지 않음!
@@ -63,11 +75,10 @@ Class Lunar extends Lunar_API {
 	 * @access public
 	 * @return array
 	 * @param string|int 날자형식
-	 *    <ul>
-	 *        <li>unixstmap (1970년 12월 15일 이후부터 가능)</li>
-	 *        <li>Ymd or Y-m-d</li>
-	 *        <li>null data (현재 시간)</li>
-	 *    </ul>
+	 *
+	 *   - unixstmap (1970년 12월 15일 이후부터 가능)
+	 *   - Ymd or Y-m-d
+	 *   - null data (현재 시간)
 	 */
 	public function toargs (&$v) {
 		if ( $v == null ) {
@@ -173,33 +184,31 @@ Class Lunar extends Lunar_API {
 	 * 양력 날자를 음력으로 변환
 	 *
 	 * @access public
-	 * @return object
-	 *    <ul>
-	 *        <li>date => YYYY-MM-DD 형식의 음력 날자</li>
-	 *        <li>dangi => 단기</li>
-	 *        <li>hyear => AD/BC 형식 년도</li>
-	 *        <li>year => 년도</li>
-	 *        <li>month => 월</li>
-	 *        <li>day => 일</li>
-	 *        <li>moonyoon => 윤년 여부</li>
-	 *        <li>largemonth => 평달/큰달 여부</li>
-	 *        <li>week => 요일</li>
-	 *        <li>hweek => 요일 (한자)</li>
-	 *        <li>unixstamp => unixstamp (양력)</li>
-	 *        <li>ganji => 간지</li>
-	 *        <li>hganji => 간지 (한자)</li>
-	 *        <li>gan => 10간</li>
-	 *        <li>hgan => 10간 (한자)</li>
-	 *        <li>ji => 12지</li>
-	 *        <li>hji => 12지 (한자)</li>
-	 *        <li>ddi => 띠</li>
-	 *    </ul>
-	 * @param int|string 날자형식
-	 *    <ul>
-	 *        <li>unixstmap (1970년 12월 15일 이후부터 가능)</li>
-	 *        <li>Ymd or Y-m-d</li>
-	 *        <li>null data (현재 시간)</li>
-	 *    </ul>
+	 * @return object .
+	 *
+	 *   - date => YYYY-MM-DD 형식의 음력 날자
+	 *   - dangi => 단기
+	 *   - hyear => AD/BC 형식 년도
+	 *   - year => 년도
+	 *   - month => 월
+	 *   - day => 일
+	 *   - moonyoon => 윤년 여부
+	 *   - largemonth => 평달/큰달 여부
+	 *   - week => 요일
+	 *   - hweek => 요일 (한자)
+	 *   - unixstamp => unixstamp (양력)
+	 *   - ganji => 간지
+	 *   - hganji => 간지 (한자)
+	 *   - gan => 10간
+	 *   - hgan => 10간 (한자)
+	 *   - ji => 12지
+	 *   - hji => 12지 (한자)
+	 *   - ddi => 띠
+	 *
+	 * @param int|string   날자형식
+	 *   - unixstmap (1970년 12월 15일 이후부터 가능)
+	 *   - Ymd or Y-m-d
+	 *   - null data (현재 시간)
 	 */
 	public function tolunar ($v = null) {
 		list ($y, $m, $d) = $this->toargs ($v);
@@ -244,30 +253,30 @@ Class Lunar extends Lunar_API {
 	 *
 	 * @access public
 	 * @return object
-	 *    <ul>
-	 *        <li>date => YYYY-MM-DD 형식의 양력 날자</li>
-	 *        <li>dangi => 단기</li>
-	 *        <li>hyear => AD/BC 형식 년도</li>
-	 *        <li>year => 년도</li>
-	 *        <li>month => 월</li>
-	 *        <li>day => 일</li>
-	 *        <li>week => 요일</li>
-	 *        <li>hweek => 요일 (한자)</li>
-	 *        <li>unixstamp => unixstamp (양력)</li>
-	 *        <li>ganji => 간지</li>
-	 *        <li>hganji => 간지 (한자)</li>
-	 *        <li>gan => 10간</li>
-	 *        <li>hgan => 10간 (한자)</li>
-	 *        <li>ji => 12지</li>
-	 *        <li>hji => 12지 (한자)</li>
-	 *        <li>ddi => 띠</li>
-	 *    </ul>
+	 *
+	 *   - date => YYYY-MM-DD 형식의 양력 날자
+	 *   - dangi => 단기
+	 *   - hyear => AD/BC 형식 년도
+	 *   - year => 년도
+	 *   - month => 월
+	 *   - day => 일
+	 *   - week => 요일
+	 *   - hweek => 요일 (한자)
+	 *   - unixstamp => unixstamp (양력)
+	 *   - ganji => 간지
+	 *   - hganji => 간지 (한자)
+	 *   - gan => 10간
+	 *   - hgan => 10간 (한자)
+	 *   - ji => 12지
+	 *   - hji => 12지 (한자)
+	 *   - ddi => 띠
+	 *
 	 * @param int|string 날자형식
-	 *    <ul>
-	 *        <li>unixstmap (1970년 12월 15일 이후부터 가능)</li>
-	 *        <li>Ymd or Y-m-d</li>
-	 *        <li>null data (현재 시간></li>
-	 *    </ul>
+	 *
+	 *   - unixstmap (1970년 12월 15일 이후부터 가능)
+	 *   - Ymd or Y-m-d
+	 *   - null data (현재 시간)
+	 *
 	 * @param bool 윤달여부
 	 */
 	public function tosolar ($v = null, $yoon = false) {
@@ -310,22 +319,21 @@ Class Lunar extends Lunar_API {
 	 * 세차(년)/월건(월)/일진(일) 데이터를 구한다.
 	 *
 	 * @access public
-	 * @return object
-	 *    <ul>
-	 *        <li>data => YYYY-MM-DD 형식의 양력 날자</li>
-	 *        <li>year => 세차</li>
-	 *        <li>month => 월건 (태양력)</li>
-	 *        <li>day => 일진</li>
-	 *        <li>hyear => 한자 세차</li>
-	 *        <li>hmonth => 한자 월건 (태양력)</li>
-	 *        <li>hday => 한자 일진</li>
-	 *    </ul>
+	 * @return object .
+	 *
+	 *    - data => YYYY-MM-DD 형식의 양력 날자
+	 *    - year => 세차
+	 *    - month => 월건 (태양력)
+	 *    - day => 일진
+	 *    - hyear => 한자 세차
+	 *    - hmonth => 한자 월건 (태양력)
+	 *    - hday => 한자 일진
+	 *
 	 * @param int|string 날자형식
-	 *    <ul>
-	 *        <li>unixstmap (1970년 12월 15일 이후부터 가능)</li>
-	 *        <li>Ymd or Y-m-d</li>
-	 *        <li>null data (현재 시간)</li>
-	 *    </ul>
+	 *
+	 *    - unixstmap (1970년 12월 15일 이후부터 가능)
+	 *    - Ymd or Y-m-d
+	 *    - null data (현재 시간)
 	 */
 	public function dayfortune ($v = null) {
 		list ($y, $m, $d) = $this->toargs ($v);
@@ -350,22 +358,20 @@ Class Lunar extends Lunar_API {
 	 * 특정일의 28수를 구한다.
 	 *
 	 * @access public
-	 * @return object
-	 *    <ul>
-	 *        <li>data => index number</li>
-	 *        <li>k => 한글 28수</li>
-	 *        <li>h => 한자 28수</li>
-	 *    </ul>
-	 * @param int|string 날자형식
-	 *    <ul>
-	 *        <li>unixstmap (1970년 12월 15일 이후부터 가능)</li>
-	 *        <li>Ymd or Y-m-d</li>
-	 *        <li>null data (현재 시간)</li>
-	 *        <li>Recursion s28day return value:<br>
-	 *        loop에서 s28day method를 반복해서 호출할 경우 return value를 이용할
-	 *        경우, return value의 index값을 이용하여 계산을 하지 않아 속도가 빠름.
-	 *        </li>
-	 *    </ul>
+	 * @return object .
+	 *
+	 *    - data => index number
+	 *    - k => 한글 28수
+	 *    - h => 한자 28수
+	 *
+	 * @param int|string   날자형식
+	 *
+	 *    - unixstmap (1970년 12월 15일 이후부터 가능)
+	 *    - Ymd or Y-m-d
+	 *    - null data (현재 시간)
+	 *    - Recursion s28day return value:<br>
+	 *      loop에서 s28day method를 반복해서 호출할 경우 return value를 이용할
+	 *      경우, return value의 index값을 이용하여 계산을 하지 않아 속도가 빠름.
 	 */
 	public function s28day ($v = null) {
 		if ( is_object ($v) ) {
@@ -394,51 +400,41 @@ Class Lunar extends Lunar_API {
 	 * 절기 시간 구하기
 	 *
 	 * @access public
-	 * @return object
-	 *    <ul>
-	 *        <li>center : 현달 초입
-	 *            <ul>
-	 *                <li>name  => 절기 이름</li>
-	 *                <li>hname => 절기 한자 이름</li>
-	 *                <li>hyear => AD/BC 형식 연도</li>
-	 *                <li>year  => 절기 연도</li>
-	 *                <li>month => 절기 월</li>
-	 *                <li>day   => 절기 일</li>
-	 *                <li>hour  => 절기 시</li>
-	 *                <li>min   => 절기 분</li>
-	 *            </ul>
-	 *        </li>
-	 *        <li>ccenter: 현달 중기
-	 *            <ul>
-	 *                <li>name  => 절기 이름</li>
-	 *                <li>hname => 절기 한자 이름</li>
-	 *                <li>hyear => AD/BC 형식 연도</li>
-	 *                <li>year  => 절기 연도</li>
-	 *                <li>month => 절기 월</li>
-	 *                <li>day   => 절기 일</li>
-	 *                <li>hour  => 절기 시</li>
-	 *                <li>min   => 절기 분</li>
-	 *            </ul>
-	 *        </li>
-	 *        <li>ncenter: 다음달 초입
-	 *            <ul>
-	 *                <li>name  => 절기 이름</li>
-	 *                <li>hname => 절기 한자 이름</li>
-	 *                <li>hyear => AD/BC 형식 연도</li>
-	 *                <li>year  => 절기 연도</li>
-	 *                <li>month => 절기 월</li>
-	 *                <li>day   => 절기 일</li>
-	 *                <li>hour  => 절기 시</li>
-	 *                <li>min   => 절기 분</li>
-	 *            </ul>
-	 *        </li>
-	 *    </ul>
-	 * @param int|string 날자형식
-	 *    <ul>
-	 *        <li>unixstmap (1970년 12월 15일 이후부터 가능)</li>
-	 *        <li>Ymd or Y-m-d</li>
-	 *        <li>null data (현재 시간)</li>
-	 *    </ul>
+	 * @return object    현달 초입/중기와 다음달 초입 데이터 반환
+	 *
+	 * * center (현달 초입)
+	 *  - name  => 절기 이름
+	 *  - hname => 절기 한자 이름
+	 *  - hyear => AD/BC 형식 연도
+	 *  - year  => 절기 연도
+	 *  - month => 절기 월
+	 *  - day   => 절기 일
+	 *  - hour  => 절기 시
+	 *  - min   => 절기 분
+	 * * ccenter (현달 중기)
+	 *  - name  => 절기 이름
+	 *  - hname => 절기 한자 이름
+	 *  - hyear => AD/BC 형식 연도
+	 *  - year  => 절기 연도
+	 *  - month => 절기 월
+	 *  - day   => 절기 일
+	 *  - hour  => 절기 시
+	 *  - min   => 절기 분
+	 * * ncenter (다음달 초입)
+	 *  - name  => 절기 이름
+	 *  - hname => 절기 한자 이름
+	 *  - hyear => AD/BC 형식 연도
+	 *  - year  => 절기 연도
+	 *  - month => 절기 월
+	 *  - day   => 절기 일
+	 *  - hour  => 절기 시
+	 *  - min   => 절기 분
+	 *
+	 * @param int|string   날자형식
+	 *
+	 *  - unixstmap (1970년 12월 15일 이후부터 가능)
+	 *  - Ymd or Y-m-d
+	 *  - null data (현재 시간
 	 */
 	public function seasondate ($v = null) {
 		list ($y, $m, $d) = $this->toargs ($v);
@@ -489,35 +485,31 @@ Class Lunar extends Lunar_API {
 	 * 합삭/망 데이터 구하기
 	 *
 	 * @access public
-	 * @return object
-	 *    <ul>
-	 *        <li>new : 합삭
-	 *            <ul>
-	 *                <li>hyear => 합삭 AD/BC 형식 연도</li>
-	 *                <li>year  => 합삭 연도</li>
-	 *                <li>month => 합삭 월</li>
-	 *                <li>day   => 합삭 일</li>
-	 *                <li>hour  => 합삭 시</li>
-	 *                <li>min   => 합삭 분</li>
-	 *            </ul>
-	 *        </li>
-	 *        <li>full : 망
-	 *            <ul>
-	 *                <li>hyear => 망 AD/BC 형식 연도</li>
-	 *                <li>year  => 망 연도</li>
-	 *                <li>month => 망 월</li>
-	 *                <li>day   => 망 일</li>
-	 *                <li>hour  => 망 시</li>
-	 *                <li>min   => 망 분</li>
-	 *            </ul>
-	 *        </li>
-	 *    </ul>
-	 * @param int|string 날자형식
-	 *    <ul>
-	 *        <li>unixstmap (1970년 12월 15일 이후부터 가능)</li>
-	 *        <li>Ymd or Y-m-d</li>
-	 *        <li>null data (현재 시간)</li>
-	 *    </ul>
+	 * @return object	. 합삭/망 object
+	 * 
+	 *   * new : 합삭
+	 *
+	 *     - hyear => 합삭 AD/BC 형식 연도
+	 *     - year  => 합삭 연도
+	 *     - month => 합삭 월
+	 *     - day   => 합삭 일
+	 *     - hour  => 합삭 시
+	 *     - min   => 합삭 분
+	 *        
+	 *   * full : 망
+	 *
+	 *     - hyear => 망 AD/BC 형식 연도
+	 *     - year  => 망 연도
+	 *     - month => 망 월
+	 *     - day   => 망 일
+	 *     - hour  => 망 시
+	 *     - min   => 망 분
+	 *
+	 * @param int|string   날자형식
+	 *
+	 *   - unixstmap (1970년 12월 15일 이후부터 가능)
+	 *   - Ymd or Y-m-d
+	 *   - null data (현재 시간)
 	 */
 	public function moonstatus ($v = null) {
 		list ($y, $m, $d) = $this->toargs ($v);
