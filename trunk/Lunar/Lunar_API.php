@@ -1,7 +1,8 @@
 <?php
 /**
- * Project: EDB_CUBRID :: CUBRID abstraction layer
- * File:    EDB/EDB_CUBRID.php
+ * Project: Lunar_API :: 양력/음력 변환 코어 클래스<br>
+ * File:    Lunar_API.php
+ *
  *
  * 이 패키지는 양력/음력간의 변환을 제공하는 API로, 고영창님의 '진짜만세력'
  * 0.92 버전을 PHP Class화 한 후 front end API를 추가한 것이다.
@@ -18,7 +19,7 @@
  */
 
 /**
- * CUBRID engine for EDB API
+ * Lunar Core API
  *
  * 이 패키지는 양력/음력간의 변환을 제공하는 API로, 고영창님의 '진짜만세력'
  * 0.92 버전을 PHP Class화 한 후 front end API를 추가한 것이다.
