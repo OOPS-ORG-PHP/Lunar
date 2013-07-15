@@ -101,6 +101,25 @@ Class Lunar extends Lunar_API {
 	}
 	// }}}
 
+	// {{{ +-- public (string) human_year ($y)
+	/**
+	 * 연도를 human readable하게 표시
+	 *
+	 * @access public
+	 * @return string   AD/BC type의 연도
+	 * @param int 연도
+	 */
+	public function human_year ($y) {
+		if ( $y < 1 ) {
+			$y = ($y * -1) + 1;
+			$t = 'BC';
+		} else
+			$t = 'AD';
+
+		return sprintf ('%s %d', $t, $y);
+	}
+	// }}}
+
 	// {{{ +-- private (string) regdate ($v)
 	/**
 	 * YYYY-MM-DD 형식의 날자를 반환
@@ -151,6 +170,7 @@ Class Lunar extends Lunar_API {
 	 *    <ul>
 	 *        <li>date => YYYY-MM-DD 형식의 음력 날자</li>
 	 *        <li>dangi => 단기</li>
+	 *        <li>hyear => AD/BC 형식 년도</li>
 	 *        <li>year => 년도</li>
 	 *        <li>month => 월</li>
 	 *        <li>day => 일</li>
@@ -191,6 +211,7 @@ Class Lunar extends Lunar_API {
 		return (object) array (
 			'date'       => $this->regdate ($r),
 			'dangi'      => $year + 2333,
+			'hyear'      => $this->human_year ($year),
 			'year'       => $year,
 			'month'      => $month,
 			'day'        => $day,
@@ -219,6 +240,7 @@ Class Lunar extends Lunar_API {
 	 *    <ul>
 	 *        <li>date => YYYY-MM-DD 형식의 양력 날자</li>
 	 *        <li>dangi => 단기</li>
+	 *        <li>hyear => AD/BC 형식 년도</li>
 	 *        <li>year => 년도</li>
 	 *        <li>month => 월</li>
 	 *        <li>day => 일</li>
@@ -258,6 +280,7 @@ Class Lunar extends Lunar_API {
 		return (object) array (
 			'date'       => $this->regdate ($r),
 			'dangi'      => $year + 2333,
+			'hyear'      => $this->human_year ($year),
 			'year'       => $year,
 			'month'      => $month,
 			'day'        => $day,
@@ -366,7 +389,8 @@ Class Lunar extends Lunar_API {
 		return (object) array (
 			'center'  => (object) array (
 				'name'  => $this->month_st[$inginame],
-				'hname'  => $this->hmonth_st[$inginame],
+				'hname' => $this->hmonth_st[$inginame],
+				'hyear' => $this->human_year ($ingiyear),
 				'year'  => $ingiyear,
 				'month' => $ingimonth,
 				'day'   => $ingiday,
@@ -375,7 +399,8 @@ Class Lunar extends Lunar_API {
 			),
 			'ccenter' => (object) array (
 				'name'  => $this->month_st[$midname],
-				'hname'  => $this->hmonth_st[$midname],
+				'hname' => $this->hmonth_st[$midname],
+				'hyear' => $this->human_year ($midyear),
 				'year'  => $midyear,
 				'month' => $midmonth,
 				'day'   => $midday,
@@ -384,7 +409,8 @@ Class Lunar extends Lunar_API {
 			),
 			'nenter'  => (object) array (
 				'name'  => $this->month_st[$outginame],
-				'hname'  => $this->hmonth_st[$outginame],
+				'hname' => $this->hmonth_st[$outginame],
+				'hyear' => $this->human_year ($outgiyear),
 				'year'  => $outgiyear,
 				'month' => $outgimonth,
 				'day'   => $outgiday,
@@ -419,10 +445,20 @@ Class Lunar extends Lunar_API {
 
 		return (object) array (
 			'new' => (object) array (
-				'year' => $y1, 'month' => $mo1, 'day' => $d1, 'hour' => $h1, 'min' => $mi1
+				'hyear' => $this->human_year ($y1),
+				'year' => $y1,
+				'month' => $mo1,
+				'day' => $d1,
+				'hour' => $h1,
+				'min' => $mi1
 			),   // 합삭 (New Moon)
 			'full' => (object) array (
-				'year' => $ym, 'month' => $mom, 'day' => $dm, 'hour' => $hm, 'min' => $mim
+				'hyear' => $this->human_year ($ym),
+				'year' => $ym,
+				'month' => $mom,
+				'day' => $dm,
+				'hour' => $hm,
+				'min' => $mim
 			)    // 망 (Full Moon)
 		);
 	}
