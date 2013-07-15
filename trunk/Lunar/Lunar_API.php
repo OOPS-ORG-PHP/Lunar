@@ -213,7 +213,7 @@ Class Lunar_API {
 
 	// {{{ +-- protected (int) div ($a, $b)
 	/**
-	 * 나누기
+	 * 정수 몫을 반환
 	 *
 	 * @access protected
 	 * @return int
@@ -364,6 +364,16 @@ Class Lunar_API {
 	 * 
 	 * @access protected
 	 * @return int 분
+	 * @param int
+	 * @param int
+	 * @param int
+	 * @param int
+	 * @param int
+	 * @param int
+	 * @param int
+	 * @param int
+	 * @param int
+	 * @param int
 	 */
 	function getminbytime ($uy, $umm, $ud, $uh, $umin, $y1, $mo1, $d1, $h1, $mm1) {
 		$t = 0;
@@ -382,6 +392,12 @@ Class Lunar_API {
 	 *
 	 * @access public
 	 * @return array
+	 * @param int
+	 * @param int
+	 * @param int
+	 * @param int
+	 * @param int
+	 * @param int
 	 */
 	protected function getdatebymin ($tmin, $uyear, $umonth, $uday, $uhour, $umin) {
 		$y1 = $mo1 = $d1 = $h1 = $mi1 = $t = 0;
@@ -459,13 +475,18 @@ Class Lunar_API {
 	 *
 	 * @access public
 	 * @return array
-	 * 
-	 *   - [0] => 60년의 배수
-	 *   - [1] => 60간지의 연도 배열 번호
-	 *   - [2] => 60간지의 월 배열 번호
-	 *   - [3] => 60간지의 일 배열 번호
-	 *   - [4] => 60간지의 시 배열 번호
 	 *
+	 *   <pre>
+	 *   Array
+	 *   (
+	 *       [0] => -17  // 60년의 배수
+	 *       [1] => 29   // 60간지의 연도 배열 index
+	 *       [2] => 55   // 60간지의 월 배열 index
+	 *       [3] => 11   // 60간지의 일 배열 index
+	 *       [4] => 20   // 60간지의 시 배열 index
+	 *   )
+	 *   </pre>
+	 * 
 	 * @param int
 	 * @param int
 	 * @param int
@@ -602,6 +623,11 @@ Class Lunar_API {
 	 *
 	 * @access protected
 	 * @return array
+	 * @param int
+	 * @param int
+	 * @param int
+	 * @param int
+	 * @param int
 	 */
 	protected function solortoso24 ($soloryear, $solormonth, $solorday, $solorhour, $solormin) {
 		list ($so24, $so24year, $so24month, $so24day, $so24hour) =
@@ -737,6 +763,28 @@ Class Lunar_API {
 	 *
 	 * @access protected
 	 * @return array
+	 *
+	 *   <pre>
+	 *   Array
+	 *   (
+	 *       [0] => 2013    // 시작 합삭 년도
+	 *       [1] => 7       // 시작 합삭 월
+	 *       [2] => 8       // 시작 합삭 일
+	 *       [3] => 16      // 시작 합삭 시
+	 *       [4] => 15      // 시작 합삭 분
+	 *       [5] => 2013    // 망 연도
+	 *       [6] => 7       // 망 월
+	 *       [7] => 23      // 망 일
+	 *       [8] => 2       // 망 시
+	 *       [9] => 59      // 망 분
+	 *       [10] => 2013   // 끝 합삭 년도
+	 *       [11] => 8      // 끝 합삭 월
+	 *       [12] => 7      // 끝 합삭 일
+	 *       [13] => 6      // 끝 합삭 시
+	 *       [14] => 50     // 끝 합삭 분
+	 *   )
+	 *   </pre>
+	 *
 	 * @param int 년
 	 * @param int 월
 	 * @param int 일
@@ -855,8 +903,22 @@ Class Lunar_API {
 
 	// {{{ +-- protected (array) solartolunar ($solyear,$solmon,$solday)
 	/**
+	 * 양력 날자를 음력 날자로 변환
+	 *
 	 * @access protected
 	 * @return array
+	 *
+	 *   <pre>
+	 *   Array
+	 *   (
+	 *       [0] => 2013   // 음력 연도
+	 *       [1] => 6      // 음력 월
+	 *       [2] => 9      // 음력 일
+	 *       [3] =>        // 음력 윤달 여부 (boolean)
+	 *       [4] => 1      // 평달(false)/큰달(true) 여부 (boolean)
+	 *   )
+	 *   </pre>
+	 *
 	 * @param int 년
 	 * @param int 월
 	 * @param int 일
@@ -958,12 +1020,24 @@ Class Lunar_API {
 
 	// {{{ +-- protected (array) lunartosolar ($lyear, $lmonth, $lday, $moonyun)
 	/**
+	 * 음력 날자를 양력 날자로 변환
+	 *
 	 * @access protected
 	 * @return array
-	 * @param int 년
-	 * @param int 월
-	 * @param int 일
-	 * @param int 윤년여부
+	 *
+	 *   <pre>
+	 *   Array
+	 *   (
+	 *       [0] => 2013   // 양력 연도
+	 *       [1] => 6      // 양력 월
+	 *       [2] => 9      // 양력 일
+	 *   )
+	 *   </pre>
+	 *
+	 * @param int  년
+	 * @param int  월
+	 * @param int  일
+	 * @param bool 음력 윤달 여부
 	 */
 	protected function lunartosolar ($lyear, $lmonth, $lday, $moonyun = false) {
 		list ($inginame, $ingiyear, $ingimonth, $ingiday, $ingihour, $ingimin,
