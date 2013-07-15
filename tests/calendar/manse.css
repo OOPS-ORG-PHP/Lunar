@@ -1,0 +1,118 @@
+@charset "utf-8"
+
+@import url(//cdn.oops.org/fonts/nanumgothic.css);
+
+* html #poststuff {
+	height: 100%; /* kill peekaboo bug in IE */
+}
+
+html, body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+}
+
+body, div, td, li, label  {
+	font-size: 12px;
+	font-family: 'Nanum Gothic', '나눔고딕', '굴림', Gulim, sans-serif;
+	color: #555;
+}
+
+h3 {
+	text-align: center;
+}
+
+.guide {
+	margin: 0 auto;
+	padding-top: 20px;
+	width: 600px;
+	/* border: 1px dotted #ccc; */
+}
+
+.year-title {
+	text-align: center;
+}
+
+.cur-month {
+	font-weight: bold;
+	font-size: 24px;
+	margin-left: 20px;
+	margin-right: 20px;
+}
+
+div#calendar {
+	background-color: #ddd;
+	margin: 10px auto;
+	padding-top: 3px;
+	padding-left: 4px;
+	padding-bottom: 3px;
+	width: 90%;
+	/* border: 1px dotted #ddd; */
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+}
+
+div#context {
+	margin: 10px auto;
+	width: 90%;
+}
+
+.ctd {
+	text-align: left;
+	background-color: #eee;
+	width: 70px;
+	display: inline-block;
+	margin: 2px 2px;
+	font-size: 14px;
+}
+
+.yoil {
+	font-size: 12px;
+	text-align: center;
+	font-weight: bold;
+}
+
+.day {
+	float: right;
+	font-size: 24px;
+	font-weight: bold;
+}
+
+.sun {
+	color: #da4f49;
+}
+
+.sat {
+	color: #2f96b4;
+}
+
+.su {
+	color: #555;
+}
+
+.lun {
+	color: #5bb75b;
+	font-size: 12px;
+}
+
+.iljin {
+	color: #555;
+}
+
+.julip {
+	color: #e81ad8;
+}
+
+.b {
+	font-weight: bold;
+}
+
+.stitle {
+	display: inline-block;
+	width: 120px;
+}
+
+.copy {
+	float: right;
+}
