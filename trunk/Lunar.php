@@ -66,7 +66,7 @@ Class Lunar extends Lunar_API {
 	 *    <ul>
 	 *        <li>unixstmap (1970년 12월 15일 이후부터 가능)</li>
 	 *        <li>Ymd or Y-m-d</li>
-	 *        <li>null data (현재 시간<li>
+	 *        <li>null data (현재 시간)</li>
 	 *    </ul>
 	 */
 	public function toargs (&$v) {
@@ -198,7 +198,7 @@ Class Lunar extends Lunar_API {
 	 *    <ul>
 	 *        <li>unixstmap (1970년 12월 15일 이후부터 가능)</li>
 	 *        <li>Ymd or Y-m-d</li>
-	 *        <li>null data (현재 시간<li>
+	 *        <li>null data (현재 시간)</li>
 	 *    </ul>
 	 */
 	public function tolunar ($v = null) {
@@ -266,7 +266,7 @@ Class Lunar extends Lunar_API {
 	 *    <ul>
 	 *        <li>unixstmap (1970년 12월 15일 이후부터 가능)</li>
 	 *        <li>Ymd or Y-m-d</li>
-	 *        <li>null data (현재 시간<li>
+	 *        <li>null data (현재 시간></li>
 	 *    </ul>
 	 * @param bool 윤달여부
 	 */
@@ -360,7 +360,7 @@ Class Lunar extends Lunar_API {
 	 *    <ul>
 	 *        <li>unixstmap (1970년 12월 15일 이후부터 가능)</li>
 	 *        <li>Ymd or Y-m-d</li>
-	 *        <li>null data (현재 시간<li>
+	 *        <li>null data (현재 시간)</li>
 	 *        <li>Recursion s28day return value:<br>
 	 *        loop에서 s28day method를 반복해서 호출할 경우 return value를 이용할
 	 *        경우, return value의 index값을 이용하여 계산을 하지 않아 속도가 빠름.
@@ -437,7 +437,7 @@ Class Lunar extends Lunar_API {
 	 *    <ul>
 	 *        <li>unixstmap (1970년 12월 15일 이후부터 가능)</li>
 	 *        <li>Ymd or Y-m-d</li>
-	 *        <li>null data (현재 시간<li>
+	 *        <li>null data (현재 시간)</li>
 	 *    </ul>
 	 */
 	public function seasondate ($v = null) {
@@ -516,7 +516,7 @@ Class Lunar extends Lunar_API {
 	 *    <ul>
 	 *        <li>unixstmap (1970년 12월 15일 이후부터 가능)</li>
 	 *        <li>Ymd or Y-m-d</li>
-	 *        <li>null data (현재 시간<li>
+	 *        <li>null data (현재 시간)</li>
 	 *    </ul>
 	 */
 	public function moonstatus ($v = null) {
