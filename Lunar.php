@@ -324,7 +324,7 @@ Class Lunar extends Lunar_API {
 	 *    <ul>
 	 *        <li>unixstmap (1970년 12월 15일 이후부터 가능)</li>
 	 *        <li>Ymd or Y-m-d</li>
-	 *        <li>null data (현재 시간<li>
+	 *        <li>null data (현재 시간)</li>
 	 *    </ul>
 	 */
 	public function dayfortune ($v = null) {
