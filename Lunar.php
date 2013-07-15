@@ -72,8 +72,22 @@ require_once 'Lunar/Lunar_API.php';
 Class Lunar extends Lunar_API {
 	// {{{ +-- public (array) toargs ($v)
 	/**
+	 * 입력된 날자 형식을 연/월/일의 멤버를 가지는 배열로 반환한다.
+	 * 입력된 변수 값은 YYYY-MM-DD 형식으로 변환 된다.
+	 *
+	 * 예제:
+	 * {@example pear_Lunar/tests/sample.php 30 25}
+	 *
 	 * @access public
 	 * @return array
+	 *   <pre>
+	 *       Array
+	 *       (
+	 *           [0] => 2013
+	 *           [1] => 7
+	 *           [2] => 16
+	 *       )
+	 *   </pre>
 	 * @param string|int 날자형식
 	 *
 	 *   - unixstmap (1970년 12월 15일 이후부터 가능)
@@ -123,6 +137,9 @@ Class Lunar extends Lunar_API {
 	/**
 	 * 연도를 human readable하게 표시
 	 *
+	 * 예제:
+	 * {@example pear_Lunar/tests/sample.php 56 11}
+	 *
 	 * @access public
 	 * @return string   AD/BC type의 연도
 	 * @param int 연도
@@ -143,8 +160,8 @@ Class Lunar extends Lunar_API {
 	 * YYYY-MM-DD 형식의 날자를 반환
 	 *
 	 * @access private
-	 * @return string
-	 * @param array
+	 * @return string   YYYY-MM-DD 형식으로 반환
+	 * @param array     년월일 배열 - array ($year, $month, $day)
 	 */
 	private function regdate ($v) {
 		list ($year, $month, $day) = $v;
@@ -163,6 +180,9 @@ Class Lunar extends Lunar_API {
 	// {{{ +-- public (bool) is_yoon ($y)
 	/**
 	 * 윤년 체크
+	 *
+	 * 예제:
+	 * {@example pear_Lunar/tests/sample.php 68 14}
 	 *
 	 * @access public
 	 * @return bool
@@ -183,27 +203,35 @@ Class Lunar extends Lunar_API {
 	/**
 	 * 양력 날자를 음력으로 변환
 	 *
-	 * @access public
-	 * @return object .
+	 * 예제:
+	 * {@example pear_Lunar/tests/sample.php 83 35}
 	 *
-	 *   - date => YYYY-MM-DD 형식의 음력 날자
-	 *   - dangi => 단기
-	 *   - hyear => AD/BC 형식 년도
-	 *   - year => 년도
-	 *   - month => 월
-	 *   - day => 일
-	 *   - moonyoon => 윤년 여부
-	 *   - largemonth => 평달/큰달 여부
-	 *   - week => 요일
-	 *   - hweek => 요일 (한자)
-	 *   - unixstamp => unixstamp (양력)
-	 *   - ganji => 간지
-	 *   - hganji => 간지 (한자)
-	 *   - gan => 10간
-	 *   - hgan => 10간 (한자)
-	 *   - ji => 12지
-	 *   - hji => 12지 (한자)
-	 *   - ddi => 띠
+	 * @access public
+	 * @return object .    음력 날자 정보 반환
+	 *
+	 *   <pre>
+	 *   stdClass Object
+	 *   (
+	 *       [date] => 2013-06-09         // YYYY-MM-DD 형식의 음력 날자
+	 *       [dangi] => 4346              // 단기
+	 *       [hyear] => AD 2013           // AD/BC 형식의 연도
+	 *       [year] => 2013               // 연도
+	 *       [month] => 6                 // 월
+	 *       [day] => 9                   // 일
+	 *       [moonyoon] =>                // 음력 윤달 여부
+	 *       [largemonth] => 1            // 평달/큰달 여부
+	 *       [week] => 화                 // 요일
+	 *       [hweek] => 火                // 한자 요일
+	 *       [unixstamp] => 1373900400    // unixstamp (양력 날자)
+	 *       [ganji] => 계사              // 세차(년)
+	 *       [hganji] => 癸巳             // 한자 세차
+	 *       [gan] => 계                  // 세차 10간
+	 *       [hgan] => 癸                 // 세차 한자 10간
+	 *       [ji] => 사                   // 세차 12지
+	 *       [hji] => 巳                  // 세차 한자 12지
+	 *       [ddi] => 뱀                  // 띠
+	 *   )
+	 *   </pre>
 	 *
 	 * @param int|string   날자형식
 	 *   - unixstmap (1970년 12월 15일 이후부터 가능)
@@ -249,27 +277,39 @@ Class Lunar extends Lunar_API {
 
 	// {{{ +-- public (object) tosolar ($v = null, $yoon = false)
 	/**
-	 * 음력 날자를 양력으로 변환
+	 * 음력 날자를 양력으로 변환.
+	 *
+	 * 구하는 음력월이 윤달인지 여부를 알 수 없을 경우, tosolar method
+	 * 를 실행하여 얻은 양력 날자를 다시 tolunar로 변환하여 비교하여
+	 * 동일하지 않다면, 윤달 파라미터 값을 주고 다시 구해야 한다!
+	 *
+	 * 예제:
+	 * {@example pear_Lunar/tests/sample.php 119 42}
 	 *
 	 * @access public
-	 * @return object
+	 * @return object .   양력 날자 정보 object 반환
 	 *
-	 *   - date => YYYY-MM-DD 형식의 양력 날자
-	 *   - dangi => 단기
-	 *   - hyear => AD/BC 형식 년도
-	 *   - year => 년도
-	 *   - month => 월
-	 *   - day => 일
-	 *   - week => 요일
-	 *   - hweek => 요일 (한자)
-	 *   - unixstamp => unixstamp (양력)
-	 *   - ganji => 간지
-	 *   - hganji => 간지 (한자)
-	 *   - gan => 10간
-	 *   - hgan => 10간 (한자)
-	 *   - ji => 12지
-	 *   - hji => 12지 (한자)
-	 *   - ddi => 띠
+	 *   <pre>
+	 *   stdClass Object
+	 *   (
+	 *       [date] => 2013-07-16        // YYYY-MM-DD 형식의 양력 날자
+	 *       [dangi] => 4346             // 단기 (양력)
+	 *       [hyear] => AD 2013          // AD/BC 형식 년도
+	 *       [year] => 2013              // 양력 연도
+	 *       [month] => 7                // 월
+	 *       [day] => 16                 // 일
+	 *       [week] => 화                // 요일
+	 *       [hweek] => 火               // 한자 요일
+	 *       [unixstamp] => 1373900400   // unixstamp (양력)
+	 *       [ganji] => 계사             // 세차
+	 *       [hganji] => 癸巳            // 세차 한자
+	 *       [gan] => 계                 // 세차 10간
+	 *       [hgan] => 癸                // 세차 한자 10간
+	 *       [ji] => 사                  // 세차 12지
+	 *       [hji] => 巳                 // 세차 한자 12지
+	 *       [ddi] => 뱀                 // 띠
+	 *   )
+	 *   </pre>
 	 *
 	 * @param int|string 날자형식
 	 *
@@ -318,16 +358,30 @@ Class Lunar extends Lunar_API {
 	/**
 	 * 세차(년)/월건(월)/일진(일) 데이터를 구한다.
 	 *
+	 * 예제:
+	 * {@example pear_Lunar/tests/sample.php 163 56}
+	 *
 	 * @access public
 	 * @return object .
 	 *
-	 *    - data => YYYY-MM-DD 형식의 양력 날자
-	 *    - year => 세차
-	 *    - month => 월건 (태양력)
-	 *    - day => 일진
-	 *    - hyear => 한자 세차
-	 *    - hmonth => 한자 월건 (태양력)
-	 *    - hday => 한자 일진
+	 *   <pre>
+	 *   stdClass Object
+	 *   (
+	 *       [data] => stdClass Object
+	 *           (
+	 *                [y] => 29           // 세차 index
+	 *                [m] => 55           // 월건 index
+	 *                [d] => 19           // 일진 index
+	 *           )
+	 *
+	 *       [year] => 계사               // 세차 값
+	 *       [month] => 기미              // 월건 값
+	 *       [day] => 계미                // 일진 값
+	 *       [hyear] => 癸巳              // 한자 세차 값
+	 *       [hmonth] => 己未             // 한자 월건 값
+	 *       [hday] => 癸未               // 한자 일진 값
+	 *   )
+	 *   </pre>
 	 *
 	 * @param int|string 날자형식
 	 *
@@ -357,12 +411,20 @@ Class Lunar extends Lunar_API {
 	/**
 	 * 특정일의 28수를 구한다.
 	 *
+	 * 예제:
+	 * {@example pear_Lunar/tests/sample.php 221 35}
+	 *
 	 * @access public
 	 * @return object .
 	 *
-	 *    - data => index number
-	 *    - k => 한글 28수
-	 *    - h => 한자 28수
+	 *   <pre>
+	 *   stdClass Object
+	 *   (
+	 *       [data] => 5    // 28수 index
+	 *       [k] => 미      // 한글 28수 값
+	 *       [h] => 尾      // 한자 28수 값
+	 *   )
+	 *   </pre>
 	 *
 	 * @param int|string   날자형식
 	 *
@@ -397,38 +459,54 @@ Class Lunar extends Lunar_API {
 
 	// {{{ +-- public (array) seasondate ($v = null)
 	/**
-	 * 절기 시간 구하기
+	 * 해당 양력일에 대한 음력 월의 절기 시간 구하기
+	 *
+	 * 예제:
+	 * {@example pear_Lunar/tests/sample.php 257 52}
 	 *
 	 * @access public
-	 * @return object    현달 초입/중기와 다음달 초입 데이터 반환
+	 * @return object .  현달 초입/중기와 다음달 초입 데이터 반환
 	 *
-	 * * center (현달 초입)
-	 *  - name  => 절기 이름
-	 *  - hname => 절기 한자 이름
-	 *  - hyear => AD/BC 형식 연도
-	 *  - year  => 절기 연도
-	 *  - month => 절기 월
-	 *  - day   => 절기 일
-	 *  - hour  => 절기 시
-	 *  - min   => 절기 분
-	 * * ccenter (현달 중기)
-	 *  - name  => 절기 이름
-	 *  - hname => 절기 한자 이름
-	 *  - hyear => AD/BC 형식 연도
-	 *  - year  => 절기 연도
-	 *  - month => 절기 월
-	 *  - day   => 절기 일
-	 *  - hour  => 절기 시
-	 *  - min   => 절기 분
-	 * * ncenter (다음달 초입)
-	 *  - name  => 절기 이름
-	 *  - hname => 절기 한자 이름
-	 *  - hyear => AD/BC 형식 연도
-	 *  - year  => 절기 연도
-	 *  - month => 절기 월
-	 *  - day   => 절기 일
-	 *  - hour  => 절기 시
-	 *  - min   => 절기 분
+	 *   <pre>
+	 *   stdClass Object
+	 *   (
+	 *       [center] => stdClass Object      // 이번달 초입 데이터
+	 *           (
+	 *               [name] => 소서           // 절기 이름
+	 *               [hname] => 小暑          // 절기 한자 이름
+	 *               [hyear] => AD 2013       // AD/BC 형식 연도
+	 *               [year] => 2013           // 초입 연도
+	 *               [month] => 7             // 초입 월
+	 *               [day] => 7               // 초입 일
+	 *               [hour] => 7              // 초입 시간
+	 *               [min] => 49              // 초입 분
+	 *           )
+	 *
+	 *       [ccenter] => stdClass Object     // 이번달 중기 데이터
+	 *           (
+	 *               [name] => 대서           // 절기 이름
+	 *               [hname] => 大暑          // 절기 한자 이름
+	 *               [hyear] => AD 2013       // AD/BC 형식 연도
+	 *               [year] => 2013           // 중기 연도
+	 *               [month] => 7             // 중기 월
+	 *               [day] => 23              // 중기 일
+	 *               [hour] => 1              // 중기 시간
+	 *               [min] => 11              // 중기 분
+	 *           )
+	 *
+	 *       [nenter] => stdClass Object      // 다음달 초입 데이터
+	 *           (
+	 *               [name] => 입추           // 절기 이름
+	 *               [hname] => 立秋          // 절기 한자 이름
+	 *               [hyear] => AD 2013       // AD/BC 형식 연도
+	 *               [year] => 2013           // 초입 연도
+	 *               [month] => 8             // 초입 월
+	 *               [day] => 7               // 초입 일
+	 *               [hour] => 17             // 초입 시간
+	 *               [min] => 36              // 초입 분
+	 *           )
+	 *   )
+	 *   </pre>
 	 *
 	 * @param int|string   날자형식
 	 *
@@ -482,28 +560,38 @@ Class Lunar extends Lunar_API {
 
 	// {{{ +-- public (object) moonstatus ($v = null)
 	/**
-	 * 합삭/망 데이터 구하기
+	 * 양력일에 대한 음력월 합삭/망 데이터 구하기
+	 *
+	 * 예제:
+	 * {@example pear_Lunar/tests/sample.php 311 56}
 	 *
 	 * @access public
 	 * @return object	. 합삭/망 object
-	 * 
-	 *   * new : 합삭
 	 *
-	 *     - hyear => 합삭 AD/BC 형식 연도
-	 *     - year  => 합삭 연도
-	 *     - month => 합삭 월
-	 *     - day   => 합삭 일
-	 *     - hour  => 합삭 시
-	 *     - min   => 합삭 분
-	 *        
-	 *   * full : 망
+	 *   <pre>
+	 *   stdClass Object
+	 *   (
+	 *       [new] => stdClass Object      // 합삭 (New Moon) 데이터
+	 *           (
+	 *               [hyear] => AD 2013    // 합삭 AD/BC 형식 연도
+	 *               [year] => 2013        // 합삭 연도
+	 *               [month] => 7          // 합삭 월
+	 *               [day] => 8            // 합삭 일
+	 *               [hour] => 16          // 합삭 시간
+	 *               [min] => 15           // 합삭 분
+	 *           )
 	 *
-	 *     - hyear => 망 AD/BC 형식 연도
-	 *     - year  => 망 연도
-	 *     - month => 망 월
-	 *     - day   => 망 일
-	 *     - hour  => 망 시
-	 *     - min   => 망 분
+	 *       [full] => stdClass Object     // 망 (Full Moon) 데이터
+	 *           (
+	 *               [hyear] => AD 2013    // 망 AD/BC 형식 연도
+	 *               [year] => 2013        // 망 연도
+	 *               [month] => 7          // 망 월
+	 *               [day] => 23           // 망 일
+	 *               [hour] => 2           // 망 시간
+	 *               [min] => 59           // 망 분
+	 *           )
+	 *   )
+	 *   </pre>
 	 *
 	 * @param int|string   날자형식
 	 *
@@ -545,6 +633,9 @@ Class Lunar extends Lunar_API {
 	/**
 	 * dayfortune method의 ganji index 반환값을 이용하여, ganji
 	 * 값을 구함
+	 *
+	 * 예제:
+	 * {@example pear_Lunar/tests/sample.php 163 56}
 	 *
 	 * @access public
 	 * @return string

@@ -16,6 +16,9 @@ if ( $ccwd == 'tests' ) {
 	$iniset ('include_path', $newpath . ':' . $oldpath);
 }
 
+/*
+ * Lunar API import
+ */
 require_once 'Lunar.php';
 
 
@@ -31,10 +34,15 @@ printf ("** target date is %s\n", $target);
 echo "**\n";
 echo "\n";
 
+# 1일의 음력 정보
 $z = $lunar->tolunar ($target);
+# 이번달의 세차/월간/일진 정보
 $tune = $lunar->dayfortune ($target);
+# 1일의 음력월에 대한 합삭/망 정보
 $moon = $lunar->moonstatus ($target);
+# 1일의 28수 정보
 $s28  = $lunar->s28day ($target);
+# 이번달의 절기 정보
 $season = $lunar->seasondate ($target);
 
 $yoon = $z->moonyoon ? ', 윤달' : '';
