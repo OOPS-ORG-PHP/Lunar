@@ -127,7 +127,7 @@ Class Lunar extends Lunar_API {
 				}
 			}
 		}
-		$v = sprintf ('%d-%d-%d', $y, $m, $d);
+		$v = $this->regdate (array ($y, $m, $d));
 
 		return array ($y, $m, $d);
 	}
@@ -170,14 +170,14 @@ Class Lunar extends Lunar_API {
 			'%d-%s%d-%s%d',
 			$year,
 			($month < 10 ) ? '0' : '',
-			$month,
+			(int) $month,
 			($day < 10 ) ? '0' : '',
-			$day
+			(int) $day
 		);
 	}
 	// }}}
 
-	// {{{ +-- public (bool) is_yoon ($y)
+	// {{{ +-- public (bool) is_yoon ($y, $julian = false)
 	/**
 	 * 윤년 체크
 	 *
@@ -187,8 +187,13 @@ Class Lunar extends Lunar_API {
 	 * @access public
 	 * @return bool
 	 * @param int 년도
+	 * @param bool Julian 여부
 	 */
-	public function is_yoon ($y) {
+	public function is_yoon ($y, $julian = false) {
+		// Julian의 윤년은 4로 나누어지면 된다.
+		if ( $julian )
+			return ($y % 4) ? false : true;
+
 		if ( ! ($y % 400) )
 			return true;
 
@@ -199,9 +204,260 @@ Class Lunar extends Lunar_API {
 	}
 	// }}}
 
+	// {{{ +-- private (string) gregorian2julian ($v)
+	/**
+	 * 그레고리력을 율리안력으로 변환
+	 *
+	 * @access private
+	 * @return object .
+	 *
+	 *   <pre>
+	 *   stdClass Object
+	 *   (
+	 *       [date] => 2013-06-09         // YYYY-MM-DD 형식의 Julian 날자
+	 *       [year] => 2013               // 연도
+	 *       [month] => 6                 // 월
+	 *       [day] => 9                   // 일
+	 *       [week] => 화                 // 요일
+	 *   )
+	 *   </pre>
+	 *
+	 * @param array|int Gregorian 연월일 배열 or Julian date count
+	 */
+	private function gregorian2julian ($v) {
+		if ( is_array ($v) ) {
+			$d = $this->regdate ($v);
+			list ($y, $m, $d) = preg_split ('/-/', $d);
+
+			$v = $this->juliandate (array ($y, $m, $d));
+		}
+
+		if ( extension_loaded ('calendar') ) {
+			$r = (object) cal_from_jd ($v, CAL_JULIAN);
+			return (object) array (
+				'date'  => $this->regdate (array ($r->year, $r->month, $r->day)),
+				'year'  => $r->year,
+				'month' => $r->month,
+				'day'   => $r->day,
+				'week'  => $r->dow
+			);
+		}
+
+		if ( is_float ($v) ) {
+			list ($Z, $F) = preg_split ('/\./', $v);
+		} else {
+			$Z = $v;
+			$F = 0;
+		}
+
+		if ( $v < 2299161 )
+			$A = $Z;
+		else {
+			$alpha = (int) ($Z - 1867216.25 / 36524.25);
+			$A = $Z + 1 + $alpha - (int) ($alpha / 4);
+		}
+
+		$B = $A + 1524;
+		$C = (int) (($B - 122.1) / 365.25);
+		$D = (int) (365.25 * $C);
+		$E = (int) ( ($B - $D) / 30.6001);
+
+		$day = $B - $D - (int) (30.6001 * $E) + $F;
+		$month = ($E < 14) ? $E - 1 : $E - 13;
+		$year = $C - 4715;
+		if ( $month > 2 )
+			$year--;
+
+		$week = ($v + 1.5) % 7;
+
+		return (object) array (
+			'date'  => $this->regdate (array ($year, $month, $day)),
+			'year'  => $year,
+			'month' => $month,
+			'day'   => $day,
+			'week'  => $week
+		);
+	}
+	// }}}
+
+	// {{{ +-- private (string) julian2gregorian ($v)
+	/**
+	 * 율리안력을 그레고리안역으로 변환
+	 *
+	 * @access private
+	 * @return object .
+	 *
+	 *   <pre>
+	 *   stdClass Object
+	 *   (
+	 *       [date] => 2013-06-09         // YYYY-MM-DD 형식의 Julian 날자
+	 *       [year] => 2013               // 연도
+	 *       [month] => 6                 // 월
+	 *       [day] => 9                   // 일
+	 *       [week] => 화                 // 요일
+	 *   )
+	 *   </pre>
+	 *
+	 * @param array|int Julian 연월일 배열 or Julian date count
+	 */
+	private function julian2gregorian ($v) {
+		if ( is_array ($v) ) {
+			$d = $this->regdate ($v);
+			list ($y, $m, $d) = preg_split ('/-/', $d);
+
+			$v = $this->juliandate (array ($y, $m, $d), true);
+		}
+
+		if ( extension_loaded ('calendar') ) {
+			$r = (object) cal_from_jd ($v, CAL_GREGORIAN);
+			return (object) array (
+				'date'  => $this->regdate (array ($r->year, $r->month, $r->day)),
+				'year'  => $r->year,
+				'month' => $r->month,
+				'day'   => $r->day,
+				'week'  => $r->dow
+			);
+		}
+
+		// https://en.wikipedia.org/wiki/Julian_day#Gregorian_calendar_from_Julian_day_number
+		$f = (int) $v + 1401;
+		$f = (int) ($f + (((4 * $v + 274277) / 146097) * 3) / 4 - 38);
+		$e = 4 * $f + 3;
+		$g = (int) (($e % 1461) / 4);
+		$h = 5 * $g + 2;
+
+		$day = (int) (($h % 153) / 5 + 1);
+		$month = (int) ((($h / 153 + 2) % 12) + 1);
+		$year = (int) ($e / 1461 - 4716 + (12 + 2 - $month) / 12);
+
+		$week = ($v + 1.5) % 7;
+
+		return (object) array (
+			'date'  => "$year-$month-$day",
+			'year'  => $year,
+			'month' => $month,
+			'day'   => $day,
+			'week'  => $week
+		);
+	}
+	// }}}
+
+	// {{{ +-- private (int) juliandate ($v)
+	/**
+	 * Gregorian 날자를 Julian date로 변환
+	 *
+	 * @access private
+	 * @return int Julian date
+	 * @param array 연월일 배열 : array ($y, $m, $d)
+	 */
+	private function juliandate ($v, $julian = false) {
+		list ($y, $m, $d) = $v;
+
+		if ( extension_loaded ('calendar') ) {
+			$old = date_default_timezone_get ();
+			date_default_timezone_set ('UTC');
+
+			$func = $julian ? 'JulianToJD' : 'GregorianToJD';
+			$r = $func ($m, $d, $y);
+
+			date_default_timezone_set ($old);
+			return $r;
+		}
+
+		// http://new.astronote.org/bbs/board.php?bo_table=prog&wr_id=29929
+		// 1. Y는 해당년도, M는 월(1월=1,2월=2), D는 해당 월의 날짜이다.
+		//    D는 시간값도 포함한 소수값으로 생각하자. 가령 3일 12시 UT라면
+		//    D=3.5이다.
+		// 2. M>2인 경우 Y,M은 변경하지 않는다. M = 1 또는 2인 경우 Y=Y-1,
+		//    M=M+12로 계산한다.
+		// 3. 그레고리력(Gregorian Calendar)의 경우 아래처럼 계산한다.
+		//    A = INT(Y/100), B = 2 – A + INT(A/4)
+		//    여기서 INT는 ()안에 들어간 값을 넘지않는 가장 큰 정수이다.
+		//    율리우스력(Julian Calendar)의 경우 B=0이다.
+		// 4. JD는 다음과 같이 계산된다.
+		//    JD = INT(365.25(Y+4716)) + INT(30.6001(M+1)) + D + B – 1524.5
+		//    여기서 30.6001은 정확히는 30.6을 써야한다. 하지만 컴퓨터 계산시
+		//    10.6이여 하는데 10.599999999 이런식으로 표현되는 경우가 발생하면
+		//    INT(10.6)과 INT(10.5999..)의 결과가 달라진다. 이 문제 대해 대처
+		//    하기 위해 30.6001을 사용한 것이다. 이러한 에러를 Round-off Error
+		//    라고 불린다.
+		if ( $m <= 2 ) {
+			$y--;
+			$m += 12;
+		}
+
+		$A = (int) ($y / 100);
+		$B = $julian ? 0 : 2 - $A + (int) ($A / 4);
+		$C = (int) (365.25 * ($y + 4716));
+		$D = (int) (30.6001 * ($m + 1));
+		return ceil ($C + $D + $d + $B - 1524.5);
+	}
+	// }}}
+
+	// {{{ +-- private (string) toutc ($v)
+	/**
+	 * Localtime을 UTC로 변환
+	 *
+	 * @access private
+	 * @return string YYYY-MM-DD-HH-II-SS
+	 * @param string date format (YYYY-MM-DD HH:II:SS)
+	 */
+	private function toutc ($v) {
+		$t = strtotime ($v);
+		$old = date_default_timezone_get ();
+		date_default_timezone_set ('UTC');
+		$r = date ('Y-m-d-H-i-s', $t);
+		date_default_timezone_set ($old);
+
+		return $r;
+	}
+	// }}}
+
+	// {{{ +-- private (int) to_utc_julian ($v)
+	/**
+	 * 합삭/망 절기 시간을 UTC로 변환 후, Julian date로 표현
+	 *
+	 * @access private
+	 * @return int
+	 * @param string data format (YYYY-MM-DD HH:II:SS)
+	 */
+	private function to_utc_julian ($v) {
+		$buf = $this->toutc ($v);
+		list ($y, $m, $d, $h, $i, $s) = preg_split ('/-/', $buf);
+
+		$chk = $y . $m . $d;
+
+		//$julian = ( $chk < 18451015 ) ? $true : false;
+		$j = $this->juliandate (array ($y, $m, $d), $julian);
+
+		if ( ($h - 12) < 0 ) {
+			$h = 11 - $h;
+			$i = 60 - $i;
+			$buf = (($h * 3600 + $i * 60) / 86400) * -1;
+		} else
+			$buf = (($h - 12) * 3600 + $i * 60) / 86400;
+
+		return $j + $buf;
+	}
+	// }}}
+
 	// {{{ +-- public (object) tolunar ($v = null)
 	/**
 	 * 양력 날자를 음력으로 변환
+	 *
+	 * 진짜 만세력은 1582/10/15(Gregorian calendar의 시작) 이전의 날자
+	 * 역시 Gregorian으로 표기를 한다. 그러므로 Calendar의 오류로 보일
+	 * 수도 있다. (실제로는 계산상의 오류는 없다고 봐야 한다.)
+	 *
+	 * 이런 부분을 보정하기 위하여, tolunar method는 1582/10/04 까지의
+	 * 날자는 julian calendar로 변환을 하여 음력날자를 구한다. 이로 인
+	 * 하여 1582/10/15 이전의 음력 날자는 original 진짜 만세력과 다른
+	 * 값을 가지게 된다.)
+	 *
+	 * 이렇게 표현될 경우, 천문우주 지식정보의 값과 비슷하게 나올 수는
+	 * 있으나, 평달/큰달 계산은 진짜 만세력의 것을 이용하므로 오차는
+	 * 발생할 수 있다.
+	 * http://astro.kasi.re.kr/Life/ConvertSolarLunarForm.aspx?MenuID=115
 	 *
 	 * 예제:
 	 * {@example pear_Lunar/tests/sample.php 83 35}
@@ -240,6 +496,26 @@ Class Lunar extends Lunar_API {
 	 */
 	public function tolunar ($v = null) {
 		list ($y, $m, $d) = $this->toargs ($v);
+
+		# 15821005 ~ 15821014 까지는 gregorian calendar에서는 존재
+		# 하지 않는다. 그러므로, 이 기간의 날자는 julian calendar
+		# 와 매치되는 날자로 변경한다. (10씩 빼준다.
+		$chk = preg_replace ('/-/', '', $v);
+		if ( $chk > 15821004 && $chk < 15821015 ) {
+			$julian = $this->juliandate (array ($y, $m, $d));
+			$julian -= 10;
+			$r = $this->julian2gregorian ($julian);
+			$v = $r->year . '-' . $r->month . '-' . $r->day;
+			list ($y, $m, $d) = $this->toargs ($v);
+			$chk = preg_replace ('/-/', '', $v);
+		}
+
+		# 15821005 보다 과거의 날자는 gregorian calendar가 없다.
+		# 그러므로 julian calendar로 표현한다.
+		if ( $chk < 15821005 ) {
+			$r = $this->julian2gregorian (array ($y, $m, $d));
+			list ($y, $m, $d) = array ($r->year, $r->month, $r->day);
+		}
 
 		$r = $this->solartolunar ($y, $m, $d);
 		list ($year, $month, $day, $myoon, $lmonth) = $r;
@@ -283,6 +559,10 @@ Class Lunar extends Lunar_API {
 	 * 를 실행하여 얻은 양력 날자를 다시 tolunar로 변환하여 비교하여
 	 * 동일하지 않다면, 윤달 파라미터 값을 주고 다시 구해야 한다!
 	 *
+	 * 진짜 만세력은 Gregorian으로 표기를 하기 때문에, 양력 1582-10-14
+	 * 이전의 경우에는 return object의 julian member 값으로 비교를 해야
+	 * 한다.
+	 *
 	 * 예제:
 	 * {@example pear_Lunar/tests/sample.php 119 42}
 	 *
@@ -292,7 +572,9 @@ Class Lunar extends Lunar_API {
 	 *   <pre>
 	 *   stdClass Object
 	 *   (
+	 *       [juliandate] => 2456527     // Julian Date Count
 	 *       [date] => 2013-07-16        // YYYY-MM-DD 형식의 양력 날자
+	 *       [julian] => 2013-08-09      // Julian Calendar
 	 *       [dangi] => 4346             // 단기 (양력)
 	 *       [hyear] => AD 2013          // AD/BC 형식 년도
 	 *       [year] => 2013              // 양력 연도
@@ -333,8 +615,16 @@ Class Lunar extends Lunar_API {
 		if ( $k1 < 0 ) $k1 += 10;
 		if ( $k2 < 0 ) $k2 += 12;
 
+		$jdate = $this->juliandate ($r);
+		//$julian = $this->gregorian2julian ($r);
+		$julian = $this->gregorian2julian ($jdate);
+
 		return (object) array (
+			'juliandate' => $jdate,
 			'date'       => $this->regdate ($r),
+			'julian'     => $julian->date,
+			#'julian_w'   => $this->week[$julian->week],
+			#'julian_hw'  => $this->hweek[$julian->week],
 			'dangi'      => $year + 2333,
 			'hyear'      => $this->human_year ($year),
 			'year'       => $year,
@@ -472,38 +762,41 @@ Class Lunar extends Lunar_API {
 	 *   (
 	 *       [center] => stdClass Object      // 이번달 초입 데이터
 	 *           (
-	 *               [name] => 소서           // 절기 이름
-	 *               [hname] => 小暑          // 절기 한자 이름
-	 *               [hyear] => AD 2013       // AD/BC 형식 연도
-	 *               [year] => 2013           // 초입 연도
-	 *               [month] => 7             // 초입 월
-	 *               [day] => 7               // 초입 일
-	 *               [hour] => 7              // 초입 시간
-	 *               [min] => 49              // 초입 분
+	 *               [name] => 소서              // 절기 이름
+	 *               [hname] => 小暑             // 절기 한자 이름
+	 *               [hyear] => AD 2013          // AD/BC 형식 연도
+	 *               [year] => 2013              // 초입 연도
+	 *               [month] => 7                // 초입 월
+	 *               [day] => 7                  // 초입 일
+	 *               [hour] => 7                 // 초입 시간
+	 *               [min] => 49                 // 초입 분
+	 *               [julian] => 2456480.4506944 // Julian date (UTC)
 	 *           )
 	 *
 	 *       [ccenter] => stdClass Object     // 이번달 중기 데이터
 	 *           (
-	 *               [name] => 대서           // 절기 이름
-	 *               [hname] => 大暑          // 절기 한자 이름
-	 *               [hyear] => AD 2013       // AD/BC 형식 연도
-	 *               [year] => 2013           // 중기 연도
-	 *               [month] => 7             // 중기 월
-	 *               [day] => 23              // 중기 일
-	 *               [hour] => 1              // 중기 시간
-	 *               [min] => 11              // 중기 분
+	 *               [name] => 대서              // 절기 이름
+	 *               [hname] => 大暑             // 절기 한자 이름
+	 *               [hyear] => AD 2013          // AD/BC 형식 연도
+	 *               [year] => 2013              // 중기 연도
+	 *               [month] => 7                // 중기 월
+	 *               [day] => 23                 // 중기 일
+	 *               [hour] => 1                 // 중기 시간
+	 *               [min] => 11                 // 중기 분
+	 *               [julian] => 2456496.1743056 // Julian date (UTC)
 	 *           )
 	 *
 	 *       [nenter] => stdClass Object      // 다음달 초입 데이터
 	 *           (
-	 *               [name] => 입추           // 절기 이름
-	 *               [hname] => 立秋          // 절기 한자 이름
-	 *               [hyear] => AD 2013       // AD/BC 형식 연도
-	 *               [year] => 2013           // 초입 연도
-	 *               [month] => 8             // 초입 월
-	 *               [day] => 7               // 초입 일
-	 *               [hour] => 17             // 초입 시간
-	 *               [min] => 36              // 초입 분
+	 *               [name] => 입추              // 절기 이름
+	 *               [hname] => 立秋             // 절기 한자 이름
+	 *               [hyear] => AD 2013          // AD/BC 형식 연도
+	 *               [year] => 2013              // 초입 연도
+	 *               [month] => 8                // 초입 월
+	 *               [day] => 7                  // 초입 일
+	 *               [hour] => 17                // 초입 시간
+	 *               [min] => 36                 // 초입 분
+	 *               [julian] => 2456511.8583333 // Julian date (UTC)
 	 *           )
 	 *   )
 	 *   </pre>
@@ -523,36 +816,66 @@ Class Lunar extends Lunar_API {
 			$outginame, $outgiyear, $outgimonth, $outgiday, $outgihour, $outgimin
 		) = $this->solortoso24 ($y, $m, 20, 1, 0);
 
+		$j_ce = $this->to_utc_julian (
+			sprintf (
+				'%s %s:%s:00',
+				$this->regdate (array ($ingiyear, $ingimonth, $ingiday)),
+				$ingihour < 10 ? '0' . $ingihour : $ingihour,
+				$ingimin < 10 ? '0' . $ingimin : $ingimin
+			)
+		);
+
+		$j_cc = $this->to_utc_julian (
+			sprintf (
+				'%s %s:%s:00',
+				$this->regdate (array ($midyear, $midmonth, $midday)),
+				$midhour < 10 ? '0' . $midhour : $midhour,
+				$midmin < 10 ? '0' . $midmin : $midmin
+			)
+		);
+
+		$j_ne = $this->to_utc_julian (
+			sprintf (
+				'%s %s:%s:00',
+				$this->regdate (array ($outgiyear, $outgimonth, $outgiday)),
+				$outgihour < 10 ? '0' . $outgihour : $outgihour,
+				$outgimin < 10 ? '0' . $outgimin : $outgimin
+			)
+		);
+
 		return (object) array (
 			'center'  => (object) array (
-				'name'  => $this->month_st[$inginame],
-				'hname' => $this->hmonth_st[$inginame],
-				'hyear' => $this->human_year ($ingiyear),
-				'year'  => $ingiyear,
-				'month' => $ingimonth,
-				'day'   => $ingiday,
-				'hour'  => $ingihour,
-				'min'   => $ingimin
+				'name'   => $this->month_st[$inginame],
+				'hname'  => $this->hmonth_st[$inginame],
+				'hyear'  => $this->human_year ($ingiyear),
+				'year'   => $ingiyear,
+				'month'  => $ingimonth,
+				'day'    => $ingiday,
+				'hour'   => $ingihour,
+				'min'    => $ingimin,
+				'julian' => $j_ce
 			),
 			'ccenter' => (object) array (
-				'name'  => $this->month_st[$midname],
-				'hname' => $this->hmonth_st[$midname],
-				'hyear' => $this->human_year ($midyear),
-				'year'  => $midyear,
-				'month' => $midmonth,
-				'day'   => $midday,
-				'hour'  => $midhour,
-				'min'   => $midmin
+				'name'   => $this->month_st[$midname],
+				'hname'  => $this->hmonth_st[$midname],
+				'hyear'  => $this->human_year ($midyear),
+				'year'   => $midyear,
+				'month'  => $midmonth,
+				'day'    => $midday,
+				'hour'   => $midhour,
+				'min'    => $midmin,
+				'julian' => $j_cc
 			),
 			'nenter'  => (object) array (
-				'name'  => $this->month_st[$outginame],
-				'hname' => $this->hmonth_st[$outginame],
-				'hyear' => $this->human_year ($outgiyear),
-				'year'  => $outgiyear,
-				'month' => $outgimonth,
-				'day'   => $outgiday,
-				'hour'  => $outgihour,
-				'min'   => $outgimin
+				'name'   => $this->month_st[$outginame],
+				'hname'  => $this->hmonth_st[$outginame],
+				'hyear'  => $this->human_year ($outgiyear),
+				'year'   => $outgiyear,
+				'month'  => $outgimonth,
+				'day'    => $outgiday,
+				'hour'   => $outgihour,
+				'min'    => $outgimin,
+				'julian' => $j_ne
 			)
 		);
 	}
@@ -573,22 +896,24 @@ Class Lunar extends Lunar_API {
 	 *   (
 	 *       [new] => stdClass Object      // 합삭 (New Moon) 데이터
 	 *           (
-	 *               [hyear] => AD 2013    // 합삭 AD/BC 형식 연도
-	 *               [year] => 2013        // 합삭 연도
-	 *               [month] => 7          // 합삭 월
-	 *               [day] => 8            // 합삭 일
-	 *               [hour] => 16          // 합삭 시간
-	 *               [min] => 15           // 합삭 분
+	 *               [hyear] => AD 2013          // 합삭 AD/BC 형식 연도
+	 *               [year] => 2013              // 합삭 연도
+	 *               [month] => 7                // 합삭 월
+	 *               [day] => 8                  // 합삭 일
+	 *               [hour] => 16                // 합삭 시간
+	 *               [min] => 15                 // 합삭 분
+	 *               [julian] => 2456481.8020833 // Julian date (UTC)
 	 *           )
 	 *
 	 *       [full] => stdClass Object     // 망 (Full Moon) 데이터
 	 *           (
-	 *               [hyear] => AD 2013    // 망 AD/BC 형식 연도
-	 *               [year] => 2013        // 망 연도
-	 *               [month] => 7          // 망 월
-	 *               [day] => 23           // 망 일
-	 *               [hour] => 2           // 망 시간
-	 *               [min] => 59           // 망 분
+	 *               [hyear] => AD 2013          // 망 AD/BC 형식 연도
+	 *               [year] => 2013              // 망 연도
+	 *               [month] => 7                // 망 월
+	 *               [day] => 23                 // 망 일
+	 *               [hour] => 2                 // 망 시간
+	 *               [min] => 59                 // 망 분
+	 *               [julian] => 2456496.2493056 // Julian date (UTC)
 	 *           )
 	 *   )
 	 *   </pre>
@@ -608,22 +933,42 @@ Class Lunar extends Lunar_API {
 			$y2, $m2, $d2, $h2, $mi2
 		) = $this->getlunarfirst ($y, $m, $d);
 
+		$j_new = $this->to_utc_julian (
+			sprintf (
+				'%s %s:%s:00',
+				$this->regdate (array ($y1, $mo1, $d1)),
+				$h1 < 10 ? '0' . $h1 : $h1,
+				$mi1 < 10 ? '0' . $mi1 : $mi1
+			)
+		);
+
+		$j_full = $this->to_utc_julian (
+			sprintf (
+				'%s %s:%s:00',
+				$this->regdate (array ($ym, $mom, $dm)),
+				$hm < 10 ? '0' . $hm : $hm,
+				$mim < 10 ? '0' . $mim : $mim
+			)
+		);
+
 		return (object) array (
 			'new' => (object) array (
-				'hyear' => $this->human_year ($y1),
-				'year' => $y1,
-				'month' => $mo1,
-				'day' => $d1,
-				'hour' => $h1,
-				'min' => $mi1
+				'hyear'  => $this->human_year ($y1),
+				'year'   => $y1,
+				'month'  => $mo1,
+				'day'    => $d1,
+				'hour'   => $h1,
+				'min'    => $mi1,
+				'julian' => $j_new
 			),   // 합삭 (New Moon)
 			'full' => (object) array (
-				'hyear' => $this->human_year ($ym),
-				'year' => $ym,
-				'month' => $mom,
-				'day' => $dm,
-				'hour' => $hm,
-				'min' => $mim
+				'hyear'  => $this->human_year ($ym),
+				'year'   => $ym,
+				'month'  => $mom,
+				'day'    => $dm,
+				'hour'   => $hm,
+				'min'    => $mim,
+				'julian' => $j_full
 			)    // 망 (Full Moon)
 		);
 	}
