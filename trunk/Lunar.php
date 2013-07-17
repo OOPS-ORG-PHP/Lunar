@@ -208,13 +208,13 @@ Class Lunar extends Lunar_API {
 	/**
 	 * 해당 날자가 gregorian 범위인지 체크
 	 *
-	 * @access private
+	 * @access public
 	 * @return bool
 	 * @param int 연도
 	 * @param int 월
 	 * @param int 일
 	 */
-	private function is_gregorian ($y, $m, $d = 1) {
+	public function is_gregorian ($y, $m, $d = 1) {
 		if ( (int) $m < 10 )
 			$m = '0' . (int) $m;
 		if ( (int) $d < 10 )
@@ -872,7 +872,6 @@ Class Lunar extends Lunar_API {
 			)
 		);
 
-		/*
 		// 1852-10-15 이전이면 julian으로 변경
 		if ( $this->is_gregorian ($ingiyear, $ingimonth, $ingiday) === false ) {
 			$r = $this->gregorian2julian (array ($ingiyear, $ingimonth, $ingiday));
@@ -880,7 +879,6 @@ Class Lunar extends Lunar_API {
 			$ingimonth = $r->month;
 			$ingiday   = $r->day;
 		}
-		 */
 
 		$j_cc = $this->to_utc_julian (
 			sprintf (
@@ -891,7 +889,6 @@ Class Lunar extends Lunar_API {
 			)
 		);
 
-		/*
 		// 1852-10-15 이전이면 julian으로 변경
 		if ( $this->is_gregorian ($midyear, $midmonth, $midday) === false ) {
 			$r = $this->gregorian2julian (array ($midyear, $midmonth, $midday));
@@ -899,7 +896,6 @@ Class Lunar extends Lunar_API {
 			$midmonth = $r->month;
 			$midday   = $r->day;
 		}
-		 */
 
 		$j_ne = $this->to_utc_julian (
 			sprintf (
@@ -910,7 +906,6 @@ Class Lunar extends Lunar_API {
 			)
 		);
 
-		/*
 		// 1852-10-15 이전이면 julian으로 변경
 		if ( $this->is_gregorian ($outgiyear, $outgimonth, $outgiday) === false ) {
 			$r = $this->gregorian2julian (array ($outgiyear, $outgimonth, $outgiday));
@@ -918,7 +913,6 @@ Class Lunar extends Lunar_API {
 			$outgimonth = $r->month;
 			$outgiday   = $r->day;
 		}
-		 */
 
 		return (object) array (
 			'center'  => (object) array (
