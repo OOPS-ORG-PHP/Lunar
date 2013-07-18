@@ -155,6 +155,35 @@ Class Lunar extends Lunar_API {
 	}
 	// }}}
 
+	// {{{ +-- public (array) split_date ($date)
+	/**
+	 * YYYY-MM-DD 또는 array ((string) YYYY, (string) MM, (string) DD)
+	 * 입력값을 * array ((int) $y, (int) $m, (int) $d)으로 변환
+	 *
+	 * @access public
+	 * @return array array ((int) $y, (int) $m, (int) $d)
+	 * @param array|string
+	 *     - YYYY-MM-DD
+	 *     - array ((string) YYYY, (string) MM, (stirng) DD)
+	 */
+	public function split_date ($date) {
+		if ( is_array ($date) )
+			$date = $this->regdate ($date);
+
+		$minus = ($date[0] == '-') ? true : false;
+		$date = $minus ? substr ($date, 1) : $date;
+
+		$r = preg_split ('/-/', $date);
+		if ( $minus )
+			$r[0] *= -1;
+
+		foreach ($r as $k => $v )
+			$r[$k] = (int) $v;
+
+		return $r;
+	}
+	// }}}
+
 	// {{{ +-- private (string) regdate ($v)
 	/**
 	 * YYYY-MM-DD 형식의 날자를 반환
@@ -177,7 +206,7 @@ Class Lunar extends Lunar_API {
 	}
 	// }}}
 
-	// {{{ +-- public (bool) is_yoon ($y, $julian = false)
+	// {{{ +-- public (bool) is_leap ($y, $julian = false)
 	/**
 	 * 윤년 체크
 	 *
@@ -189,22 +218,22 @@ Class Lunar extends Lunar_API {
 	 * @param int 년도
 	 * @param bool Julian 여부
 	 */
-	public function is_yoon ($y, $julian = false) {
+	public function is_leap ($y, $julian = false) {
 		// Julian의 윤년은 4로 나누어지면 된다.
 		if ( $julian )
 			return ($y % 4) ? false : true;
 
-		if ( ! ($y % 400) )
+		if ( ($y % 400) == 0 )
 			return true;
 
-		if ( ! ($y % 4 ) && ($y % 100) )
+		if ( ($y % 4) == 0 && ($y % 100) != 0 )
 			return true;
 
 		return false;
 	}
 	// }}}
 
-	// {{{ +-- private (bool) is_gregorian ($y, $m, $d = 1)
+	// {{{ +-- public (bool) is_gregorian ($y, $m, $d = 1)
 	/**
 	 * 해당 날자가 gregorian 범위인지 체크
 	 *
@@ -252,13 +281,16 @@ Class Lunar extends Lunar_API {
 	private function gregorian2julian ($v) {
 		if ( is_array ($v) ) {
 			$d = $this->regdate ($v);
-			list ($y, $m, $d) = preg_split ('/-/', $d);
+			list ($y, $m, $d) = $this->split_date ($d);
 
-			$v = $this->juliandate (array ($y, $m, $d));
+			$v = $this->cal2jd (array ($y, $m, $d));
 		}
 
 		if ( extension_loaded ('calendar') ) {
 			$r = (object) cal_from_jd ($v, CAL_JULIAN);
+			if ( $r->year < 0 )
+				$r->year++;
+
 			return (object) array (
 				'date'  => $this->regdate (array ($r->year, $r->month, $r->day)),
 				'year'  => $r->year,
@@ -305,6 +337,12 @@ Class Lunar extends Lunar_API {
 	}
 	// }}}
 
+	// {{{ +-- private mod ($x, $y)
+	private function mod ($x, $y) {
+		return ($x % $y + $y) % $y;
+	}
+	// }}}
+
 	// {{{ +-- private (string) julian2gregorian ($v)
 	/**
 	 * 율리안력을 그레고리안역으로 변환
@@ -325,16 +363,17 @@ Class Lunar extends Lunar_API {
 	 *
 	 * @param array|int Julian 연월일 배열 or Julian date count
 	 */
-	private function julian2gregorian ($v) {
-		if ( is_array ($v) ) {
-			$d = $this->regdate ($v);
-			list ($y, $m, $d) = preg_split ('/-/', $d);
-
-			$v = $this->juliandate (array ($y, $m, $d), true);
+	private function julian2gregorian ($jd, $pure = false) {
+		if ( is_array ($jd) ) {
+			list ($y, $m, $d) = $this->split_date ($jd);
+			$jd = $this->cal2jd (array ($y, $m, $d), true);
 		}
 
-		if ( extension_loaded ('calendar') ) {
-			$r = (object) cal_from_jd ($v, CAL_GREGORIAN);
+		if ( extension_loaded ('calendar') && $pure == false ) {
+			$r = (object) cal_from_jd ($jd, CAL_GREGORIAN);
+			if ( $r->year < 0 )
+				$r->year++;
+
 			return (object) array (
 				'date'  => $this->regdate (array ($r->year, $r->month, $r->day)),
 				'year'  => $r->year,
@@ -345,20 +384,42 @@ Class Lunar extends Lunar_API {
 		}
 
 		// https://en.wikipedia.org/wiki/Julian_day#Gregorian_calendar_from_Julian_day_number
-		$f = (int) $v + 1401;
-		$f = (int) ($f + (((4 * $v + 274277) / 146097) * 3) / 4 - 38);
-		$e = 4 * $f + 3;
-		$g = (int) (($e % 1461) / 4);
-		$h = 5 * $g + 2;
+		// 01-01-02 부터 이전은 맞지 않는다 --;
+		#$f = (int) $jd + 1401;
+		#$f = (int) ($f + (((4 * $jd + 274277) / 146097) * 3) / 4 - 38);
+		#$e = 4 * $f + 3;
+		#$g = (int) (($e % 1461) / 4);
+		#$h = 5 * $g + 2;
+		#$day = (int) (($h % 153) / 5 + 1);
+		#$month = (int) ((($h / 153 + 2) % 12) + 1);
+		#$year = (int) ($e / 1461 - 4716 + (12 + 2 - $month) / 12);
 
-		$day = (int) (($h % 153) / 5 + 1);
-		$month = (int) ((($h / 153 + 2) % 12) + 1);
-		$year = (int) ($e / 1461 - 4716 + (12 + 2 - $month) / 12);
+		// http://www.fourmilab.ch/documents/calendar/
+		$wjd = floor ($jd -  0.5) + 0.5;
+		# GREGORIAN_EPOCH 1721425.5
+		$depoch = $wjd - 1721425.5;
+		$quadricent = floor ($depoch / 146097);
+		$dqc = $this->mod ($depoch, 146097);
+		$cent = floor ($dqc / 36524);
+		$dcent = $this->mod ($dqc, 36524);
+		$quad = floor ($dcent / 1461);
+		$dquad = $this->mod ($dcent, 1461);
+		$yindex = floor ($dquad / 365);
 
-		$week = ($v + 1.5) % 7;
+		$year = ($quadricent * 400) + ($cent * 100) + ($quad * 4) + $yindex;
+		if ( ! ($cent == 4 || $yindex == 4) )
+			$year++;
+	
+		$yearday = $wjd - $this->cal2jd (array ($year, 1, 1));
+		$leapadj = (($wjd < $this->cal2jd (array ($year, 3, 1)))
+					? 0 : ($this->is_leap ($year) ? 1 : 2));
+		$month = floor (((($yearday + $leapadj) * 12) + 373) / 367);
+		$day = ceil ($wjd - $this->cal2jd (array ($year, $month, 1))) + 1;
+
+		$week = ($jd + 1.5) % 7;
 
 		return (object) array (
-			'date'  => "$year-$month-$day",
+			'date'  => $this->regdate (array ($year, $month, $day)),
 			'year'  => $year,
 			'month' => $month,
 			'day'   => $day,
@@ -367,6 +428,7 @@ Class Lunar extends Lunar_API {
 	}
 	// }}}
 
+	// {{{ +-- private (int) cal2jd_pure ($v, $julian = false)
 	/**
 	 * Gregorian 날자를 Julian date로 변환 (by PURE PHP CODE)
 	 *
@@ -392,7 +454,7 @@ Class Lunar extends Lunar_API {
 	 * @return int Julian date
 	 * @param array 연월일 배열 : array ($y, $m, $d)
 	 */
-	private function juliandate_pure ($v, $julian = false) {
+	private function cal2jd_pure ($v, $julian = false) {
 		list ($y, $m, $d) = $v;
 
 		if ( $m <= 2 ) {
@@ -406,7 +468,9 @@ Class Lunar extends Lunar_API {
 		$D = (int) (30.6001 * ($m + 1));
 		return ceil ($C + $D + $d + $B - 1524.5);
 	}
+	// }}}
 
+	// {{{ +-- private (int) cal2jd_ext ($v, $julian = false)
 	/**
 	 * Gregorian 날자를 Julian date로 변환 (by Calendar Extension)
 	 *
@@ -414,7 +478,7 @@ Class Lunar extends Lunar_API {
 	 * @return int Julian date
 	 * @param array 연월일 배열 : array ($y, $m, $d)
 	 */
-	private function juliandate_extension ($v, $julian = false) {
+	private function cal2jd_ext ($v, $julian = false) {
 		list ($y, $m, $d) = $v;
 
 		$old = date_default_timezone_get ();
@@ -428,8 +492,9 @@ Class Lunar extends Lunar_API {
 		date_default_timezone_set ($old);
 		return $r;
 	}
+	// }}}
 
-	// {{{ +-- public (int) juliandate ($v)
+	// {{{ +-- public (int) cal2jd ($v)
 	/**
 	 * Gregorian 날자를 Julian date로 변환
 	 *
@@ -437,11 +502,11 @@ Class Lunar extends Lunar_API {
 	 * @return int Julian date
 	 * @param array 연월일 배열 : array ($y, $m, $d)
 	 */
-	public function juliandate ($v, $julian = false) {
+	public function cal2jd ($v, $julian = false) {
 		if ( extension_loaded ('calendar') )
-			return $this->juliandate_extension ($v, $julian);
+			return $this->cal2jd_ext ($v, $julian);
 
-		return $this->juliandate_pure ($v, $julian);
+		return $this->cal2jd_pure ($v, $julian);
 	}
 	// }}}
 
@@ -474,12 +539,12 @@ Class Lunar extends Lunar_API {
 	 */
 	private function to_utc_julian ($v) {
 		$buf = $this->toutc ($v);
-		list ($y, $m, $d, $h, $i, $s) = preg_split ('/-/', $buf);
+		list ($y, $m, $d, $h, $i, $s) = $this->split_date ($buf);
 
 		$chk = $y . $m . $d;
 
 		//$julian = ( $chk < 18451015 ) ? $true : false;
-		$j = $this->juliandate (array ($y, $m, $d), $julian);
+		$j = $this->cal2jd (array ($y, $m, $d), $julian);
 
 		if ( ($h - 12) < 0 ) {
 			$h = 11 - $h;
@@ -513,7 +578,7 @@ Class Lunar extends Lunar_API {
 		# 와 매치되는 날자로 변경한다. (10씩 빼준다.
 		$chk = $y . $m . $d;
 		if ( $chk > 15821004 && $chk < 15821015 ) {
-			$julian = $this->juliandate (array ($y, (int) $m, (int) $d));
+			$julian = $this->cal2jd (array ($y, (int) $m, (int) $d));
 			$julian -= 10;
 			$r = $this->julian2gregorian ($julian);
 			list ($y, $m, $d) = array ($r->year, $r->month, $r->day);
@@ -585,7 +650,9 @@ Class Lunar extends Lunar_API {
 	 */
 	public function tolunar ($v = null) {
 		list ($y, $m, $d) = $this->toargs ($v);
+		printf ("** %4s.%2s.%2s ... ", $y, $m, $d);
 		list ($y, $m, $d) = $this->fix_calendar ($y, $m, $d);
+		printf ("%4s.%2s.%2s<br>", $y, $m, $d);
 
 		$r = $this->solartolunar ($y, $m, $d);
 		list ($year, $month, $day, $myoon, $lmonth) = $r;
@@ -642,7 +709,7 @@ Class Lunar extends Lunar_API {
 	 *   <pre>
 	 *   stdClass Object
 	 *   (
-	 *       [juliandate] => 2456527     // Julian Date Count
+	 *       [jd] => 2456527             // Julian Date Count
 	 *       [date] => 2013-07-16        // YYYY-MM-DD 형식의 양력 날자
 	 *       [julian] => 2013-08-09      // Julian Calendar
 	 *       [dangi] => 4346             // 단기 (양력)
@@ -685,12 +752,12 @@ Class Lunar extends Lunar_API {
 		if ( $k1 < 0 ) $k1 += 10;
 		if ( $k2 < 0 ) $k2 += 12;
 
-		$jdate = $this->juliandate ($r);
+		$jdate = $this->cal2jd ($r);
 		//$julian = $this->gregorian2julian ($r);
 		$julian = $this->gregorian2julian ($jdate);
 
 		return (object) array (
-			'juliandate' => $jdate,
+			'jd'         => $jdate,
 			'date'       => $this->regdate ($r),
 			'julian'     => $julian->date,
 			#'julian_w'   => $this->week[$julian->week],
