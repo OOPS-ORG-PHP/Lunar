@@ -367,45 +367,34 @@ Class Lunar extends Lunar_API {
 	}
 	// }}}
 
-	// {{{ +-- private (int) juliandate ($v)
 	/**
-	 * Gregorian 날자를 Julian date로 변환
+	 * Gregorian 날자를 Julian date로 변환 (by PURE PHP CODE)
+	 *
+	 * http://new.astronote.org/bbs/board.php?bo_table=prog&wr_id=29929
+	 * 1. Y는 해당년도, M는 월(1월=1,2월=2), D는 해당 월의 날짜이다.
+	 *    D는 시간값도 포함한 소수값으로 생각하자. 가령 3일 12시 UT라면
+	 *    D=3.5이다.
+	 * 2. M>2인 경우 Y,M은 변경하지 않는다. M = 1 또는 2인 경우 Y=Y-1,
+	 *    M=M+12로 계산한다.
+	 * 3. 그레고리력(Gregorian Calendar)의 경우 아래처럼 계산한다.
+	 *    A = INT(Y/100), B = 2 – A + INT(A/4)
+	 *    여기서 INT는 ()안에 들어간 값을 넘지않는 가장 큰 정수이다.
+	 *    율리우스력(Julian Calendar)의 경우 B=0이다.
+	 * 4. JD는 다음과 같이 계산된다.
+	 *    JD = INT(365.25(Y+4716)) + INT(30.6001(M+1)) + D + B – 1524.5
+	 *    여기서 30.6001은 정확히는 30.6을 써야한다. 하지만 컴퓨터 계산시
+	 *    10.6이여 하는데 10.599999999 이런식으로 표현되는 경우가 발생하면
+	 *    INT(10.6)과 INT(10.5999..)의 결과가 달라진다. 이 문제 대해 대처
+	 *    하기 위해 30.6001을 사용한 것이다. 이러한 에러를 Round-off Error
+	 *    라고 불린다.
 	 *
 	 * @access private
 	 * @return int Julian date
 	 * @param array 연월일 배열 : array ($y, $m, $d)
 	 */
-	private function juliandate ($v, $julian = false) {
+	private function juliandate_pure ($v, $julian = false) {
 		list ($y, $m, $d) = $v;
 
-		if ( extension_loaded ('calendar') ) {
-			$old = date_default_timezone_get ();
-			date_default_timezone_set ('UTC');
-
-			$func = $julian ? 'JulianToJD' : 'GregorianToJD';
-			$r = $func ($m, $d, $y);
-
-			date_default_timezone_set ($old);
-			return $r;
-		}
-
-		// http://new.astronote.org/bbs/board.php?bo_table=prog&wr_id=29929
-		// 1. Y는 해당년도, M는 월(1월=1,2월=2), D는 해당 월의 날짜이다.
-		//    D는 시간값도 포함한 소수값으로 생각하자. 가령 3일 12시 UT라면
-		//    D=3.5이다.
-		// 2. M>2인 경우 Y,M은 변경하지 않는다. M = 1 또는 2인 경우 Y=Y-1,
-		//    M=M+12로 계산한다.
-		// 3. 그레고리력(Gregorian Calendar)의 경우 아래처럼 계산한다.
-		//    A = INT(Y/100), B = 2 – A + INT(A/4)
-		//    여기서 INT는 ()안에 들어간 값을 넘지않는 가장 큰 정수이다.
-		//    율리우스력(Julian Calendar)의 경우 B=0이다.
-		// 4. JD는 다음과 같이 계산된다.
-		//    JD = INT(365.25(Y+4716)) + INT(30.6001(M+1)) + D + B – 1524.5
-		//    여기서 30.6001은 정확히는 30.6을 써야한다. 하지만 컴퓨터 계산시
-		//    10.6이여 하는데 10.599999999 이런식으로 표현되는 경우가 발생하면
-		//    INT(10.6)과 INT(10.5999..)의 결과가 달라진다. 이 문제 대해 대처
-		//    하기 위해 30.6001을 사용한 것이다. 이러한 에러를 Round-off Error
-		//    라고 불린다.
 		if ( $m <= 2 ) {
 			$y--;
 			$m += 12;
@@ -416,6 +405,43 @@ Class Lunar extends Lunar_API {
 		$C = (int) (365.25 * ($y + 4716));
 		$D = (int) (30.6001 * ($m + 1));
 		return ceil ($C + $D + $d + $B - 1524.5);
+	}
+
+	/**
+	 * Gregorian 날자를 Julian date로 변환 (by Calendar Extension)
+	 *
+	 * @access private
+	 * @return int Julian date
+	 * @param array 연월일 배열 : array ($y, $m, $d)
+	 */
+	private function juliandate_extension ($v, $julian = false) {
+		list ($y, $m, $d) = $v;
+
+		$old = date_default_timezone_get ();
+		date_default_timezone_set ('UTC');
+
+		$func = $julian ? 'JulianToJD' : 'GregorianToJD';
+		if ( $y < 1 )
+			$y--;
+		$r = $func ((int) $m, (int) $d, (int) $y);
+
+		date_default_timezone_set ($old);
+		return $r;
+	}
+
+	// {{{ +-- public (int) juliandate ($v)
+	/**
+	 * Gregorian 날자를 Julian date로 변환
+	 *
+	 * @access public
+	 * @return int Julian date
+	 * @param array 연월일 배열 : array ($y, $m, $d)
+	 */
+	public function juliandate ($v, $julian = false) {
+		if ( extension_loaded ('calendar') )
+			return $this->juliandate_extension ($v, $julian);
+
+		return $this->juliandate_pure ($v, $julian);
 	}
 	// }}}
 
