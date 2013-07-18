@@ -1,24 +1,13 @@
 <?php
-/*
- * Local variables:
- * tab-width: 4
- * c-basic-offset: 4
- * End:
- * vim: set filetype=php noet sw=4 ts=4 fdm=marker:
- * vim600: noet sw=4 ts=4 fdm=marker
- * vim<600: noet sw=4 ts=4
- */
 
 require_once 'Lunar.php';
 
-// 수행 시간 체크
 function get_microtime ($old, $new) {
 	$start = explode(" ", $old);
 	$end = explode(" ", $new);
 	return sprintf("%.2f", ($end[1] + $end[0]) - ($start[1] + $start[0]));
 }
 
-// 이전달,다음달 링크
 function prev_next ($y, $m) {
 	$prevm = (int) $m - 1;
 	$nextm = (int) $m + 1;
@@ -55,11 +44,12 @@ if ( preg_match ('/^(-?[0-9]{1,4})-([0-9]{1,2})$/', $_GET['v'], $match) ) {
 } else
 	list ($year, $month) = preg_split ('/-/', $cur);
 
-// -2400 ~ 2200 까지로 제한한다.
 if ( $year < -2400 || $year > 2200 ) {
 	readfile ('./error.html');
 	exit;
 }
+
+$gregorian_check = $year . $month;
 
 $lday = array (0, 31, 28, 31, 30, 31, 31, 30, 31, 30, 31, 30, 31);
 $wday = array ('일' => 1, '월' => 2, '화' => 3, '수' => 4, '목' => 5, '금' => 6, '토' => 7);
@@ -69,86 +59,105 @@ $old = microtime ();
 $lunar = new Lunar;
 
 $cdate = $year . '-' . $month . '-01';
-# 1일에 대한 음력 정보
 $fday = $lunar->tolunar ($cdate);
-# 1일에 대한 세차/월간/일진 정보
 $tune = $lunar->dayfortune ($cdate);
-# 지정한 달 1일의 음력달에 대한 합삭/망 정보
 $moon = $lunar->moonstatus ($cdate);
-# 1일의 28수 정보
+$moon1 = $lunar->moonstatus ($year . '-' . $month . '-28');
 $s28  = $lunar->s28day ($cdate);
-# 지정한 달의 절기 정보
 $season = $lunar->seasondate ($cdate);
 
-# 윤년이면 2월의 마지막 날을 29일로 수정
-if ( $lunar->is_yoon ($year) )
+if ( $lunar->is_leap ($year) )
 	$lday[2] = 29;
-
-# 현재달의 마지막 날자
 $lastday = $lday[(int) $month];
 
-# 1일이 음력 윤달이면 음력월 정보 앞에 (윤)을 붙임
 if ( $fday->moonyoon )
 	$fday->month = '(閏)' . $fday->month;
 
 $tdstart = $wday[$fday->week];
 $tdend = $tdstart + $lastday;
 
-// java script 음력 배열 정보 만들기
-$lm = '[ \'\', \'' . $fday->month . '\'';
-$ld = '[ 0, ' . $fday->day;
-$l28s = '[ \'\', \'' . $s28->h . '\'';
-$liljin = '[ \'\', \'' . $tune->hday . '\'';
+if ( $gregorian_check == 158210 ) {
+	require_once '158210.php';
 
-$_s28 = $s28;
-$mbuf = $fday->month;
-$dbuf = $fday->day;
-for ( $i=1; $i<$lastday; $i++ ) {
-	$chk = false;
-	$dbuf++;
-
-	if ( $fday->largemoon ) {
-		if ( $dbuf > 30 ) {
-			$mbuf = preg_replace ('/[^0-9]/', '', $fday->month);
-			$mbuf ++;
-			$dbuf -= 30;
-			$chk = true;
-		}
+	$julip = (object) array ('day' => 100, 'name' => '');
+	$junggi = $season->ccenter;
+} else {
+	if ( $lunar->is_gregorian ($year, $month, 1) === false ) {
+		$julip = $season->ccenter;
+		$junggi = $season->nenter;
 	} else {
-		if ( $dbuf > 29 ) {
-			$mbuf = preg_replace ('/[^0-9]/', '', $fday->month);
-			$mbuf ++;
-			$dbuf -= 29;
-			$chk = true;
+		$julip = $season->center;
+		$junggi = $season->ccenter;
+	}
+	$lm = '[ \'\', \'' . $fday->month . '\'';
+	$ld = '[ 0, ' . $fday->day;
+	$l28s = '[ \'\', \'' . $s28->h . '\'';
+	$liljin = '[ \'\', \'' . $tune->hday . '\'';
+
+	$_s28 = $s28;
+	$mbuf = $fday->month;
+	$dbuf = $fday->day;
+	for ( $i=1; $i<$lastday; $i++ ) {
+		$chk = false;
+		$dbuf++;
+
+		if ( $fday->largemonth ) {
+			if ( $dbuf > 30 ) {
+				$mbuf = preg_replace ('/[^0-9]/', '', $fday->month);
+				$mbuf ++;
+				$dbuf -= 30;
+				$chk = true;
+			}
+		} else {
+			if ( $dbuf > 29 ) {
+				$mbuf = preg_replace ('/[^0-9]/', '', $fday->month);
+				$mbuf ++;
+				$dbuf -= 29;
+				$chk = true;
+			}
 		}
+
+		if ( $chk ) {
+			if ( ($i + 2) > $lday[(int) $month] ) {
+				$cmon = $month + 1;
+				$cday = ($i + 2) - $lday[(int) $month];
+			} else {
+				$cmon = $month;
+				$cday = $i + 2;
+			}
+			$cdate = '';
+			$cdate = $year . '-' . $cmon . '-' . $cday;
+			#echo $cdate . ' : ' . $lday[(int) $month] . ' : ' . $i . "<br>\n";
+			$r = $lunar->tolunar ($cdate);
+			/*
+			echo "<pre>\n";
+			print_r ($r);
+			echo "</pre>\n";
+			 */
+			$mbuf = $r->moonyoon ? '(閏)' : '';
+			$mbuf .= $r->month;
+
+			if ( $r->largemonth )
+				$fday->largemonth = true;
+			$chk == false;
+		}
+
+		$lm .= ', \'' . $mbuf . '\'';
+		$ld .= ', ' . $dbuf;
+		$_s28 = $lunar->s28day ($_s28);
+		$l28s .= ', \'' . $_s28->h . '\'';
+
+		$gindex = $tune->data->d + $i;
+		if ( $gindex >= 60 )
+			$gindex -= 60;
+
+		$liljin .= ', \'' . $lunar->ganji_ref($gindex, true) . '\'';
 	}
-
-	// 음력 마지막일이면, 음력 다음달의 음력 정보를 구한다.
-	// 다음 음력달이 윤달일 경우 확인 해야 하며, 다음 음력달의
-	// 합삭/망 정보도 구한다.
-	if ( $chk ) {
-		$cdate = $year . '-' . $month . '-' . ($i + 2);
-		$r = $lunar->tolunar ($cdate);
-		$mbuf = $r->moonyoon ? '(閏)' : '';
-		$mbuf .= $r->month;
-		$moon1 = $lunar->moonstatus ($cdate);
-	}
-
-	$lm .= ', \'' . $mbuf . '\'';
-	$ld .= ', ' . $dbuf;
-	$_s28 = $lunar->s28day ($_s28);
-	$l28s .= ', \'' . $_s28->h . '\'';
-
-	$gindex = $tune->data->d + $i;
-	if ( $gindex >= 60 )
-		$gindex -= 60;
-
-	$liljin .= ', \'' . $lunar->ganji_ref($gindex, true) . '\'';
+	$lm .= ' ]';
+	$ld .= ' ]';
+	$l28s .= ' ]';
+	$liljin .= ' ]';
 }
-$lm .= ' ]';
-$ld .= ' ]';
-$l28s .= ' ]';
-$liljin .= ' ]';
 
 $np = prev_next ($year, $month);
 
@@ -161,11 +170,11 @@ $ptime = get_microtime ($old, $new);
 <head>
 	<meta charset="utf-8">
 	<title>진짜 만세력 PHP version</title>
-	<link type="text/css" href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="//cdn.oops.org/bootstrap/2.3.2/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="manse.css">
 
-	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-	<script type="text/javascript" src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="//cdn.oops.org/jquery/1.10.2.min.js"></script>
+	<script type="text/javascript" src="//cdn.oops.org/bootstrap/2.3.2/js/bootstrap.min.js"></script>
 
 	<script type="text/javascript">
 	//<![CDATA[
@@ -184,7 +193,7 @@ $ptime = get_microtime ($old, $new);
 				[ ],
 				[ , , , , , '어린이날' ],
 				[ , , , , , , '현충일' ],
-				[ , , , , , , , , , , , , , , , , , '제헌절' ],
+				[ ],
 				[ , , , , , , , , , , , , , , , '광복절' ],
 				[ ],
 				[ , , , '개천절', , , , , , '한글날' ],
@@ -203,14 +212,19 @@ $ptime = get_microtime ($old, $new);
 
 				var i = 1;
 				for ( ; td<this.tdend; td++,i++ ) {
+					if ( this.tdend == 23 )
+						dayv = (i > 4) ? i + 10 : i;
+					else
+						dayv = i;
+
 					var julip = '';
-					if ( i == <?=$season->center->day?> ) {
-						julip = '<span class="julip"><?=$season->center->name?></span>';
-					} else if ( i == <?=$season->ccenter->day?> ) {
-						julip = '<span class="julip"><?=$season->ccenter->name?></span>';
+					if ( dayv == <?=$julip->day?> ) {
+						julip = '<span class="julip"><?=$julip->name?></span>';
+					} else if ( dayv == <?=$junggi->day?> ) {
+						julip = '<span class="julip"><?=$junggi->name?></span>';
 					}
 
-					var data = '<span class="day">' + i + '</span>'
+					var data = '<span class="day">' + dayv + '</span>'
 							+ '<span class="su">' + this.l28s[i] + '</span><br>'
 							+ '<span class="lun">' + this.lmonth[i] + '.' + this.lday[i] + '</span><br>'
 							+ '<span class="iljin">' + this.liljin[i] + ' </span>' + julip;
@@ -331,52 +345,60 @@ $ptime = get_microtime ($old, $new);
 		</div>
 
 		<div id="context">
-			<span class="b">Processing Time:</span>: <?=$ptime?> sec<br><br>
+			<div class="stitle b">Processing Time:</div> <?=$ptime?> sec<br>
+			<div class="stitle b">Valid Period:</div> BC 2401(-2400)년 ~ AD 2300<br><br>
 
 	 		<div class="stitle b">이번달 절입:</div> <?=$season->center->name?>
 						<?=$season->center->hyear?>년
 						<?=$season->center->month?>월
 						<?=$season->center->day?>일
 						<?=$season->center->hour?>시
-						<?=$season->center->min?>분<br>
+						<?=$season->center->min?>분
+						<span class="label label-success">Julian Day</span>  <?=$season->center->julian?><br>
  			<div class="stitle b">이번달 중기:</div> <?=$season->ccenter->name?>
 						<?=$season->ccenter->hyear?>년
 						<?=$season->ccenter->month?>월
 						<?=$season->ccenter->day?>일
 						<?=$season->ccenter->hour?>시
-						<?=$season->ccenter->min?>분<br>
- 			<div class="stitle b">다음달 중기:</div> <?=$season->nenter->name?>
+						<?=$season->ccenter->min?>분
+						<span class="label label-success">Julian Day</span>  <?=$season->ccenter->julian?><br>
+ 			<div class="stitle b">다음달 절입:</div> <?=$season->nenter->name?>
 						<?=$season->nenter->hyear?>년
 						<?=$season->nenter->month?>월
 						<?=$season->nenter->day?>일
 						<?=$season->nenter->hour?>시
-						<?=$season->nenter->min?>분<br><br>
+						<?=$season->nenter->min?>분
+						<span class="label label-success">Julian Day</span>  <?=$season->nenter->julian?><br><br>
 
 			<div class="stitle b">합삭 (New Moon):</div>
 						<?=$moon->new->hyear?>년
 						<?=$moon->new->month?>월
 						<?=$moon->new->day?>일
 						<?=$moon->new->hour?>시
-						<?=$moon->new->min?>분<br>
+						<?=$moon->new->min?>분
+						<span class="label label-success">Julian Day</span>  <?=$moon->new->julian?><br>
 			<div class="stitle b">망 (Full Moon):</div>
 						<?=$moon->full->hyear?>년
 						<?=$moon->full->month?>월
 						<?=$moon->full->day?>일
 						<?=$moon->full->hour?>시
-						<?=$moon->full->min?>분<br>
+						<?=$moon->full->min?>분
+						<span class="label label-success">Julian Day</span>  <?=$moon->full->julian?><br>
 
 			<div class="stitle b">합삭 (New Moon):</div>
 						<?=$moon1->new->hyear?>년
 						<?=$moon1->new->month?>월
 						<?=$moon1->new->day?>일
 						<?=$moon1->new->hour?>시
-						<?=$moon1->new->min?>분<br>
+						<?=$moon1->new->min?>분
+						<span class="label label-success">Julian Day</span>  <?=$moon1->new->julian?><br>
 			<div class="stitle b">망 (Full Moon):</div>
 						<?=$moon1->full->hyear?>년
 						<?=$moon1->full->month?>월
 						<?=$moon1->full->day?>일
 						<?=$moon1->full->hour?>시
-						<?=$moon1->full->min?>분<br>
+						<?=$moon1->full->min?>분
+						<span class="label label-success">Julian Day</span>  <?=$moon1->full->julian?><br>
 
 
 			<a name="desc"></a>
@@ -393,6 +415,62 @@ $ptime = get_microtime ($old, $new);
 			</p>
 
 			<p>
+			먼저 달력을 보기전에 다음 사항을 꼭 인지를 해야 한다.
+			</p>
+
+			<ol>
+				<li>우리가 사용하는 Gregorian calendar는 1582년 10월 15일 부터 존재한다.</li>
+				<li>1582년 10월 15일 이전은 Julian calendar로 표기한다.</li>
+				<li>1582년 10월 5일 부터 1582년 10월 14일은 calender상에 존재하지 않는다.</li>
+			</ol>
+
+			<p>
+			그럼 고영창님의 <span class="label label-warning">진짜만세력</span>과 다른
+			달력들과의 차이가 발생하는 이유를 살펴 보자면 다음의 특징들이 있다.
+			</p>
+
+			<ol>
+				<li>대부분의 calendar들은 1582년 10월 15일 이전을 Julian calendar로 표기한다.</li>
+				<li><span class="label label-warning">진짜만세력</span>은 모든 표시를
+					Gregorian calender로 표기한다.</li>
+				<li>심지어 <span class="label label-warning">진짜만세력</span>은
+					존재하지 않는 1582.10.5~1582.10.14 기간을 표시한다.</span>
+			</ol>
+
+			<p>
+			이런 이유로 고영장님의 <span class="label label-warning">진짜만세력</span>은
+			1582년 10월 15일 이전의 데이터에 대해서는 다른 달력들과 많은 차이를 보이게
+			된다. 하지만, 그렇다고 해서 고영창님의 달력이 잘못되었다고 할 수는 없으며,
+			Julian date count의 경우에는 정확한 표기를 하고 있는 것으로 보인다.
+			</p>
+
+			<p>
+			또한, 기존의 달력들이 database를 구축하여 사용하는 방식이나, 고영창님의
+			<span class="label label-warning">진짜만세력</span>은 계산에 의하여 사용
+			되므로, 음력 윤달의 기준이 조금 다르기 때문에 일간이나 음력윤달의 차이로
+			인하여 음력날자가 1~2일 정도가 차이가 발생할 수 있다. 이에 대해서는 고영창님의
+			<a href="http://afnmp3.homeip.net/~kohyc/calendar/index.cgi">홈페이지</a>를
+			참조하기 바란다.
+
+			<p>
+			<span class="label label-warning">진짜만세력</span>과 여기서 배포하는
+			진짜만세력 PHP API의 차이는 다음과 같다.
+			</p>
+
+			<ol>
+				<li>모든 계산은 original <span class="label label-warning">진짜만세력</span>의
+					계산 방식을 따른다. (이는 다른 calendar들과 음력 날자가 1~2일의 차이가
+					발생할 수 있고, 음력 윤달이 다를 수 있다.)</li>
+				<li>1582년 10월 15일 이전의 표기를 Julian calender를 사용한다. (다른
+					calender들과 역사 기록과 맞추기 위해서...)</li>
+				<li>Julian calender를 사용하기 때문에 기원전 calender는 BC 4713년
+					2월 8일 부터 가능하다.</li>
+				<li>위의 이유는 <span class="label label-warning">진짜만세력</span>의
+					계산은 Gregorian calerder로 하기 때문에 Julian calender를 Gregorian
+					calender로 변환하기 위한 알고리즘의 제약 때문이다.</li>
+			</ol>
+
+			<p style="text-decoration: underline;">
 			이 API의 유효기간은 다음과 같다.
 			</p>
 
@@ -406,9 +484,11 @@ $ptime = get_microtime ($old, $new);
 				</li>
 				<li>64bit:
 					<ul>
-						<li>BC 9998(-9999)년 1월 1일 ~ AD 9999년 12월 31일</li>
-						<li>API의 연도 체크가 4자리 까지임..</li>
+						<li>BC 4713(-4712)년 2월 8일 ~ AD 9999년 12월 31일</li>
+						<li>API의 연도 체크가 4자리 까지이므로 10000년 이상은 확인 못함</li>
 						<li>64bit 계산이 가능한 시점까지 가능할 듯..</li>
+						<li>기원전의 경우 Julian date가 BC 4713년 1월 1일 부터이므로
+							Gregorian calendar 변환이 가능한  BC 4713년 2월 8일부터 가능하다.</li>
 					</ul>
 				</li>
 			</ul>
