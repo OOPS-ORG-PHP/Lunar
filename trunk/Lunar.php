@@ -650,9 +650,9 @@ Class Lunar extends Lunar_API {
 	 */
 	public function tolunar ($v = null) {
 		list ($y, $m, $d) = $this->toargs ($v);
-		printf ("** %4s.%2s.%2s ... ", $y, $m, $d);
+		#printf ("** %4s.%2s.%2s ... ", $y, $m, $d);
 		list ($y, $m, $d) = $this->fix_calendar ($y, $m, $d);
-		printf ("%4s.%2s.%2s<br>", $y, $m, $d);
+		#printf ("%4s.%2s.%2s<br>", $y, $m, $d);
 
 		$r = $this->solartolunar ($y, $m, $d);
 		list ($year, $month, $day, $myoon, $lmonth) = $r;
