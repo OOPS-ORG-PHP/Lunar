@@ -66,7 +66,7 @@ print_r ($r);
 echo $lunar->human_year (-2333);
 
 /*
- * $lunar->is_yoon ($y)
+ * $lunar->is_reap ($y)
  *
  * input:
  *        1992 (양력)
@@ -75,7 +75,7 @@ echo $lunar->human_year (-2333);
  *        true
  */
 
-if ( $lunar->is_yoon (1992) )
+if ( $lunar->is_leap (1992) )
 	echo "This is Yoon Year\n";
 else
 	echo "This is not Yoon Year\n";
