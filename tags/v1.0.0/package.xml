@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package version="2.0" packagerversion="1.7.2" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
+	<!-- $Id$ -->
+	<name>Lunar</name>
+	<channel>pear.oops.org</channel>
+	<summary>Solar/Lunar Convert API</summary>
+	<description>Solar/Lunar convert API. Original algorithm is by 고영창 (http://afnmp3.homeip.net/~kohyc/calendar/)</description>
+	<lead>
+		<name>JoungKyun.Kim</name>
+		<user>joungkyun</user>
+		<email>joungkyun@gmail.com</email>
+		<active>yes</active>
+	</lead>
+	<date>2013-07-19</date>
+	<time>16:39:37</time>
+	<version>
+		<release>1.0.0</release>
+		<api>1.0.0</api>
+	</version>
+	<stability>
+		<release>stable</release>
+		<api>stable</api>
+	</stability>
+	<license uri="http://afnmp3.homeip.net:81/~kohyc/calendar/cal20000_download.html">고영창</license>
+	<notes>* 1.0.0 release
+* 진짜 만세력 0.92(perl version) and 0.93(pascal version)으로 Core API 포팅
+* 1582년 10월 15일 이전 율리우스력 변환
+* 율리우스 적일 추가
+</notes>
+	<contents>
+		<dir name="/">
+			<file role="php" md5sum="300589cf9becba21433406d81b8bcfb2" name="Lunar/Lunar_API.php" />
+			<file role="php" md5sum="34049bfe2d9d1fbfeec45c8b8abd78a1" name="Lunar.php" />
+		</dir>
+	</contents>
+	<dependencies>
+		<required>
+			<php>
+				<min>5.1.0</min>
+			</php>
+			<pearinstaller>
+				<min>1.4.3</min>
+			</pearinstaller>
+		</required>
+		<optional>
+			<package>
+				<name>calendar</name>
+				<channel>php</channel>
+			</package>
+		</optional>
+	</dependencies>
+	<phprelease />
+	<changelog>
+		<release>
+			<version>
+				<release>1.0.0</release>
+				<api>1.0.0</api>
+			</version>
+			<stability>
+				<release>stable</release>
+				<api>stable</api>
+			</stability>
+			<date>2013-07-19</date>
+			<license uri="http://afnmp3.homeip.net:81/~kohyc/calendar/cal20000_download.html">고영창</license>
+			<notes>* release 1.0.0
+</notes>
+		</release>
+	</changelog>
+</package>
