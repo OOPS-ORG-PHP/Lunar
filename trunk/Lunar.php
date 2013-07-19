@@ -239,10 +239,17 @@ Class Lunar extends Lunar_API {
 	 * @return bool
 	 * @param int 년도
 	 * @param bool Julian 여부
+	 * <p>
+	 * 1582년 이전은 Julian calender로 판단하여 이 값이
+	 * false라도 율리우스력으로 간주하여 판단한다.
+	 * </p>
 	 */
 	public function is_leap ($y, $julian = false) {
+		if ( $y == 1582 )
+			return true;
+
 		// Julian의 윤년은 4로 나누어지면 된다.
-		if ( $julian )
+		if ( $julian || $y < 1582 )
 			return ($y % 4) ? false : true;
 
 		if ( ($y % 400) == 0 )
