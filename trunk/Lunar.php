@@ -245,11 +245,8 @@ Class Lunar extends Lunar_API {
 	 * </p>
 	 */
 	public function is_leap ($y, $julian = false) {
-		if ( $y == 1582 )
-			return true;
-
 		// Julian의 윤년은 4로 나누어지면 된다.
-		if ( $julian || $y < 1582 )
+		if ( $julian || $y < 1583 )
 			return ($y % 4) ? false : true;
 
 		if ( ($y % 400) == 0 )
