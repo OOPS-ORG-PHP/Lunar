@@ -66,7 +66,7 @@ $moon1 = $lunar->moonstatus ($year . '-' . $month . '-28');
 $s28  = $lunar->s28day ($cdate);
 $season = $lunar->seasondate ($cdate);
 
-if ( $lunar->is_leap ($year) )
+if ( $lunar->is_leap ($year, $year < 1583 ? true : false) )
 	$lday[2] = 29;
 $lastday = $lday[(int) $month];
 
