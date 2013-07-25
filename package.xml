@@ -11,26 +11,23 @@
 		<email>joungkyun@gmail.com</email>
 		<active>yes</active>
 	</lead>
-	<date>2013-07-19</date>
-	<time>16:39:37</time>
+	<date>2013-07-26</date>
+	<time>00:43:32</time>
 	<version>
 		<release>1.0.0</release>
 		<api>1.0.0</api>
 	</version>
 	<stability>
-		<release>stable</release>
+		<release>devel</release>
 		<api>stable</api>
 	</stability>
 	<license uri="http://afnmp3.homeip.net:81/~kohyc/calendar/cal20000_download.html">고영창</license>
-	<notes>* 1.0.0 release
-* 진짜 만세력 0.92(perl version) and 0.93(pascal version)으로 Core API 포팅
-* 1582년 10월 15일 이전 율리우스력 변환
-* 율리우스 적일 추가
+	<notes>* is_leap method : 1582년 이전은 율리우스력 기준으로 윤년 판단.
 </notes>
 	<contents>
 		<dir name="/">
-			<file role="php" md5sum="300589cf9becba21433406d81b8bcfb2" name="Lunar/Lunar_API.php" />
-			<file role="php" md5sum="34049bfe2d9d1fbfeec45c8b8abd78a1" name="Lunar.php" />
+			<file role="php" md5sum="67d003a03654bc0ad9bcff6f6bc4f28b" name="Lunar/Lunar_API.php" />
+			<file role="php" md5sum="0914b3a55fe22286bc8fe1e257224295" name="Lunar.php" />
 		</dir>
 	</contents>
 	<dependencies>
@@ -53,6 +50,20 @@
 	<changelog>
 		<release>
 			<version>
+				<release>1.0.1</release>
+				<api>1.0.0</api>
+			</version>
+			<stability>
+				<release>stable</release>
+				<api>stable</api>
+			</stability>
+			<date>2013-07-26</date>
+			<license>BSD(Lunar.php) &amp; 고영창(Lunar/Lunar_API.php)</license>
+			<notes>* is_leap method : 1582년 이전은 율리우스력 기준으로 윤년 판단.
+</notes>
+		</release>
+		<release>
+			<version>
 				<release>1.0.0</release>
 				<api>1.0.0</api>
 			</version>
@@ -61,8 +72,11 @@
 				<api>stable</api>
 			</stability>
 			<date>2013-07-19</date>
-			<license uri="http://afnmp3.homeip.net:81/~kohyc/calendar/cal20000_download.html">고영창</license>
+			<license>BSD(Lunar.php) &amp; 고영창(Lunar/Lunar_API.php)</license>
 			<notes>* release 1.0.0
+* 진짜 만세력 0.92(perl version) and 0.93(pascal version)으로 Core API 포팅
+* 1582년 10월 15일 이전 율리우스력 변환
+* 율리우스 적일 추가
 </notes>
 		</release>
 	</changelog>
