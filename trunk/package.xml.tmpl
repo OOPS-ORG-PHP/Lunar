@@ -18,14 +18,11 @@
 		<api>1.0.0</api>
 	</version>
 	<stability>
-		<release>stable</release>
+		<release>devel</release>
 		<api>stable</api>
 	</stability>
 	<license uri="http://afnmp3.homeip.net:81/~kohyc/calendar/cal20000_download.html">고영창</license>
-	<notes>* 1.0.0 release
-* 진짜 만세력 0.92(perl version) and 0.93(pascal version)으로 Core API 포팅
-* 1582년 10월 15일 이전 율리우스력 변환
-* 율리우스 적일 추가
+	<notes>* is_leap method : 1582년 이전은 율리우스력 기준으로 윤년 판단.
 </notes>
 	<contents>
 		<dir name="/">
@@ -53,7 +50,7 @@
 	<changelog>
 		<release>
 			<version>
-				<release>1.0.0</release>
+				<release>1.0.1</release>
 				<api>1.0.0</api>
 			</version>
 			<stability>
@@ -61,8 +58,25 @@
 				<api>stable</api>
 			</stability>
 			<date>@curdate@</date>
-			<license uri="http://afnmp3.homeip.net:81/~kohyc/calendar/cal20000_download.html">고영창</license>
+			<license>BSD(Lunar.php) &amp; 고영창(Lunar/Lunar_API.php)</license>
+			<notes>* is_leap method : 1582년 이전은 율리우스력 기준으로 윤년 판단. [@33]
+</notes>
+		</release>
+		<release>
+			<version>
+				<release>1.0.0</release>
+				<api>1.0.0</api>
+			</version>
+			<stability>
+				<release>stable</release>
+				<api>stable</api>
+			</stability>
+			<date>2013-07-19</date>
+			<license>BSD(Lunar.php) &amp; 고영창(Lunar/Lunar_API.php)</license>
 			<notes>* release 1.0.0
+* 진짜 만세력 0.92(perl version) and 0.93(pascal version)으로 Core API 포팅
+* 1582년 10월 15일 이전 율리우스력 변환
+* 율리우스 적일 추가
 </notes>
 		</release>
 	</changelog>
