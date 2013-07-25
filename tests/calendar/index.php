@@ -279,7 +279,7 @@ $ptime = get_microtime ($old, $new);
 <div class="guide">
 
 	<h3>
-		진짜 만세력 PHP API
+		Lunar/Solar Pear Calendar
 		<a href="#desc" class="btn btn-info">About</a>
 		<a href="./index.phps" class="btn btn-warning">View Source</a>
 	</h3>
@@ -354,21 +354,21 @@ $ptime = get_microtime ($old, $new);
 						<?=$season->center->day?>일
 						<?=$season->center->hour?>시
 						<?=$season->center->min?>분
-						<span class="label label-success">Julian Day</span>  <?=$season->center->julian?><br>
+						<span class="label label-success">Julian Date</span>  <?=$season->center->julian?><br>
  			<div class="stitle b">이번달 중기:</div> <?=$season->ccenter->name?>
 						<?=$season->ccenter->hyear?>년
 						<?=$season->ccenter->month?>월
 						<?=$season->ccenter->day?>일
 						<?=$season->ccenter->hour?>시
 						<?=$season->ccenter->min?>분
-						<span class="label label-success">Julian Day</span>  <?=$season->ccenter->julian?><br>
+						<span class="label label-success">Julian Date</span>  <?=$season->ccenter->julian?><br>
  			<div class="stitle b">다음달 절입:</div> <?=$season->nenter->name?>
 						<?=$season->nenter->hyear?>년
 						<?=$season->nenter->month?>월
 						<?=$season->nenter->day?>일
 						<?=$season->nenter->hour?>시
 						<?=$season->nenter->min?>분
-						<span class="label label-success">Julian Day</span>  <?=$season->nenter->julian?><br><br>
+						<span class="label label-success">Julian Date</span>  <?=$season->nenter->julian?><br><br>
 
 			<div class="stitle b">합삭 (New Moon):</div>
 						<?=$moon->new->hyear?>년
@@ -376,14 +376,14 @@ $ptime = get_microtime ($old, $new);
 						<?=$moon->new->day?>일
 						<?=$moon->new->hour?>시
 						<?=$moon->new->min?>분
-						<span class="label label-success">Julian Day</span>  <?=$moon->new->julian?><br>
+						<span class="label label-success">Julian Date</span>  <?=$moon->new->julian?><br>
 			<div class="stitle b">망 (Full Moon):</div>
 						<?=$moon->full->hyear?>년
 						<?=$moon->full->month?>월
 						<?=$moon->full->day?>일
 						<?=$moon->full->hour?>시
 						<?=$moon->full->min?>분
-						<span class="label label-success">Julian Day</span>  <?=$moon->full->julian?><br>
+						<span class="label label-success">Julian Date</span>  <?=$moon->full->julian?><br>
 
 			<div class="stitle b">합삭 (New Moon):</div>
 						<?=$moon1->new->hyear?>년
@@ -391,24 +391,24 @@ $ptime = get_microtime ($old, $new);
 						<?=$moon1->new->day?>일
 						<?=$moon1->new->hour?>시
 						<?=$moon1->new->min?>분
-						<span class="label label-success">Julian Day</span>  <?=$moon1->new->julian?><br>
+						<span class="label label-success">Julian Date</span>  <?=$moon1->new->julian?><br>
 			<div class="stitle b">망 (Full Moon):</div>
 						<?=$moon1->full->hyear?>년
 						<?=$moon1->full->month?>월
 						<?=$moon1->full->day?>일
 						<?=$moon1->full->hour?>시
 						<?=$moon1->full->min?>분
-						<span class="label label-success">Julian Day</span>  <?=$moon1->full->julian?><br>
+						<span class="label label-success">Julian Date</span>  <?=$moon1->full->julian?><br>
 
 
 			<a name="desc"></a>
 
 			<hr>
 
-			<h5>* About 진짜 만세력 PHP version</h5>
+			<h5>* About Lunar/Solar Pear Package</h5>
 
 			<p>
-			<span class="label label-warning">진짜만세력</span> PHP Api 1.0.0은
+			<span class="label label-warning">Lunar</span> Pear package는
 			<a href="mailto:kohyc@chollian.net">고영창</a>님의
 			<span class="label label-warning">진짜만세력</span> 0.92 Perl 버전을
 			PHP로 포팅한 것이다.
@@ -419,8 +419,8 @@ $ptime = get_microtime ($old, $new);
 			</p>
 
 			<ol>
-				<li>우리가 사용하는 Gregorian calendar는 1582년 10월 15일 부터 존재한다.</li>
-				<li>1582년 10월 15일 이전은 Julian calendar로 표기한다.</li>
+				<li>우리가 사용하는 그레고리력은 1582년 10월 15일 부터 존재한다.</li>
+				<li>1582년 10월 15일 이전은 율리우스력으로 표기한다.</li>
 				<li>1582년 10월 5일 부터 1582년 10월 14일은 calender상에 존재하지 않는다.</li>
 			</ol>
 
@@ -430,9 +430,9 @@ $ptime = get_microtime ($old, $new);
 			</p>
 
 			<ol>
-				<li>대부분의 calendar들은 1582년 10월 15일 이전을 Julian calendar로 표기한다.</li>
+				<li>대부분의 calendar들은 1582년 10월 15일 이전을 율리우스력으로 표기한다.</li>
 				<li><span class="label label-warning">진짜만세력</span>은 모든 표시를
-					Gregorian calender로 표기한다.</li>
+					그레고리력으로 표기한다.</li>
 				<li>심지어 <span class="label label-warning">진짜만세력</span>은
 					존재하지 않는 1582.10.5~1582.10.14 기간을 표시한다.</span>
 			</ol>
@@ -441,7 +441,7 @@ $ptime = get_microtime ($old, $new);
 			이런 이유로 고영장님의 <span class="label label-warning">진짜만세력</span>은
 			1582년 10월 15일 이전의 데이터에 대해서는 다른 달력들과 많은 차이를 보이게
 			된다. 하지만, 그렇다고 해서 고영창님의 달력이 잘못되었다고 할 수는 없으며,
-			Julian date count의 경우에는 정확한 표기를 하고 있는 것으로 보인다.
+			율리우스 적일(Julian date)의 경우에는 정확한 표기를 하고 있는 것으로 보인다.
 			</p>
 
 			<p>
@@ -461,14 +461,21 @@ $ptime = get_microtime ($old, $new);
 				<li>모든 계산은 original <span class="label label-warning">진짜만세력</span>의
 					계산 방식을 따른다. (이는 다른 calendar들과 음력 날자가 1~2일의 차이가
 					발생할 수 있고, 음력 윤달이 다를 수 있다.)</li>
-				<li>1582년 10월 15일 이전의 표기를 Julian calender를 사용한다. (다른
+				<li>1582년 10월 15일 이전의 표기를 율리우스력을 사용한다. (다른
 					calender들과 역사 기록과 맞추기 위해서...)</li>
-				<li>Julian calender를 사용하기 때문에 기원전 calender는 BC 4713년
+				<li>율리우스력을 사용하기 때문에 기원전 calender는 BC 4713년
 					2월 8일 부터 가능하다.</li>
 				<li>위의 이유는 <span class="label label-warning">진짜만세력</span>의
-					계산은 Gregorian calerder로 하기 때문에 Julian calender를 Gregorian
-					calender로 변환하기 위한 알고리즘의 제약 때문이다.</li>
+					계산은 그레고리력으로 하기 때문에 율리우스력을 그레고리력으로
+					변환하기 위한 알고리즘의 제약 때문이다.</li>
 			</ol>
+
+			<p>
+			고영창님의 <span class="label label-warning">진짜만세력</span>과 동일하게
+			포팅한 버전을 원할 경우,
+			<a href="//oops.org/project/manse/original/">http://oops.org/project/manse/original</a>을
+			참고 하도록 한다.
+			</p>
 
 			<p style="text-decoration: underline;">
 			이 API의 유효기간은 다음과 같다.
@@ -487,8 +494,8 @@ $ptime = get_microtime ($old, $new);
 						<li>BC 4713(-4712)년 2월 8일 ~ AD 9999년 12월 31일</li>
 						<li>API의 연도 체크가 4자리 까지이므로 10000년 이상은 확인 못함</li>
 						<li>64bit 계산이 가능한 시점까지 가능할 듯..</li>
-						<li>기원전의 경우 Julian date가 BC 4713년 1월 1일 부터이므로
-							Gregorian calendar 변환이 가능한  BC 4713년 2월 8일부터 가능하다.</li>
+						<li>기원전의 경우 율리우스 적일이 BC 4713년 1월 1일 부터이므로
+							그레고리력 변환이 가능한  BC 4713년 2월 8일부터 가능하다.</li>
 					</ul>
 				</li>
 			</ul>
