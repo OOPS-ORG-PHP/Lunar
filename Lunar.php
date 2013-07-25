@@ -35,15 +35,16 @@
  *
  * 주의!
  *
- * 이 API를 사용하기 전에 '진짜 만세력'을 검색하여 '진짜 만세력'의 특징을
- * 잘 알고 사용하기 바란다. '진짜 만세력'은 계산에 의한 값이기 때문에 DB화
- * 된 만세력과는 약간의 차이가 발생할 수 있다!
+ * pear_Lunar package는 2가지 라이센스를 가지고 있다. pear_Lunar 패키지의
+ * Core API (Lunar/Lunar_API.php)는 고영창님의 '진짜만세력' 코드를 PHP로
+ * 포팅한 것으로, 고영창님에게 라이센스가 있으며, front end API(Lunar.php)는
+ * 김정균이 작성한 코드들로 BSD license를 따른다.
  *
  * @category    Calendar
  * @package     Lunar
  * @author      JoungKyun.Kim <http://oops.org>
  * @copyright   (c) 1997-2013 OOPS.org
- * @license     http://afnmp3.homeip.net/~kohyc/calendar/index.cgi
+ * @license     BSD (Lunar.php) And 고영창(Lunar/Lunar_API.php)
  * @version     SVN: $Id$
  * @link        http://pear.oops.org/package/Lunar
  * @since       File available since release 0.0.1
