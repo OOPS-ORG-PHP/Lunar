@@ -78,17 +78,7 @@ $tdend = $tdstart + $lastday;
 
 if ( $gregorian_check == 158210 ) {
 	require_once '158210.php';
-
-	$julip = (object) array ('day' => 100, 'name' => '');
-	$junggi = $season->ccenter;
 } else {
-	if ( $lunar->is_gregorian ($year, $month, 1) === false ) {
-		$julip = $season->ccenter;
-		$junggi = $season->nenter;
-	} else {
-		$julip = $season->center;
-		$junggi = $season->ccenter;
-	}
 	$lm = '[ \'\', \'' . $fday->month . '\'';
 	$ld = '[ 0, ' . $fday->day;
 	$l28s = '[ \'\', \'' . $s28->h . '\'';
@@ -134,6 +124,10 @@ if ( $gregorian_check == 158210 ) {
 			print_r ($r);
 			echo "</pre>\n";
 			 */
+
+			if ( $season->center->month != $month )
+				$season = $lunar->seasondate ($cdate);
+
 			$mbuf = $r->moonyoon ? '(閏)' : '';
 			$mbuf .= $r->month;
 
@@ -169,9 +163,11 @@ $ptime = get_microtime ($old, $new);
 <html lang="ko">
 <head>
 	<meta charset="utf-8">
-	<title>진짜 만세력 PHP version</title>
+	<title>Lunar/Solar Pear package</title>
 	<link rel="stylesheet" type="text/css" href="//cdn.oops.org/bootstrap/2.3.2/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="manse.css">
+	<!--[if IE]><link rel="stylesheet" type="text/css" href="manse-ie.css"><![endif]-->
+	<!--[if lte IE 7]><link rel="stylesheet" type="text/css" href="manse-ie7.css"><![endif]-->
 
 	<script type="text/javascript" src="//cdn.oops.org/jquery/1.10.2.min.js"></script>
 	<script type="text/javascript" src="//cdn.oops.org/bootstrap/2.3.2/js/bootstrap.min.js"></script>
@@ -200,12 +196,23 @@ $ptime = get_microtime ($old, $new);
 				[ ],
 				[ , , , , , , , , , , , , , , , , , , , , , , , , , '성탄절' ]
 			],
+			cmon:   <?=(int) $month?>,
 			lmonth: <?=$lm?>,
 			lday:   <?=$ld?>,
 			liljin: <?=$liljin?>,
 			l28s:   <?=$l28s?>,
 
 			fixtable: function () {
+<?php
+echo <<<EOF
+				var season = new Object ();
+				season.m{$season->center->month}d{$season->center->day} = '{$season->center->name}';
+				season.m{$season->ccenter->month}d{$season->ccenter->day} = '{$season->ccenter->name}';
+				season.m{$season->nenter->month}d{$season->nenter->day} = '{$season->nenter->name}';
+
+
+EOF;
+?>
 				for ( td=1; td<this.tdstart; td++ ) {
 					$( '#td' + td ).empty ();
 				}
@@ -218,11 +225,10 @@ $ptime = get_microtime ($old, $new);
 						dayv = i;
 
 					var julip = '';
-					if ( dayv == <?=$julip->day?> ) {
-						julip = '<span class="julip"><?=$julip->name?></span>';
-					} else if ( dayv == <?=$junggi->day?> ) {
-						julip = '<span class="julip"><?=$junggi->name?></span>';
-					}
+
+					eval ('var jv = season.m' + this.cmon + 'd' + dayv);
+					if ( jv != undefined )
+						julip = '<span class="julip">' + jv + '</span>';
 
 					var data = '<span class="day">' + dayv + '</span>'
 							+ '<span class="su">' + this.l28s[i] + '</span><br>'
