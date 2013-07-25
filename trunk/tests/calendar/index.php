@@ -66,7 +66,14 @@ $moon1 = $lunar->moonstatus ($year . '-' . $month . '-28');
 $s28  = $lunar->s28day ($cdate);
 $season = $lunar->seasondate ($cdate);
 
-if ( $lunar->is_leap ($year, $year < 1583 ? true : false) )
+/*
+ * pear_Lunar 1.0.0에서는 is_leap method가 연도만으로 율리우스력
+ * 판단을 하지 않으며로 아래과 같이 조건을 체크해야 한다.
+ * if ( $lunar->is_leap ($year, $year < 1583 ? true : false) )
+ * pear_Lunar 1.0.1 부터는 2번째 인자가 없어도, 연도만으로
+ * 율리우스력 판단을 한다.
+ */
+if ( $lunar->is_leap ($year) )
 	$lday[2] = 29;
 $lastday = $lday[(int) $month];
 

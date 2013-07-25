@@ -241,7 +241,7 @@ Class Lunar extends Lunar_API {
 	 * @param bool Julian 여부
 	 * <p>
 	 * 1582년 이전은 Julian calender로 판단하여 이 값이
-	 * false라도 율리우스력으로 간주하여 판단한다.
+	 * false라도 율리우스력으로 간주하여 판단한다. (sinse 1.0.1)
 	 * </p>
 	 */
 	public function is_leap ($y, $julian = false) {
