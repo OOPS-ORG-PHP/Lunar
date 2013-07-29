@@ -290,7 +290,7 @@ Class Lunar extends Lunar_API {
 	 * 그레고리력을 율리안력으로 변환
 	 *
 	 * @access private
-	 * @return object .
+	 * @return stdClass
 	 *
 	 *   <pre>
 	 *   stdClass Object
@@ -375,7 +375,7 @@ Class Lunar extends Lunar_API {
 	 * 율리안력을 그레고리안역으로 변환
 	 *
 	 * @access private
-	 * @return object .
+	 * @return stdClass
 	 *
 	 *   <pre>
 	 *   stdClass Object
@@ -644,7 +644,7 @@ Class Lunar extends Lunar_API {
 	 * {@example pear_Lunar/tests/sample.php 83 35}
 	 *
 	 * @access public
-	 * @return object .    음력 날자 정보 반환
+	 * @return stdClass    음력 날자 정보 반환
 	 *
 	 *   <pre>
 	 *   stdClass Object
@@ -732,7 +732,7 @@ Class Lunar extends Lunar_API {
 	 * {@example pear_Lunar/tests/sample.php 119 42}
 	 *
 	 * @access public
-	 * @return object .   양력 날자 정보 object 반환
+	 * @return stdClass    양력 날자 정보 object 반환
 	 *
 	 *   <pre>
 	 *   stdClass Object
@@ -817,7 +817,7 @@ Class Lunar extends Lunar_API {
 	 * {@example pear_Lunar/tests/sample.php 163 56}
 	 *
 	 * @access public
-	 * @return object .
+	 * @return stdClass
 	 *
 	 *   <pre>
 	 *   stdClass Object
@@ -872,7 +872,7 @@ Class Lunar extends Lunar_API {
 	 * {@example pear_Lunar/tests/sample.php 221 35}
 	 *
 	 * @access public
-	 * @return object .
+	 * @return stdClass
 	 *
 	 *   <pre>
 	 *   stdClass Object
@@ -924,7 +924,7 @@ Class Lunar extends Lunar_API {
 	 * {@example pear_Lunar/tests/sample.php 257 52}
 	 *
 	 * @access public
-	 * @return object .  현달 초입/중기와 다음달 초입 데이터 반환
+	 * @return stdClass   현달 초입/중기와 다음달 초입 데이터 반환
 	 *
 	 *   <pre>
 	 *   stdClass Object
@@ -1084,7 +1084,7 @@ Class Lunar extends Lunar_API {
 	 * {@example pear_Lunar/tests/sample.php 311 56}
 	 *
 	 * @access public
-	 * @return object	. 합삭/망 object
+	 * @return stdClass	합삭/망 object
 	 *
 	 *   <pre>
 	 *   stdClass Object
