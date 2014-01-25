@@ -43,7 +43,7 @@
  * @category    Calendar
  * @package     Lunar
  * @author      JoungKyun.Kim <http://oops.org>
- * @copyright   (c) 1997-2013 OOPS.org
+ * @copyright   (c) 2014 OOPS.org
  * @license     BSD (Lunar.php) And 고영창(Lunar/Lunar_API.php)
  * @version     SVN: $Id$
  * @link        http://pear.oops.org/package/Lunar
