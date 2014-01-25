@@ -11,8 +11,8 @@
 		<email>joungkyun@gmail.com</email>
 		<active>yes</active>
 	</lead>
-	<date>2013-07-26</date>
-	<time>00:48:36</time>
+	<date>2014-01-25</date>
+	<time>17:52:14</time>
 	<version>
 		<release>1.0.1</release>
 		<api>1.0.0</api>
@@ -21,13 +21,18 @@
 		<release>devel</release>
 		<api>stable</api>
 	</stability>
-	<license uri="http://afnmp3.homeip.net:81/~kohyc/calendar/cal20000_download.html">고영창</license>
+	<license>BSD(Lunar.php) &amp; 고영창(Lunar/Lunar_API.php)</license>
 	<notes>* is_leap method : 1582년 이전은 율리우스력 기준으로 윤년 판단.
+* calendar example:
+  - 6월과 7월의 마지막날 잘못 표기되는 문제 수정
+  - IE에서 calendar 토요일 밀리는 문제 해결
+  - 율리우스력 출력시에 절기 정보 잘못 나오는 문제 수정
+* Lunar Frontend method license를 BSD license로 변경
 </notes>
 	<contents>
 		<dir name="/">
-			<file role="php" md5sum="67d003a03654bc0ad9bcff6f6bc4f28b" name="Lunar/Lunar_API.php" />
-			<file role="php" md5sum="0914b3a55fe22286bc8fe1e257224295" name="Lunar.php" />
+			<file role="php" md5sum="18dbf83fb94de86465d08d8a2c9ced96" name="Lunar/Lunar_API.php" />
+			<file role="php" md5sum="5943f7e1399f7a56f70ccd74e9af2c41" name="Lunar.php" />
 		</dir>
 	</contents>
 	<dependencies>
@@ -57,13 +62,14 @@
 				<release>stable</release>
 				<api>stable</api>
 			</stability>
-			<date>2013-07-26</date>
+			<date>2014-01-25</date>
 			<license>BSD(Lunar.php) &amp; 고영창(Lunar/Lunar_API.php)</license>
 			<notes>* is_leap method : 1582년 이전은 율리우스력 기준으로 윤년 판단. [@33]
 * calendar example:
   - 6월과 7월의 마지막날 잘못 표기되는 문제 수정
   - IE에서 calendar 토요일 밀리는 문제 해결
   - 율리우스력 출력시에 절기 정보 잘못 나오는 문제 수정
+* Lunar Frontend method license를 BSD license로 변경
 </notes>
 		</release>
 		<release>
