@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.9.4" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
+ <name>Lunar</name>
+ <channel>pear.oops.org</channel>
+ <summary>Solar/Lunar Convert API</summary>
+ <description>Solar/Lunar convert API. Original algorithm is by 고영창 (http://afnmp3.homeip.net/~kohyc/calendar/)</description>
+ <lead>
+  <name>JoungKyun.Kim</name>
+  <user>joungkyun</user>
+  <email>joungkyun@gmail.com</email>
+  <active>yes</active>
+ </lead>
+ <date>2014-01-25</date>
+ <time>17:52:14</time>
+ <version>
+  <release>1.0.1</release>
+  <api>1.0.0</api>
+ </version>
+ <stability>
+  <release>devel</release>
+  <api>stable</api>
+ </stability>
+ <license>BSD(Lunar.php) &amp; 고영창(Lunar/Lunar_API.php)</license>
+ <notes>
+* is_leap method : 1582년 이전은 율리우스력 기준으로 윤년 판단.
+* calendar example:
+  - 6월과 7월의 마지막날 잘못 표기되는 문제 수정
+  - IE에서 calendar 토요일 밀리는 문제 해결
+  - 율리우스력 출력시에 절기 정보 잘못 나오는 문제 수정
+* Lunar Frontend method license를 BSD license로 변경
+ </notes>
+ <contents>
+  <dir name="/">
+   <file md5sum="18dbf83fb94de86465d08d8a2c9ced96" name="Lunar/Lunar_API.php" role="php" />
+   <file md5sum="5943f7e1399f7a56f70ccd74e9af2c41" name="Lunar.php" role="php" />
+  </dir>
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>5.1.0</min>
+   </php>
+   <pearinstaller>
+    <min>1.4.3</min>
+   </pearinstaller>
+  </required>
+  <optional>
+   <package>
+    <name>calendar</name>
+    <channel>php</channel>
+   </package>
+  </optional>
+ </dependencies>
+ <phprelease />
+ <changelog>
+  <release>
+   <version>
+    <release>1.0.1</release>
+    <api>1.0.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2014-01-25</date>
+   <license>BSD(Lunar.php) &amp; 고영창(Lunar/Lunar_API.php)</license>
+   <notes>
+* is_leap method : 1582년 이전은 율리우스력 기준으로 윤년 판단. [@33]
+* calendar example:
+  - 6월과 7월의 마지막날 잘못 표기되는 문제 수정
+  - IE에서 calendar 토요일 밀리는 문제 해결
+  - 율리우스력 출력시에 절기 정보 잘못 나오는 문제 수정
+* Lunar Frontend method license를 BSD license로 변경
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.0.0</release>
+    <api>1.0.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2013-07-19</date>
+   <license>BSD(Lunar.php) &amp; 고영창(Lunar/Lunar_API.php)</license>
+   <notes>
+* release 1.0.0
+* 진짜 만세력 0.92(perl version) and 0.93(pascal version)으로 Core API 포팅
+* 1582년 10월 15일 이전 율리우스력 변환
+* 율리우스 적일 추가
+   </notes>
+  </release>
+ </changelog>
+</package>
