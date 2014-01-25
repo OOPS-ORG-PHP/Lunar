@@ -12,9 +12,9 @@
 		<active>yes</active>
 	</lead>
 	<date>2014-01-25</date>
-	<time>17:52:14</time>
+	<time>17:54:17</time>
 	<version>
-		<release>1.0.1</release>
+		<release>1.0.2</release>
 		<api>1.0.0</api>
 	</version>
 	<stability>
@@ -22,12 +22,7 @@
 		<api>stable</api>
 	</stability>
 	<license>BSD(Lunar.php) &amp; 고영창(Lunar/Lunar_API.php)</license>
-	<notes>* is_leap method : 1582년 이전은 율리우스력 기준으로 윤년 판단.
-* calendar example:
-  - 6월과 7월의 마지막날 잘못 표기되는 문제 수정
-  - IE에서 calendar 토요일 밀리는 문제 해결
-  - 율리우스력 출력시에 절기 정보 잘못 나오는 문제 수정
-* Lunar Frontend method license를 BSD license로 변경
+	<notes>
 </notes>
 	<contents>
 		<dir name="/">
@@ -53,6 +48,20 @@
 	</dependencies>
 	<phprelease />
 	<changelog>
+		<release>
+			<version>
+				<release>1.0.2</release>
+				<api>1.0.0</api>
+			</version>
+			<stability>
+				<release>stable</release>
+				<api>stable</api>
+			</stability>
+			<date>2014-01-25</date>
+			<license>BSD(Lunar.php) &amp; 고영창(Lunar/Lunar_API.php)</license>
+			<notes>
+</notes>
+		</release>
 		<release>
 			<version>
 				<release>1.0.1</release>
