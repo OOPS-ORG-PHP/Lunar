@@ -3,17 +3,8 @@
  * Project: Lunar :: 양력/음력 변환 클래스<br>
  * File:    Lunar.php
  *
- * 이 패키지는 양력/음력간의 변환을 제공한다.
- *
- * 1852년 10월 15일 이전의 양력 날자는 율리우스력으로 취급을 하며, 내부
- * 계산시에 그레고리력으로 변환을 하여 계산을 한다.
- *
- * 제공 되는 기능은 다음과 같다.
- *
- * 1. 양력/음력 변환 API
- * 2. 절기 API
- * 3. 합삭/막 정보 API
- * 4. 세차/월간/일진 API 등
+ * 이 패키지는 양력/음력간의 변환을 제공하는 API로, 고영창님의 '진짜만세력'
+ * 0.92 버전을 PHP Class화 한 후 front end API를 추가한 것이다.
  *
  * 이 변환 API의 유효기간은 다음과 같다.
  *
@@ -23,11 +14,9 @@
  *     + -2087-07-05(음력 -2087-05-29) 이전은 계산이 무지 느려짐..
  *
  *   * 64bit
- *     + -4712-02-08 ~ 9999-12-31
- *     + API의 연도 체크가 4자리 까지이므로 10000년 이상은 확인 못함
- *     + 64bit 계산이 가능한 시점까지 가능할 듯..
- *     + 기원전의 경우 Julian date가 BC 4713년 1월 1일 부터이므로
- *       Gregorian calendar 변환이 가능한 BC 4713년 2월 8일부터 가능
+ *     + -9999-01-01 ~ 9999-12-31
+ *     + API 날자 입력 형식떄문에 연도를 4자리로 제한. 아마 64bit 계산이
+ *       가능한 지점까지 가능할 듯..
  * </pre>
  *
  * 계산 처리 시간상, 과거 2000년전과 미래 100년후의 시간은 왠만하면 웹에서는
@@ -35,16 +24,15 @@
  *
  * 주의!
  *
- * pear_Lunar package는 2가지 라이센스를 가지고 있다. pear_Lunar 패키지의
- * Core API (Lunar/Lunar_API.php)는 고영창님의 '진짜만세력' 코드를 PHP로
- * 포팅한 것으로, 고영창님에게 라이센스가 있으며, front end API(Lunar.php)는
- * 김정균이 작성한 코드들로 BSD license를 따른다.
+ * 이 API를 사용하기 전에 '진짜 만세력'을 검색하여 '진짜 만세력'의 특징을
+ * 잘 알고 사용하기 바란다. '진짜 만세력'은 계산에 의한 값이기 때문에 DB화
+ * 된 만세력과는 약간의 차이가 발생할 수 있다!
  *
  * @category    Calendar
  * @package     Lunar
  * @author      JoungKyun.Kim <http://oops.org>
- * @copyright   (c) 2014 OOPS.org
- * @license     BSD (Lunar.php) And 고영창(Lunar/Lunar_API.php)
+ * @copyright   (c) 1997-2013 OOPS.org
+ * @license     http://afnmp3.homeip.net/~kohyc/calendar/index.cgi
  * @version     SVN: $Id$
  * @link        http://pear.oops.org/package/Lunar
  * @since       File available since release 0.0.1
@@ -60,17 +48,8 @@ require_once 'Lunar/Lunar_API.php';
 /**
  * 양력/음력 변환 클래스
  *
- * 이 패키지는 양력/음력간의 변환을 제공한다.
- *
- * 1852년 10월 15일 이전의 양력 날자는 율리우스력으로 취급을 하며, 내부
- * 계산시에 그레고리력으로 변환을 하여 계산을 한다.
- *
- * 제공 되는 기능은 다음과 같다.
- *
- * 1. 양력/음력 변환 API
- * 2. 절기 API
- * 3. 합삭/막 정보 API
- * 4. 세차/월간/일진 API 등
+ * 이 패키지는 양력/음력간의 변환을 제공하는 API로, 고영창님의 '진짜만세력'
+ * 0.92 버전을 PHP Class화 한 후 front end API를 추가한 것이다.
  *
  * 이 변환 API의 유효기간은 다음과 같다.
  *
@@ -80,11 +59,9 @@ require_once 'Lunar/Lunar_API.php';
  *     + -2087-07-05(음력 -2087-05-29) 이전은 계산이 무지 느려짐..
  *
  *   * 64bit
- *     + -4712-02-08 ~ 9999-12-31
- *     + API의 연도 체크가 4자리 까지이므로 10000년 이상은 확인 못함
- *     + 64bit 계산이 가능한 시점까지 가능할 듯..
- *     + 기원전의 경우 Julian date가 BC 4713년 1월 1일 부터이므로
- *       Gregorian calendar 변환이 가능한 BC 4713년 2월 8일부터 가능
+ *     + -9999-01-01 ~ 9999-12-31
+ *     + API 날자 입력 형식떄문에 연도를 4자리로 제한. 아마 64bit 계산이
+ *       가능한 지점까지 가능할 듯..
  * </pre>
  *
  * 계산 처리 시간상, 과거 2000년전과 미래 100년후의 시간은 왠만하면 웹에서는
@@ -240,14 +217,10 @@ Class Lunar extends Lunar_API {
 	 * @return bool
 	 * @param int 년도
 	 * @param bool Julian 여부
-	 * <p>
-	 * 1582년 이전은 Julian calender로 판단하여 이 값이
-	 * false라도 율리우스력으로 간주하여 판단한다. (sinse 1.0.1)
-	 * </p>
 	 */
 	public function is_leap ($y, $julian = false) {
 		// Julian의 윤년은 4로 나누어지면 된다.
-		if ( $julian || $y < 1583 )
+		if ( $julian )
 			return ($y % 4) ? false : true;
 
 		if ( ($y % 400) == 0 )
@@ -290,7 +263,7 @@ Class Lunar extends Lunar_API {
 	 * 그레고리력을 율리안력으로 변환
 	 *
 	 * @access private
-	 * @return stdClass
+	 * @return object .
 	 *
 	 *   <pre>
 	 *   stdClass Object
@@ -375,7 +348,7 @@ Class Lunar extends Lunar_API {
 	 * 율리안력을 그레고리안역으로 변환
 	 *
 	 * @access private
-	 * @return stdClass
+	 * @return object .
 	 *
 	 *   <pre>
 	 *   stdClass Object
@@ -644,7 +617,7 @@ Class Lunar extends Lunar_API {
 	 * {@example pear_Lunar/tests/sample.php 83 35}
 	 *
 	 * @access public
-	 * @return stdClass    음력 날자 정보 반환
+	 * @return object .    음력 날자 정보 반환
 	 *
 	 *   <pre>
 	 *   stdClass Object
@@ -674,7 +647,6 @@ Class Lunar extends Lunar_API {
 	 *   - unixstmap (1970년 12월 15일 이후부터 가능)
 	 *   - Ymd or Y-m-d
 	 *   - null data (현재 시간)
-	 *   - 1582년 10월 15일 이전의 날자는 율리우스력의 날자로 취급함.
 	 */
 	public function tolunar ($v = null) {
 		list ($y, $m, $d) = $this->toargs ($v);
@@ -724,7 +696,7 @@ Class Lunar extends Lunar_API {
 	 * 를 실행하여 얻은 양력 날자를 다시 tolunar로 변환하여 비교하여
 	 * 동일하지 않다면, 윤달 파라미터 값을 주고 다시 구해야 한다!
 	 *
-	 * 진짜 만세력은 Gregorian으로 표기를 하기 때문에, 양력 1582-10-15
+	 * 진짜 만세력은 Gregorian으로 표기를 하기 때문에, 양력 1582-10-14
 	 * 이전의 경우에는 return object의 julian member 값으로 비교를 해야
 	 * 한다.
 	 *
@@ -732,7 +704,7 @@ Class Lunar extends Lunar_API {
 	 * {@example pear_Lunar/tests/sample.php 119 42}
 	 *
 	 * @access public
-	 * @return stdClass    양력 날자 정보 object 반환
+	 * @return object .   양력 날자 정보 object 반환
 	 *
 	 *   <pre>
 	 *   stdClass Object
@@ -817,7 +789,7 @@ Class Lunar extends Lunar_API {
 	 * {@example pear_Lunar/tests/sample.php 163 56}
 	 *
 	 * @access public
-	 * @return stdClass
+	 * @return object .
 	 *
 	 *   <pre>
 	 *   stdClass Object
@@ -843,7 +815,6 @@ Class Lunar extends Lunar_API {
 	 *    - unixstmap (1970년 12월 15일 이후부터 가능)
 	 *    - Ymd or Y-m-d
 	 *    - null data (현재 시간)
-	 *    - 1582년 10월 15일 이전의 날자는 율리우스력의 날자로 취급함.
 	 */
 	public function dayfortune ($v = null) {
 		list ($y, $m, $d) = $this->toargs ($v);
@@ -872,7 +843,7 @@ Class Lunar extends Lunar_API {
 	 * {@example pear_Lunar/tests/sample.php 221 35}
 	 *
 	 * @access public
-	 * @return stdClass
+	 * @return object .
 	 *
 	 *   <pre>
 	 *   stdClass Object
@@ -888,7 +859,6 @@ Class Lunar extends Lunar_API {
 	 *    - unixstmap (1970년 12월 15일 이후부터 가능)
 	 *    - Ymd or Y-m-d
 	 *    - null data (현재 시간)
-	 *    - 1582년 10월 15일 이전의 날자는 율리우스력의 날자로 취급함.
 	 *    - Recursion s28day return value:<br>
 	 *      loop에서 s28day method를 반복해서 호출할 경우 return value를 이용할
 	 *      경우, return value의 index값을 이용하여 계산을 하지 않아 속도가 빠름.
@@ -924,7 +894,7 @@ Class Lunar extends Lunar_API {
 	 * {@example pear_Lunar/tests/sample.php 257 52}
 	 *
 	 * @access public
-	 * @return stdClass   현달 초입/중기와 다음달 초입 데이터 반환
+	 * @return object .  현달 초입/중기와 다음달 초입 데이터 반환
 	 *
 	 *   <pre>
 	 *   stdClass Object
@@ -975,7 +945,6 @@ Class Lunar extends Lunar_API {
 	 *  - unixstmap (1970년 12월 15일 이후부터 가능)
 	 *  - Ymd or Y-m-d
 	 *  - null data (현재 시간
-	 *  - 1582년 10월 15일 이전의 날자는 율리우스력의 날자로 취급함.
 	 */
 	public function seasondate ($v = null) {
 		list ($y, $m, $d) = $this->toargs ($v);
@@ -1084,7 +1053,7 @@ Class Lunar extends Lunar_API {
 	 * {@example pear_Lunar/tests/sample.php 311 56}
 	 *
 	 * @access public
-	 * @return stdClass	합삭/망 object
+	 * @return object	. 합삭/망 object
 	 *
 	 *   <pre>
 	 *   stdClass Object
@@ -1118,7 +1087,6 @@ Class Lunar extends Lunar_API {
 	 *   - unixstmap (1970년 12월 15일 이후부터 가능)
 	 *   - Ymd or Y-m-d
 	 *   - null data (현재 시간)
-	 *   - 1582년 10월 15일 이전의 날자는 율리우스력의 날자로 취급함.
 	 */
 	public function moonstatus ($v = null) {
 		list ($y, $m, $d) = $this->toargs ($v);
