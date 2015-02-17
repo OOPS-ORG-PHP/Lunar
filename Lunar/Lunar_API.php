@@ -24,7 +24,7 @@
  * @package     Lunar
  * @subpackage	Lunar Core API
  * @author      JoungKyun.Kim <http://oops.org>
- * @copyright   (c) 2014 OOPS.org
+ * @copyright   (c) 2015 OOPS.org
  * @license     고영창 (http://afnmp3.homeip.net/~kohyc/calendar/index.cgi)
  * @version     SVN: $Id$
  * @link        http://pear.oops.org/package/Lunar
