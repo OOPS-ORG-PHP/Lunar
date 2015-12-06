@@ -981,18 +981,18 @@ Class Lunar_API {
 
 		if ( ($midmonth1 == $smomonth && $midday1 >= $smoday) || ($midmonth1 == $mo1 && $midday1 < $d1) ) {
 			$lmonth  = ($midname1 - 1) / 2 + 1;
-			$lmoonyun = 0;
+			$leap = 0;
 		} else {
 			if ( ($midmonth2 == $mo1 && $midday2<$d1) || ($midmonth2 == $smomonth && $midday2 >= $smoday) ) {
 				$lmonth   = ($midname2 - 1) / 2 + 1;
-				$lmoonyun = 0;
+				$leap = 0;
 			} else {
 				if (  $smomonth < $midmonth2 && $midmonth2 < $mo1 ) {
 					$lmonth   = ($midname2 - 1) /2 + 1;
-					$lmoonyun = 0;
+					$leap = 0;
 				} else {
 					$lmonth   = ($midname1 - 1) / 2 + 1;
-					$lmoonyun =1;
+					$leap =1;
 				}
 			}
 		}
@@ -1002,7 +1002,7 @@ Class Lunar_API {
 		if ( $lmonth == 12 && $smomonth == 1 )
 			$lyear--;
 
-		if ( ($lmonth == 11 && $lmoonyun == 1) || $lmonth == 12 || $lmonth < 6 ) {
+		if ( ($lmonth == 11 && $leap == 1) || $lmonth == 12 || $lmonth < 6 ) {
 			list ($midyear1, $midmonth1, $midday1, $midhour1, $midmin1)
 				= $this->getdatebymin (2880, $smoyear, $smomonth, $smoday, $smohour, $smomin);
 
@@ -1014,21 +1014,21 @@ Class Lunar_API {
 				$outgiday = 12;
 
 			if ( $outgiday == $outgimonth ) {
-				if ( $lmoonyun == 1 )
-					$lmoonyun=0;
+				if ( $leap == 1 )
+					$leap=0;
 			} else {
-				if ( $lmoonyun == 1 ) {
+				if ( $leap == 1 ) {
 					if ( $lmonth != $outgimonth ) {
 						$lmonth--;
 						if ( $lmonth == 0 ) { 
 							$lyear--;
 							$lmonth = 12;
 						};
-						$lmoonyun = 0;
+						$leap = 0;
 					};
 				} else {
 					if ( $lmonth == $outgimonth ) {
-						$lmoonyun = 1;
+						$leap = 1;
 					} else {  
 						$lmonth--;
 						if ( $lmonth == 0 ) {
@@ -1041,11 +1041,11 @@ Class Lunar_API {
 
 		}
 
-		return array ($lyear, $lmonth, $lday, $lmoonyun ? true : false, $largemonth ? true : false);
+		return array ($lyear, $lmonth, $lday, $leap ? true : false, $largemonth ? true : false);
 	}
 	// }}}
 
-	// {{{ +-- protected (array) lunartosolar ($lyear, $lmonth, $lday, $moonyun)
+	// {{{ +-- protected (array) lunartosolar ($lyear, $lmonth, $lday, $leap)
 	/**
 	 * 음력 날자를 양력 날자로 변환
 	 *
@@ -1066,7 +1066,7 @@ Class Lunar_API {
 	 * @param int  일
 	 * @param bool 음력 윤달 여부
 	 */
-	protected function lunartosolar ($lyear, $lmonth, $lday, $moonyun = false) {
+	protected function lunartosolar ($lyear, $lmonth, $lday, $leap = false) {
 		list ($inginame, $ingiyear, $ingimonth, $ingiday, $ingihour, $ingimin,
 			$midname, $midyear, $midmonth, $midday, $midhour, $midmin,
 			$outginame, $outgiyear, $outgimonth, $outgiday, $outgihour, $outgimin)
@@ -1092,7 +1092,7 @@ Class Lunar_API {
 				= $this->getdatebymin ($tmin, $outgiyear, $outgimonth, $outgiday, 0, 0);
 
 
-			if ( $moonyun ) {
+			if ( $leap ) {
 				list ($lyear2, $lmonth2, $lday2, $lnp, $lnp2)
 					= $this->solartolunar ($year1, $month1, $day1);
 				if ( $lyear2==$lyear && $lmonth==$lmonth2 ) {

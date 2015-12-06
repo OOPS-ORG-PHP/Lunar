@@ -655,7 +655,7 @@ Class Lunar extends Lunar_API {
 	 *       [year] => 2013               // 연도
 	 *       [month] => 6                 // 월
 	 *       [day] => 9                   // 일
-	 *       [moonyoon] =>                // 음력 윤달 여부
+	 *       [leap] =>                    // 음력 윤달 여부
 	 *       [largemonth] => 1            // 평달/큰달 여부
 	 *       [week] => 화                 // 요일
 	 *       [hweek] => 火                // 한자 요일
@@ -683,7 +683,7 @@ Class Lunar extends Lunar_API {
 		#printf ("%4s.%2s.%2s<br>", $y, $m, $d);
 
 		$r = $this->solartolunar ($y, $m, $d);
-		list ($year, $month, $day, $myoon, $lmonth) = $r;
+		list ($year, $month, $day, $leap, $lmonth) = $r;
 
 		$w = $this->getweekday ($y, $m, $d);
 
@@ -700,7 +700,7 @@ Class Lunar extends Lunar_API {
 			'year'       => $year,
 			'month'      => $month,
 			'day'        => $day,
-			'moonyoon'   => $myoon,
+			'leap'       => $leap,
 			'largemonth' => $lmonth,
 			'week'       => $this->week[$w],
 			'hweek'      => $this->hweek[$w],
@@ -716,7 +716,7 @@ Class Lunar extends Lunar_API {
 	}
 	// }}}
 
-	// {{{ +-- public (object) tosolar ($v = null, $yoon = false)
+	// {{{ +-- public (object) tosolar ($v = null, $leap = false)
 	/**
 	 * 음력 날자를 양력으로 변환.
 	 *
@@ -767,10 +767,10 @@ Class Lunar extends Lunar_API {
 	 *
 	 * @param bool 윤달여부
 	 */
-	public function tosolar ($v = null, $yoon = false) {
+	public function tosolar ($v = null, $leap = false) {
 		list ($y, $m, $d) = $this->toargs ($v);
 
-		$r = $this->lunartosolar ($y, $m, $d, $yoon);
+		$r = $this->lunartosolar ($y, $m, $d, $leap);
 		list ($year, $month, $day) = $r;
 
 		$w = $this->getweekday ($year, $month, $day);

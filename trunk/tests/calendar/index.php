@@ -77,7 +77,7 @@ if ( $lunar->is_leap ($year) )
 	$lday[2] = 29;
 $lastday = $lday[(int) $month];
 
-if ( $fday->moonyoon )
+if ( $fday->leap )
 	$fday->month = '(閏)' . $fday->month;
 
 $tdstart = $wday[$fday->week];
@@ -135,7 +135,7 @@ if ( $gregorian_check == 158210 ) {
 			if ( $season->center->month != $month )
 				$season = $lunar->seasondate ($cdate);
 
-			$mbuf = $r->moonyoon ? '(閏)' : '';
+			$mbuf = $r->leap ? '(閏)' : '';
 			$mbuf .= $r->month;
 
 			if ( $r->largemonth )
