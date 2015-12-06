@@ -649,7 +649,7 @@ Class Lunar extends Lunar_API {
 	 *   <pre>
 	 *   stdClass Object
 	 *   (
-	 *       [date] => 2013-06-09         // YYYY-MM-DD 형식의 음력 날자
+	 *       [fmt] => 2013-06-09          // YYYY-MM-DD 형식의 음력 날자
 	 *       [dangi] => 4346              // 단기
 	 *       [hyear] => AD 2013           // AD/BC 형식의 연도
 	 *       [year] => 2013               // 연도
@@ -694,7 +694,7 @@ Class Lunar extends Lunar_API {
 		if ( $k2 < 0 ) $k2 += 12;
 
 		return (object) array (
-			'date'       => $this->regdate ($r),
+			'fmt'        => $this->regdate ($r),
 			'dangi'      => $year + 2333,
 			'hyear'      => $this->human_year ($year),
 			'year'       => $year,
@@ -738,7 +738,7 @@ Class Lunar extends Lunar_API {
 	 *   stdClass Object
 	 *   (
 	 *       [jd] => 2456527             // Julian Date Count
-	 *       [date] => 2013-07-16        // YYYY-MM-DD 형식의 양력 날자
+	 *       [fmt] => 2013-07-16         // YYYY-MM-DD 형식의 양력 날자
 	 *       [julian] => 2013-08-09      // Julian Calendar
 	 *       [dangi] => 4346             // 단기 (양력)
 	 *       [hyear] => AD 2013          // AD/BC 형식 년도
@@ -786,10 +786,8 @@ Class Lunar extends Lunar_API {
 
 		return (object) array (
 			'jd'         => $jdate,
-			'date'       => $this->regdate ($r),
+			'fmt'        => $this->regdate ($r),
 			'julian'     => $julian->date,
-			#'julian_w'   => $this->week[$julian->week],
-			#'julian_hw'  => $this->hweek[$julian->week],
 			'dangi'      => $year + 2333,
 			'hyear'      => $this->human_year ($year),
 			'year'       => $year,
