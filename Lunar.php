@@ -783,13 +783,13 @@ Class Lunar extends Lunar_API {
 		$jdate = $this->cal2jd ($r);
 		//$julian = $this->gregorian2julian ($r);
 		$julian = $this->gregorian2julian ($jdate);
+		$gregory = $this->regdate ($r);
 
 		return (object) array (
 			'jd'         => $jdate,
-			'date'       => $this->regdate ($r),
+			'date'       => ($jdate < 2299161) ? $julian->date : $gregory,
+			'gregory'    => $gregory,
 			'julian'     => $julian->date,
-			#'julian_w'   => $this->week[$julian->week],
-			#'julian_hw'  => $this->hweek[$julian->week],
 			'dangi'      => $year + 2333,
 			'hyear'      => $this->human_year ($year),
 			'year'       => $year,
