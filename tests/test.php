@@ -45,7 +45,7 @@ $s28  = $lunar->s28day ($target);
 # 이번달의 절기 정보
 $season = $lunar->seasondate ($target);
 
-$yoon = $z->moonyoon ? ', 윤달' : '';
+$yoon = $z->leap ? ', 윤달' : '';
 $bmon = $z->largemonth ? '큰달' : '평달';
 
 echo <<<EOF
@@ -69,7 +69,7 @@ foreach ( $season as $v )
 	printf ("%s(%s) %d년 %d월 %d일\n", $v->name, $v->hname, $v->year, $v->month, $v->day);
 
 
-$z = $lunar->tosolar ($z->fmt, $z->moonyoon);
+$z = $lunar->tosolar ($z->fmt, $z->leap);
 
 echo <<<EOF
 

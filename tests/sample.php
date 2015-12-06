@@ -93,13 +93,13 @@ else
  * output
  *        stdClass Object
  *        (
- *            [date] => 2013-06-09
+ *            [fmt] => 2013-06-09
  *            [dangi] => 4346
  *            [hyear] => AD 2013
  *            [year] => 2013
  *            [month] => 6
  *            [day] => 9
- *            [moonyoon] =>
+ *            [leap] =>
  *            [largemonth] => 1
  *            [week] => 화
  *            [hweek] => 火
@@ -128,7 +128,7 @@ print_r ($lunar->tolunar ('2013-07-16'));
  * output
  *        stdClass Object
  *        (
- *            [date] => 2013-07-16
+ *            [fmt] => 2013-07-16
  *            [dangi] => 4346
  *            [hyear] => AD 2013
  *            [year] => 2013
