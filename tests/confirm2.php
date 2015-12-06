@@ -29,10 +29,10 @@ for ( $i=1842; $i<=2041; $i++ ) {
 
 		echo "- $i.$j.01\n";
 		$z = $lunar->tolunar ($i . $j . '01');
-		$z1 = $lunar->tosolar ($z->date, $z->moonyoon);
+		$z1 = $lunar->tosolar ($z->fmt, $z->moonyoon);
 
-		if ( $z1->date != "{$i}-{$j}-01" || $z->tday != $z1->tday ) {
-			printf ("** %d-%s-01 %s(양) %s(음) %s %s\n", $i, $j, $z1->date, $z->date, $z1->tday, $z->tday);
+		if ( $z1->fmt != "{$i}-{$j}-01" || $z->week != $z1->week ) {
+			printf ("** %d-%s-01 %s(양) %s(음) %s %s\n", $i, $j, $z1->fmt, $z->fmt, $z1->week, $z->week);
 		}
 	}
 

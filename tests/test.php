@@ -51,7 +51,7 @@ $bmon = $z->largemonth ? '큰달' : '평달';
 echo <<<EOF
 -- 음력 변환 --------------------------------
 
-날자   {$z->date} {$z->week} ({$z->hweek})
+날자   {$z->fmt} {$z->week} ({$z->hweek})
 연     {$z->year}
 월     {$z->month} ($bmon$yoon) {$tune->month}({$tune->hmonth})월
 일     {$z->day} {$tune->day}({$tune->hday})일
@@ -69,12 +69,12 @@ foreach ( $season as $v )
 	printf ("%s(%s) %d년 %d월 %d일\n", $v->name, $v->hname, $v->year, $v->month, $v->day);
 
 
-$z = $lunar->tosolar ($z->date, $z->moonyoon);
+$z = $lunar->tosolar ($z->fmt, $z->moonyoon);
 
 echo <<<EOF
 
 -- 양력 재변환 ------------------------------
-날자   {$z->date} {$z->week} ({$z->hweek})
+날자   {$z->fmt} {$z->week} ({$z->hweek})
 연     {$z->year}
 월     {$z->month}
 일     {$z->day}

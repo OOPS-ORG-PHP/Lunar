@@ -26,8 +26,8 @@ echo "== 음력 -> 양력 요일 검증 ====================================\n";
 $z = array ();
 for ( $i=1842; $i<=2040; $i++ ) {
 	$z = $lunar->tolunar ($i . '0101');
-	$p[] = array ($z->date, $z->tday);
-	#echo sprintf ("\tarray ('%d', '%s'),\n", preg_replace ('/-/', '', $p->date), $p->tday);
+	$p[] = array ($z->fmt, $z->week);
+	#echo sprintf ("\tarray ('%d', '%s'),\n", preg_replace ('/-/', '', $p->fmt), $p->week);
 }
 
 foreach ( $p as $v ) {
@@ -38,10 +38,10 @@ foreach ( $p as $v ) {
 	$td = date ('D', mktime (0, 0, 0, $m, $d, $y));
 
 	$buf = $lunar->tosolar ($v[0]);
-	if ( $v[1] != $buf->tday ) {
+	if ( $v[1] != $buf->week ) {
 		printf (
 			"%s (%s - $td) : %s (%s)\n",
-			$v[0], $v[1], $buf->date, $buf->tday
+			$v[0], $v[1], $buf->fmt, $buf->week
 		);
 	}
 }
@@ -52,8 +52,8 @@ echo "== 양력 -> 음력 요일 검증 ====================================\n";
 $z = array ();
 for ( $i=1841; $i<=2040; $i++ ) {
 	$z = $lunar->tosolar ($i . '0101');
-	$p[] = array ($z->date, $z->tday);
-	#echo sprintf ("\tarray ('%d', '%s'),\n", preg_replace ('/-/', '', $p->date), $p->tday);
+	$p[] = array ($z->fmt, $z->week);
+	#echo sprintf ("\tarray ('%d', '%s'),\n", preg_replace ('/-/', '', $p->fmt), $p->week);
 }
 
 foreach ( $p as $v ) {
@@ -64,10 +64,10 @@ foreach ( $p as $v ) {
 	$td = date ('D', mktime (0, 0, 0, $m, $d, $y));
 
 	$buf = $lunar->tolunar($v[0]);
-	if ( $v[1] != $buf->tday ) {
+	if ( $v[1] != $buf->week ) {
 		printf (
 			"%s (%s - $td) : %s (%s)\n",
-			$v[0], $v[1], $buf->date, $buf->tday
+			$v[0], $v[1], $buf->fmt, $buf->week
 		);
 	}
 }

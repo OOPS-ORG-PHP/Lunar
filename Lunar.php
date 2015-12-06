@@ -295,7 +295,7 @@ Class Lunar extends Lunar_API {
 	 *   <pre>
 	 *   stdClass Object
 	 *   (
-	 *       [date] => 2013-06-09         // YYYY-MM-DD 형식의 Julian 날자
+	 *       [fmt] => 2013-06-09          // YYYY-MM-DD 형식의 Julian 날자
 	 *       [year] => 2013               // 연도
 	 *       [month] => 6                 // 월
 	 *       [day] => 9                   // 일
@@ -319,7 +319,7 @@ Class Lunar extends Lunar_API {
 				$r->year++;
 
 			return (object) array (
-				'date'  => $this->regdate (array ($r->year, $r->month, $r->day)),
+				'fmt'   => $this->regdate (array ($r->year, $r->month, $r->day)),
 				'year'  => $r->year,
 				'month' => $r->month,
 				'day'   => $r->day,
@@ -355,7 +355,7 @@ Class Lunar extends Lunar_API {
 		$week = ($v + 1.5) % 7;
 
 		return (object) array (
-			'date'  => $this->regdate (array ($year, $month, $day)),
+			'fmt'   => $this->regdate (array ($year, $month, $day)),
 			'year'  => $year,
 			'month' => $month,
 			'day'   => $day,
@@ -380,11 +380,11 @@ Class Lunar extends Lunar_API {
 	 *   <pre>
 	 *   stdClass Object
 	 *   (
-	 *       [date] => 2013-06-09         // YYYY-MM-DD 형식의 Julian 날자
-	 *       [year] => 2013               // 연도
+	 *       [fmt]   => 2013-06-09        // YYYY-MM-DD 형식의 Julian 날자
+	 *       [year]  => 2013              // 연도
 	 *       [month] => 6                 // 월
-	 *       [day] => 9                   // 일
-	 *       [week] => 화                 // 요일
+	 *       [day]   => 9                 // 일
+	 *       [week]  => 화                // 요일
 	 *   )
 	 *   </pre>
 	 *
@@ -402,7 +402,7 @@ Class Lunar extends Lunar_API {
 				$r->year++;
 
 			return (object) array (
-				'date'  => $this->regdate (array ($r->year, $r->month, $r->day)),
+				'fmt'   => $this->regdate (array ($r->year, $r->month, $r->day)),
 				'year'  => $r->year,
 				'month' => $r->month,
 				'day'   => $r->day,
@@ -446,7 +446,7 @@ Class Lunar extends Lunar_API {
 		$week = ($jd + 1.5) % 7;
 
 		return (object) array (
-			'date'  => $this->regdate (array ($year, $month, $day)),
+			'fmt'   => $this->regdate (array ($year, $month, $day)),
 			'year'  => $year,
 			'month' => $month,
 			'day'   => $day,
@@ -788,9 +788,9 @@ Class Lunar extends Lunar_API {
 
 		return (object) array (
 			'jd'         => $jdate,
-			'fmt'        => ($jdate < 2299161) ? $julian->date : $gregory,
+			'fmt'        => ($jdate < 2299161) ? $julian->fmt : $gregory,
 			'gregory'    => $gregory,
-			'julian'     => $julian->date,
+			'julian'     => $julian->fmt,
 			'dangi'      => $year + 2333,
 			'hyear'      => $this->human_year ($year),
 			'year'       => $year,

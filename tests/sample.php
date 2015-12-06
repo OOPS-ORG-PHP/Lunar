@@ -155,8 +155,8 @@ print_r ($lunar->tosolar ('2013-06-09'));
  */
 $lun = '2013-06-09';
 $solv = $lunar->tosolar ($lun);
-$lunv = $lunar->tolunar ($sol->date);
-if ( $lun != $lunv->date )
+$lunv = $lunar->tolunar ($sol->fmt);
+if ( $lun != $lunv->fmt )
 	$solv = $lunar->tosolar ($lun, true);
 
 
