@@ -53,6 +53,13 @@
  */
 
 /**
+ * import myException class
+ */
+require_once 'myException.php';
+set_error_handler('myException::myErrorHandler');
+
+
+/**
  * import Lunar API
  */
 require_once 'Lunar/Lunar_API.php';
@@ -135,7 +142,7 @@ Class Lunar extends Lunar_API {
 					array_shift ($match);
 					list ($y, $m, $d) = $match;
 				} else {
-					throw new Exception ('Invalid Date Format', E_USER_WARNING);
+					throw new myException ('Invalid Date Format', E_USER_WARNING);
 					return false;
 				}
 			}
@@ -147,7 +154,7 @@ Class Lunar extends Lunar_API {
 				$d = (int) date ('d', $fixed);
 			} else {
 				if ( $m > 12 || $d > 31 ) {
-					throw new Exception ('Invalid Date Format', E_USER_WARNING);
+					throw new myException ('Invalid Date Format', E_USER_WARNING);
 					return false;
 				}
 			}

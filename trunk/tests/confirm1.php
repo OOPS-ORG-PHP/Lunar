@@ -18,56 +18,60 @@ if ( $ccwd == 'tests' ) {
 	$iniset ('include_path', $newpath . ':' . $oldpath);
 }
 
+require_once 'KASI_Lunar.php';
 require_once 'Lunar.php';
 
-$lunar = new Lunar;
+try {
+	$lunar = new Lunar;
 
-echo "== 음력 -> 양력 요일 검증 ====================================\n";
-$z = array ();
-for ( $i=1842; $i<=2040; $i++ ) {
-	$z = $lunar->tolunar ($i . '0101');
-	$p[] = array ($z->fmt, $z->week);
-	#echo sprintf ("\tarray ('%d', '%s'),\n", preg_replace ('/-/', '', $p->fmt), $p->week);
-}
-
-foreach ( $p as $v ) {
-	$y = substr ($v[0], 0, 4);
-	$m = substr ($v[0], 5, 2);
-	$d = substr ($v[0], 8, 2);
-
-	$td = date ('D', mktime (0, 0, 0, $m, $d, $y));
-
-	$buf = $lunar->tosolar ($v[0]);
-	if ( $v[1] != $buf->week ) {
-		printf (
-			"%s (%s - $td) : %s (%s)\n",
-			$v[0], $v[1], $buf->fmt, $buf->week
-		);
+	echo "== 음력 -> 양력 요일 검증 ====================================\n";
+	$z = array ();
+	for ( $i=1842; $i<=2040; $i++ ) {
+		$z = $lunar->tolunar ($i . '0101');
+		$p[] = array ($z->fmt, $z->week);
+		#echo sprintf ("\tarray ('%d', '%s'),\n", preg_replace ('/-/', '', $p->fmt), $p->week);
 	}
-}
 
+	foreach ( $p as $v ) {
+		$td = date ('D', mktime (0, 0, 0, $buf->month, $buf->day, $buf->year));
 
-echo "== 양력 -> 음력 요일 검증 ====================================\n";
-
-$z = array ();
-for ( $i=1841; $i<=2040; $i++ ) {
-	$z = $lunar->tosolar ($i . '0101');
-	$p[] = array ($z->fmt, $z->week);
-	#echo sprintf ("\tarray ('%d', '%s'),\n", preg_replace ('/-/', '', $p->fmt), $p->week);
-}
-
-foreach ( $p as $v ) {
-	$y = substr ($v[0], 0, 4);
-	$m = substr ($v[0], 5, 2);
-	$d = substr ($v[0], 8, 2);
-
-	$td = date ('D', mktime (0, 0, 0, $m, $d, $y));
-
-	$buf = $lunar->tolunar($v[0]);
-	if ( $v[1] != $buf->week ) {
-		printf (
-			"%s (%s - $td) : %s (%s)\n",
-			$v[0], $v[1], $buf->fmt, $buf->week
-		);
+		$buf = $lunar->tosolar ($v[0]);
+		if ( $v[1] != $buf->week ) {
+			printf (
+				"%s (%s - $td) : %s (%s)\n",
+				$v[0], $v[1], $buf->fmt, $buf->week
+			);
+		}
 	}
+
+	unset ($p);
+
+	echo "== 양력 -> 음력 요일 검증 ====================================\n";
+
+	$z = array ();
+	for ( $i=1841; $i<=2040; $i++ ) {
+		$z = $lunar->tosolar ($i . '0101');
+		$p[] = array ($z->fmt, $z->week);
+		#echo sprintf ("\tarray ('%d', '%s'),\n", preg_replace ('/-/', '', $p->fmt), $p->week);
+	}
+
+	foreach ( $p as $v ) {
+		$y = substr ($v[0], 0, 4);
+		$m = substr ($v[0], 5, 2);
+		$d = substr ($v[0], 8, 2);
+
+		$td = date ('D', mktime (0, 0, 0, $m, $d, $y));
+
+		$buf = $lunar->tolunar($v[0]);
+		if ( $v[1] != $buf->week ) {
+			printf (
+				"%s (%s - $td) : %s (%s)\n",
+				$v[0], $v[1], $buf->fmt, $buf->week
+			);
+		}
+	}
+} catch ( Exception $e ) {
+	echo $e->Message () . "\n";
+	print_r ($e->TraceAsArray ()) . "\n";
+	$e->finalize ();
 }
