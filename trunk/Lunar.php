@@ -33,6 +33,12 @@
  * 계산 처리 시간상, 과거 2000년전과 미래 100년후의 시간은 왠만하면 웹에서는
  * 사용하는 것을 권장하지 않음!
  *
+ * 참고!
+ *
+ * oops\KASI_Lunar pear package를 설치한 후에, KASI_Lunar.php 를 include 하면,
+ * 내부적으로 1391-02-05 ~ 2050-12-31 기간은 한국천문연구원의 음양력 DB를 이용하여
+ * 처리를 한다.
+ *
  * 주의!
  *
  * pear_Lunar package는 2가지 라이센스를 가지고 있다. pear_Lunar 패키지의
@@ -101,6 +107,12 @@ require_once 'Lunar/Lunar_API.php';
  *
  * 계산 처리 시간상, 과거 2000년전과 미래 100년후의 시간은 왠만하면 웹에서는
  * 사용하는 것을 권장하지 않음!
+ *
+ * 참고!
+ *
+ * oops\KASI_Lunar pear package를 설치한 후에, KASI_Lunar.php 를 include 하면,
+ * 내부적으로 1391-02-05 ~ 2050-12-31 기간은 한국천문연구원의 음양력 DB를 이용하여
+ * 처리를 한다.
  *
  * @package     oops\Lunar
  * @author      JoungKyun.Kim <http://oops.org>
