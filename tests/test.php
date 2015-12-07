@@ -24,31 +24,32 @@ require_once 'Lunar.php';
 
 $target = $argv[1] ? $argv[1] : date ('Ymd', time ());
 
-$lunar = new Lunar;
+try {
+	$lunar = new Lunar;
 
-$target = $argv[1];
-$lunar->toargs ($target);
+	$target = $argv[1];
+	$lunar->toargs ($target);
 
-echo "**\n";
-printf ("** target date is %s\n", $target);
-echo "**\n";
-echo "\n";
+	echo "**\n";
+	printf ("** target date is %s\n", $target);
+	echo "**\n";
+	echo "\n";
 
-# 1일의 음력 정보
-$z = $lunar->tolunar ($target);
-# 이번달의 세차/월간/일진 정보
-$tune = $lunar->dayfortune ($target);
-# 1일의 음력월에 대한 합삭/망 정보
-$moon = $lunar->moonstatus ($target);
-# 1일의 28수 정보
-$s28  = $lunar->s28day ($target);
-# 이번달의 절기 정보
-$season = $lunar->seasondate ($target);
+	# 1일의 음력 정보
+	$z = $lunar->tolunar ($target);
+	# 이번달의 세차/월간/일진 정보
+	$tune = $lunar->dayfortune ($target);
+	# 1일의 음력월에 대한 합삭/망 정보
+	$moon = $lunar->moonstatus ($target);
+	# 1일의 28수 정보
+	$s28  = $lunar->s28day ($target);
+	# 이번달의 절기 정보
+	$season = $lunar->seasondate ($target);
 
-$yoon = $z->leap ? ', 윤달' : '';
-$bmon = $z->largemonth ? '큰달' : '평달';
+	$yoon = $z->leap ? ', 윤달' : '';
+	$bmon = $z->largemonth ? '큰달' : '평달';
 
-echo <<<EOF
+	echo <<<EOF
 -- 음력 변환 --------------------------------
 
 날자   {$z->fmt} {$z->week} ({$z->hweek})
@@ -65,13 +66,13 @@ echo <<<EOF
 
 EOF;
 
-foreach ( $season as $v )
-	printf ("%s(%s) %d년 %d월 %d일\n", $v->name, $v->hname, $v->year, $v->month, $v->day);
+	foreach ( $season as $v )
+		printf ("%s(%s) %d년 %d월 %d일\n", $v->name, $v->hname, $v->year, $v->month, $v->day);
 
 
-$z = $lunar->tosolar ($z->fmt, $z->leap);
+	$z = $lunar->tosolar ($z->fmt, $z->leap);
 
-echo <<<EOF
+	echo <<<EOF
 
 -- 양력 재변환 ------------------------------
 날자   {$z->fmt} {$z->week} ({$z->hweek})
@@ -82,6 +83,11 @@ echo <<<EOF
 띠     {$z->ddi}
 
 EOF;
+} catch ( Exception $e ) {
+	echo $e->Message () . "\n";
+	print_r ($e->TraceAsArray ()) . "\n";
+	$e->finalize ();
+}
 
 /*
  * Local variables:

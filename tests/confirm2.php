@@ -20,21 +20,27 @@ if ( $ccwd == 'tests' ) {
 
 require_once 'Lunar.php';
 
-$lunar = new Lunar;
+try {
+	$lunar = new Lunar;
 
-$z = array ();
-for ( $i=1842; $i<=2041; $i++ ) {
-	for ( $j=1; $j<=12; $j++ ) {
-		$j = ($j < 10) ? '0' . $j : $j;
+	$z = array ();
+	for ( $i=1842; $i<=2041; $i++ ) {
+		for ( $j=1; $j<=12; $j++ ) {
+			$j = ($j < 10) ? '0' . $j : $j;
 
-		echo "- $i.$j.01\n";
-		$z = $lunar->tolunar ($i . $j . '01');
-		$z1 = $lunar->tosolar ($z->fmt, $z->leap);
+			echo "- $i.$j.01\n";
+			$z = $lunar->tolunar ($i . $j . '01');
+			$z1 = $lunar->tosolar ($z->fmt, $z->leap);
 
-		if ( $z1->fmt != "{$i}-{$j}-01" || $z->week != $z1->week ) {
-			printf ("** %d-%s-01 %s(양) %s(음) %s %s\n", $i, $j, $z1->fmt, $z->fmt, $z1->week, $z->week);
+			if ( $z1->fmt != "{$i}-{$j}-01" || $z->week != $z1->week ) {
+				printf ("** %d-%s-01 %s(양) %s(음) %s %s\n", $i, $j, $z1->fmt, $z->fmt, $z1->week, $z->week);
+			}
 		}
-	}
 
+	}
+} catch ( Exception $e ) {
+	echo $e->Message () . "\n";
+	print_r ($e->TraceAsArray ()) . "\n";
+	$e->finalize ();
 }
 
