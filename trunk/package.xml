@@ -12,7 +12,7 @@
 		<active>yes</active>
 	</lead>
 	<date>2015-12-07</date>
-	<time>03:34:51</time>
+	<time>17:30:55</time>
 	<version>
 		<release>2.0.0</release>
 		<api>2.0.0</api>
@@ -25,11 +25,13 @@
 	<notes>* tolunar와 tosolar method의 date member를 fmt로 이름 변경
 * tosolar method에 gregory member 추가
 * tosloal method의 fmt member의 값은, 20151015 이전일 경우 율리우스력으로 반환하도록 변경
+* moonyoon member 이름을 leap로 변경
+* oops\KASI_Lunar package가 설치되어 있을 경우 천문과학연구원의 음양력 데이터 지원
 </notes>
 	<contents>
 		<dir name="/">
-			<file role="php" md5sum="d65c979f27edc7ec70ad7ca28ef1793f" name="Lunar/Lunar_API.php" />
-			<file role="php" md5sum="460c47ce71d47a17dffa2b91307870c2" name="Lunar.php" />
+			<file role="php" md5sum="4ed21cd8e37848efcf6994cd64469f4c" name="Lunar/Lunar_API.php" />
+			<file role="php" md5sum="119fbbf04d862c473d64ecd1c47e7523" name="Lunar.php" />
 		</dir>
 	</contents>
 	<dependencies>
@@ -64,6 +66,8 @@
 			<notes>* tolunar와 tosolar method의 date member를 fmt로 이름 변경
 * tosolar method에 gregory member 추가
 * tosloal method의 fmt member의 값은, 20151015 이전일 경우 율리우스력으로 반환하도록 변경
+* moonyoon member 이름을 leap로 변경
+* oops\KASI_Lunar package가 설치되어 있을 경우 천문과학연구원의 음양력 데이터 지원
 </notes>
 		</release>
 		<release>
