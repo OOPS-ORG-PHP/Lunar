@@ -12,7 +12,7 @@
 		<active>yes</active>
 	</lead>
 	<date>2015-12-07</date>
-	<time>17:30:55</time>
+	<time>18:05:32</time>
 	<version>
 		<release>2.0.0</release>
 		<api>2.0.0</api>
@@ -27,11 +27,12 @@
 * tosloal method의 fmt member의 값은, 20151015 이전일 경우 율리우스력으로 반환하도록 변경
 * moonyoon member 이름을 leap로 변경
 * oops\KASI_Lunar package가 설치되어 있을 경우 천문과학연구원의 음양력 데이터 지원
+* use myException
 </notes>
 	<contents>
 		<dir name="/">
 			<file role="php" md5sum="4ed21cd8e37848efcf6994cd64469f4c" name="Lunar/Lunar_API.php" />
-			<file role="php" md5sum="119fbbf04d862c473d64ecd1c47e7523" name="Lunar.php" />
+			<file role="php" md5sum="9625577c2ecc6990dadc8ac5217b995f" name="Lunar.php" />
 		</dir>
 	</contents>
 	<dependencies>
@@ -42,6 +43,11 @@
 			<pearinstaller>
 				<min>1.4.3</min>
 			</pearinstaller>
+			<package>
+				<name>myException</name>
+				<channel>pear.oops.org</channel>
+				<min>1.0.1</min>
+			</package>
 		</required>
 		<optional>
 			<package>
@@ -68,6 +74,7 @@
 * tosloal method의 fmt member의 값은, 20151015 이전일 경우 율리우스력으로 반환하도록 변경
 * moonyoon member 이름을 leap로 변경
 * oops\KASI_Lunar package가 설치되어 있을 경우 천문과학연구원의 음양력 데이터 지원
+* use myException
 </notes>
 		</release>
 		<release>
