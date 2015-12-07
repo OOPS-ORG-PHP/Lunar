@@ -19,12 +19,13 @@ if ( $ccwd == 'tests' ) {
 /*
  * Lunar API import
  */
+#require_once 'KASI_Lunar.php';
 require_once 'Lunar.php';
 
 
 $target = $argv[1] ? $argv[1] : date ('Ymd', time ());
 
-$lunar = new Lunar;
+$lunar = new oops\Lunar;
 
 
 /*

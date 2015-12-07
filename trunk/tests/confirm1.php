@@ -22,7 +22,7 @@ if ( $ccwd == 'tests' ) {
 require_once 'Lunar.php';
 
 try {
-	$lunar = new Lunar;
+	$lunar = new oops\Lunar;
 
 	echo "== 음력 -> 양력 요일 검증 ====================================\n";
 	$z = array ();
