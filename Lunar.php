@@ -102,7 +102,7 @@ require_once 'Lunar/Lunar_API.php';
 Class Lunar extends Lunar_API {
 	private $KASI = null;
 
-	// {{{ +-- public (array) toargs ($v)
+	// {{{ +-- public (array) toargs ($v, $lunar = fasle)
 	/**
 	 * 입력된 날자 형식을 연/월/일의 멤버를 가지는 배열로 반환한다.
 	 * 입력된 변수 값은 YYYY-MM-DD 형식으로 변환 된다.
@@ -126,7 +126,7 @@ Class Lunar extends Lunar_API {
 	 *   - Ymd or Y-m-d
 	 *   - null data (현재 시간)
 	 */
-	public function toargs (&$v) {
+	public function toargs (&$v, $lunar = false) {
 		if ( $v == null ) {
 			$y = (int) date ('Y');
 			$m = (int) date ('m');
@@ -147,7 +147,8 @@ Class Lunar extends Lunar_API {
 				}
 			}
 
-			if ( $y > 1969 && $y < 2038 ) {
+			// 넘어온 날자가 음력일 경우 아래가 실행되면 측정 날자가 달라질 수 있다.
+			if ( ! $lunar && $y > 1969 && $y < 2038 ) {
 				$fixed = mktime (0, 0, 0, $m, $d, $y);
 				$y = (int) date ('Y', $fixed);
 				$m = (int) date ('m', $fixed);
@@ -808,7 +809,7 @@ Class Lunar extends Lunar_API {
 	 * @param bool 윤달여부
 	 */
 	public function tosolar ($v = null, $leap = false) {
-		list ($y, $m, $d) = $this->toargs ($v);
+		list ($y, $m, $d) = $this->toargs ($v, true);
 
 		$kasi = false;
 		$cdate = preg_replace ('/-/', '', $v);
