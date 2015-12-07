@@ -56,7 +56,7 @@ $wday = array ('일' => 1, '월' => 2, '화' => 3, '수' => 4, '목' => 5, '금'
 
 $old = microtime ();
 
-$lunar = new Lunar;
+$lunar = new oops\Lunar;
 
 $cdate = $year . '-' . $month . '-01';
 $fday = $lunar->tolunar ($cdate);
