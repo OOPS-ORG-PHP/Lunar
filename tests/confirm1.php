@@ -18,7 +18,7 @@ if ( $ccwd == 'tests' ) {
 	$iniset ('include_path', $newpath . ':' . $oldpath);
 }
 
-require_once 'KASI_Lunar.php';
+#require_once 'KASI_Lunar.php';
 require_once 'Lunar.php';
 
 try {
@@ -28,14 +28,14 @@ try {
 	$z = array ();
 	for ( $i=1842; $i<=2040; $i++ ) {
 		$z = $lunar->tolunar ($i . '0101');
-		$p[] = array ($z->fmt, $z->week);
+		$p[] = array ($z->fmt, $z->week, $z->leap);
 		#echo sprintf ("\tarray ('%d', '%s'),\n", preg_replace ('/-/', '', $p->fmt), $p->week);
 	}
 
 	foreach ( $p as $v ) {
+		$buf = $lunar->tosolar ($v[0], $v[2]);
 		$td = date ('D', mktime (0, 0, 0, $buf->month, $buf->day, $buf->year));
 
-		$buf = $lunar->tosolar ($v[0]);
 		if ( $v[1] != $buf->week ) {
 			printf (
 				"%s (%s - $td) : %s (%s)\n",
