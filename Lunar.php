@@ -93,6 +93,8 @@ require_once 'Lunar/Lunar_API.php';
  * @package     Lunar
  */
 Class Lunar extends Lunar_API {
+	private $KASI = null;
+
 	// {{{ +-- public (array) toargs ($v)
 	/**
 	 * 입력된 날자 형식을 연/월/일의 멤버를 가지는 배열로 반환한다.
@@ -640,6 +642,10 @@ Class Lunar extends Lunar_API {
 	 * 발생할 수 있다.
 	 * http://astro.kasi.re.kr/Life/ConvertSolarLunarForm.aspx?MenuID=115
 	 *
+	 * 2.0 부터는 이러한 오차를 줄이기 위하여 oops\KASI_Lunar package가
+	 * 설치되어 있을 경우, 1392-02-05 ~ 2050-12-31 기간에 대해서는
+	 * 천문과학연구원의 데이터를 이용할 수 있도록 지원한다.
+	 *
 	 * 예제:
 	 * {@example pear_Lunar/tests/sample.php 83 35}
 	 *
@@ -679,13 +685,40 @@ Class Lunar extends Lunar_API {
 	public function tolunar ($v = null) {
 		list ($y, $m, $d) = $this->toargs ($v);
 		#printf ("** %4s.%2s.%2s ... ", $y, $m, $d);
-		list ($y, $m, $d) = $this->fix_calendar ($y, $m, $d);
-		#printf ("%4s.%2s.%2s<br>", $y, $m, $d);
 
-		$r = $this->solartolunar ($y, $m, $d);
-		list ($year, $month, $day, $leap, $lmonth) = $r;
+		$kasi = false;
+		$cdate = preg_replace ('/-/', '', $this->regdate (array ($y, $m, $d)));
+		// 1391-02-05 ~ 2050-12-31 까지는 KASI data로 처리를 한다.
+		if ( $cdate > 13910204 && $cdate < 20510101 ) {
+			if ( class_exists ('oops\KASI\Lunar') ) {
+				$kasi = true;
+				if ( $this->KASI == null )
+					$this->KASI = new oops\KASI\Lunar;
+				$r = $this->KASI->tolunar ($this->regdate (array ($y, $m, $d)));
+				if ( $r === false )
+					return false;
 
-		$w = $this->getweekday ($y, $m, $d);
+				$year   = $r->year;
+				$month  = $r->month;
+				$day    = $r->day;
+				$leap   = $r->leap;
+				$lmonth = $r->lmoon;
+				$w      = $r->week;
+
+				unset ($r);
+				$r = array ($year, $month, $day);
+			}
+		}	
+
+		if ( $kasi === false ) {
+			list ($y, $m, $d) = $this->fix_calendar ($y, $m, $d);
+			#printf ("%4s.%2s.%2s<br>", $y, $m, $d);
+
+			$r = $this->solartolunar ($y, $m, $d);
+			list ($year, $month, $day, $leap, $lmonth) = $r;
+
+			$w = $this->getweekday ($y, $m, $d);
+		}
 
 		$k1 = ($year + 6) % 10;
 		$k2 = ($year + 8) % 12;
@@ -770,10 +803,51 @@ Class Lunar extends Lunar_API {
 	public function tosolar ($v = null, $leap = false) {
 		list ($y, $m, $d) = $this->toargs ($v);
 
-		$r = $this->lunartosolar ($y, $m, $d, $leap);
-		list ($year, $month, $day) = $r;
+		$kasi = false;
+		$cdate = preg_replace ('/-/', '', $this->regdate (array ($y, $m, $d)));
+		// 1391-01-01 ~ 2050-12-31 까지는 KASI data로 처리를 한다.
+		if ( $cdate > 13910101 && $cdate < 20501119 ) {
+			if ( class_exists ('oops\KASI\Lunar') ) {
+				$kasi = true;
+				if ( $this->KASI == null )
+					$this->KASI = new oops\KASI\Lunar;
+				$r = $this->KASI->tosolar ($this->regdate (array ($y, $m, $d)), $leap);
+				if ( $r === false )
+					return false;
 
-		$w = $this->getweekday ($year, $month, $day);
+				$year  = $r->year;
+				$month = $r->month;
+				$day   = $r->day;
+				$w     = $r->week;
+
+				$jdate = $r->jd; 
+				$fmt   = $r->fmt;
+
+				if ( $r->jd > 2299160) {
+					$j    = $this->gregorian2julian ($r->jd);
+					$jfmt = $j->fmt;
+					$gfmt = $r->fmt;
+				} else {
+					$jfmt = $r->fmt;
+					$g    = $this->julian2gregorian ($r->jd);
+					$gfmt = $g->fmt;
+				}
+			}
+		}
+
+		if ( $kasi === false ) {
+			$r = $this->lunartosolar ($y, $m, $d, $leap);
+			list ($year, $month, $day) = $r;
+
+			$w = $this->getweekday ($year, $month, $day);
+
+			$jdate = $this->cal2jd ($r);
+			//$julian = $this->gregorian2julian ($r);
+			$julian = $this->gregorian2julian ($jdate);
+			$jfmt   = $julian->fmt;
+			$gfmt   = $this->regdate ($r);
+			$fmt = ($jdate < 2299161) ? $jfmt : $gfmt;
+		}
 
 		$k1 = ($y + 6) % 10;
 		$k2 = ($y + 8) % 12;
@@ -781,16 +855,11 @@ Class Lunar extends Lunar_API {
 		if ( $k1 < 0 ) $k1 += 10;
 		if ( $k2 < 0 ) $k2 += 12;
 
-		$jdate = $this->cal2jd ($r);
-		//$julian = $this->gregorian2julian ($r);
-		$julian = $this->gregorian2julian ($jdate);
-		$gregory = $this->regdate ($r);
-
 		return (object) array (
 			'jd'         => $jdate,
-			'fmt'        => ($jdate < 2299161) ? $julian->fmt : $gregory,
-			'gregory'    => $gregory,
-			'julian'     => $julian->fmt,
+			'fmt'        => $fmt,
+			'gregory'    => $gfmt,
+			'julian'     => $jfmt,
 			'dangi'      => $year + 2333,
 			'hyear'      => $this->human_year ($year),
 			'year'       => $year,
