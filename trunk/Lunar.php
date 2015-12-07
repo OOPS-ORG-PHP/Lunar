@@ -41,7 +41,7 @@
  * 김정균이 작성한 코드들로 BSD license를 따른다.
  *
  * @category    Calendar
- * @package     Lunar
+ * @package     oops\Lunar
  * @author      JoungKyun.Kim <http://oops.org>
  * @copyright   (c) 2015 OOPS.org
  * @license     BSD (Lunar.php) And 고영창(Lunar/Lunar_API.php)
@@ -51,6 +51,11 @@
  * @example     pear_Lunar/tests/test.php Sample code
  * @filesource
  */
+
+/**
+ * Namespace oops
+ */
+namespace oops;
 
 /**
  * import myException class
@@ -97,7 +102,12 @@ require_once 'Lunar/Lunar_API.php';
  * 계산 처리 시간상, 과거 2000년전과 미래 100년후의 시간은 왠만하면 웹에서는
  * 사용하는 것을 권장하지 않음!
  *
- * @package     Lunar
+ * @package     oops\Lunar
+ * @author      JoungKyun.Kim <http://oops.org>
+ * @copyright   (c) 2015 OOPS.org
+ * @license     BSD (Lunar.php) And 고영창(Lunar/Lunar_API.php)
+ * @version     SVN: $Id$
+ * @example     pear_Lunar/tests/test.php Sample code
  */
 Class Lunar extends Lunar_API {
 	private $KASI = null;
@@ -142,7 +152,7 @@ Class Lunar extends Lunar_API {
 					array_shift ($match);
 					list ($y, $m, $d) = $match;
 				} else {
-					throw new myException ('Invalid Date Format', E_USER_WARNING);
+					throw new \myException ('Invalid Date Format', E_USER_WARNING);
 					return false;
 				}
 			}
@@ -155,7 +165,7 @@ Class Lunar extends Lunar_API {
 				$d = (int) date ('d', $fixed);
 			} else {
 				if ( $m > 12 || $d > 31 ) {
-					throw new myException ('Invalid Date Format', E_USER_WARNING);
+					throw new \myException ('Invalid Date Format', E_USER_WARNING);
 					return false;
 				}
 			}
@@ -701,7 +711,7 @@ Class Lunar extends Lunar_API {
 			if ( class_exists ('oops\KASI\Lunar') ) {
 				$kasi = true;
 				if ( $this->KASI == null )
-					$this->KASI = new oops\KASI\Lunar;
+					$this->KASI = new \oops\KASI\Lunar;
 				$r = $this->KASI->tolunar ($v);
 				if ( $r === false )
 					return false;
@@ -818,7 +828,7 @@ Class Lunar extends Lunar_API {
 			if ( class_exists ('oops\KASI\Lunar') ) {
 				$kasi = true;
 				if ( $this->KASI == null )
-					$this->KASI = new oops\KASI\Lunar;
+					$this->KASI = new \oops\KASI\Lunar;
 				$r = $this->KASI->tosolar ($v, $leap);
 				if ( $r === false )
 					return false;
