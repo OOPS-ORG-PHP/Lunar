@@ -18,6 +18,7 @@ if ( $ccwd == 'tests' ) {
 	$iniset ('include_path', $newpath . ':' . $oldpath);
 }
 
+require_once 'KASI_Lunar.php';
 require_once 'Lunar.php';
 
 try {
