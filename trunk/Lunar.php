@@ -694,14 +694,14 @@ Class Lunar extends Lunar_API {
 		#printf ("** %4s.%2s.%2s ... ", $y, $m, $d);
 
 		$kasi = false;
-		$cdate = preg_replace ('/-/', '', $this->regdate (array ($y, $m, $d)));
+		$cdate = preg_replace ('/-/', '', $v);
 		// 1391-02-05 ~ 2050-12-31 까지는 KASI data로 처리를 한다.
 		if ( $cdate > 13910204 && $cdate < 20510101 ) {
 			if ( class_exists ('oops\KASI\Lunar') ) {
 				$kasi = true;
 				if ( $this->KASI == null )
 					$this->KASI = new oops\KASI\Lunar;
-				$r = $this->KASI->tolunar ($this->regdate (array ($y, $m, $d)));
+				$r = $this->KASI->tolunar ($v);
 				if ( $r === false )
 					return false;
 
@@ -811,14 +811,14 @@ Class Lunar extends Lunar_API {
 		list ($y, $m, $d) = $this->toargs ($v);
 
 		$kasi = false;
-		$cdate = preg_replace ('/-/', '', $this->regdate (array ($y, $m, $d)));
+		$cdate = preg_replace ('/-/', '', $v);
 		// 1391-01-01 ~ 2050-12-31 까지는 KASI data로 처리를 한다.
 		if ( $cdate > 13910101 && $cdate < 20501119 ) {
 			if ( class_exists ('oops\KASI\Lunar') ) {
 				$kasi = true;
 				if ( $this->KASI == null )
 					$this->KASI = new oops\KASI\Lunar;
-				$r = $this->KASI->tosolar ($this->regdate (array ($y, $m, $d)), $leap);
+				$r = $this->KASI->tosolar ($v, $leap);
 				if ( $r === false )
 					return false;
 
