@@ -12,13 +12,13 @@
 		<active>yes</active>
 	</lead>
 	<date>2015-12-07</date>
-	<time>22:09:02</time>
+	<time>23:41:32</time>
 	<version>
 		<release>2.0.0</release>
 		<api>2.0.0</api>
 	</version>
 	<stability>
-		<release>devel</release>
+		<release>stable</release>
 		<api>stable</api>
 	</stability>
 	<license>BSD(Lunar.php) &amp; 고영창(Lunar/Lunar_API.php)</license>
@@ -32,8 +32,8 @@
 </notes>
 	<contents>
 		<dir name="/">
-			<file role="php" md5sum="18efdc9016a956eeb4fa06c4f218e315" name="Lunar/Lunar_API.php" />
-			<file role="php" md5sum="10dee8a7d72b80a088c087b8828b68bf" name="Lunar.php" />
+			<file role="php" md5sum="bff079c66d4ed1361845349414f1aed1" name="Lunar/Lunar_API.php" />
+			<file role="php" md5sum="2e146601ef517e352cc0e5e6933f9fff" name="Lunar.php" />
 		</dir>
 	</contents>
 	<dependencies>

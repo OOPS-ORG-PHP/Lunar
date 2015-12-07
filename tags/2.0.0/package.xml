@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.9.4" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
+ <name>Lunar</name>
+ <channel>pear.oops.org</channel>
+ <summary>Solar/Lunar Convert API</summary>
+ <description>Solar/Lunar convert API. Original algorithm is by 고영창 (http://afnmp3.homeip.net/~kohyc/calendar/)</description>
+ <lead>
+  <name>JoungKyun.Kim</name>
+  <user>joungkyun</user>
+  <email>joungkyun@gmail.com</email>
+  <active>yes</active>
+ </lead>
+ <date>2015-12-07</date>
+ <time>23:41:32</time>
+ <version>
+  <release>2.0.0</release>
+  <api>2.0.0</api>
+ </version>
+ <stability>
+  <release>stable</release>
+  <api>stable</api>
+ </stability>
+ <license>BSD(Lunar.php) &amp; 고영창(Lunar/Lunar_API.php)</license>
+ <notes>
+* tolunar와 tosolar method의 date member를 fmt로 이름 변경
+* tosolar method에 gregory member 추가
+* tosloal method의 fmt member의 값은, 20151015 이전일 경우 율리우스력으로 반환하도록 변경
+* moonyoon member 이름을 leap로 변경
+* oops\KASI_Lunar package가 설치되어 있을 경우 천문과학연구원의 음양력 데이터 지원
+* use myException
+* namespace oops 추가
+ </notes>
+ <contents>
+  <dir name="/">
+   <file md5sum="bff079c66d4ed1361845349414f1aed1" name="Lunar/Lunar_API.php" role="php" />
+   <file md5sum="2e146601ef517e352cc0e5e6933f9fff" name="Lunar.php" role="php" />
+  </dir>
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>5.1.0</min>
+   </php>
+   <pearinstaller>
+    <min>1.4.3</min>
+   </pearinstaller>
+   <package>
+    <name>myException</name>
+    <channel>pear.oops.org</channel>
+    <min>1.0.1</min>
+   </package>
+  </required>
+  <optional>
+   <package>
+    <name>calendar</name>
+    <channel>php</channel>
+   </package>
+  </optional>
+ </dependencies>
+ <phprelease />
+ <changelog>
+  <release>
+   <version>
+    <release>2.0.0</release>
+    <api>2.0.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2015-12-07</date>
+   <license>BSD(Lunar.php) &amp; 고영창(Lunar/Lunar_API.php)</license>
+   <notes>
+* tolunar와 tosolar method의 date member를 fmt로 이름 변경
+* tosolar method에 gregory member 추가
+* tosloal method의 fmt member의 값은, 20151015 이전일 경우 율리우스력으로 반환하도록 변경
+* moonyoon member 이름을 leap로 변경
+* oops\KASI_Lunar package가 설치되어 있을 경우 천문과학연구원의 음양력 데이터 지원
+* use myException
+* namespace oops 추가
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.0.2</release>
+    <api>1.0.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2015-06-09</date>
+   <license>BSD(Lunar.php) &amp; 고영창(Lunar/Lunar_API.php)</license>
+   <notes>
+* 갑진년이 갑신년으로 표기되는 문제 수정
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.0.1</release>
+    <api>1.0.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2014-01-25</date>
+   <license>BSD(Lunar.php) &amp; 고영창(Lunar/Lunar_API.php)</license>
+   <notes>
+* is_leap method : 1582년 이전은 율리우스력 기준으로 윤년 판단. [@33]
+* calendar example:
+  - 6월과 7월의 마지막날 잘못 표기되는 문제 수정
+  - IE에서 calendar 토요일 밀리는 문제 해결
+  - 율리우스력 출력시에 절기 정보 잘못 나오는 문제 수정
+* Lunar Frontend method license를 BSD license로 변경
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.0.0</release>
+    <api>1.0.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2013-07-19</date>
+   <license>BSD(Lunar.php) &amp; 고영창(Lunar/Lunar_API.php)</license>
+   <notes>
+* release 1.0.0
+* 진짜 만세력 0.92(perl version) and 0.93(pascal version)으로 Core API 포팅
+* 1582년 10월 15일 이전 율리우스력 변환
+* 율리우스 적일 추가
+   </notes>
+  </release>
+ </changelog>
+</package>
