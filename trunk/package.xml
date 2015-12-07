@@ -12,7 +12,7 @@
 		<active>yes</active>
 	</lead>
 	<date>2015-12-07</date>
-	<time>18:05:32</time>
+	<time>21:18:13</time>
 	<version>
 		<release>2.0.0</release>
 		<api>2.0.0</api>
@@ -32,7 +32,7 @@
 	<contents>
 		<dir name="/">
 			<file role="php" md5sum="4ed21cd8e37848efcf6994cd64469f4c" name="Lunar/Lunar_API.php" />
-			<file role="php" md5sum="9625577c2ecc6990dadc8ac5217b995f" name="Lunar.php" />
+			<file role="php" md5sum="2e43d264030f52dfe10380012cbb8493" name="Lunar.php" />
 		</dir>
 	</contents>
 	<dependencies>
