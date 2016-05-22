@@ -1,4 +1,4 @@
-# Lunar PHP pear package
+# Lunar Calendar PHP pear package
 
 ## License
 
