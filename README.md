@@ -46,7 +46,7 @@ Lunar Pear class의 라이센스는 복합 라이센스 이므로, 주의가 필
 1. 1582년 10월 15일 이전의 표기를 율리우스력을 사용한다. (다른 calender들과 역사 기록과 맞추기 위해서...)
 1. 율리우스력을 사용하기 때문에 기원전 calender는 BC 4713년 2월 8일 부터 가능하다.
 1. 위의 이유는 ***진짜만세력***의 계산은 그레고리력으로 하기 때문에 율리우스력을 그레고리력으로 변환하기 위한 알고리즘의 제약 때문이다.
-1. 2.0 부터는 oops/KASI_Lunar pear package가 설치되어 있을 경우, 1391-02-05 ~ 2050-12-31 까지는 한국천문연구원의 음양력 DB를 지원한다.
+1. 2.0 부터는 [KASI-Lunar package](https://github.com/OOPS-ORG-PHP/KASI-Lunar) pear package가 설치되어 있을 경우, 1391-02-05 ~ 2050-12-31 까지는 한국천문연구원의 음양력 DB를 지원한다.
 
 고영창님의 진짜만세력과 동일하게 포팅한 버전을 원할 경우, http://oops.org/project/manse/original 문서를 참고 하도록 한다.
 
@@ -83,7 +83,7 @@ http://pear.oops.org/docs/oops-Lunar/Lunar/Lunar.html
  * Lunar API import
  */
 /*
- * oops/KASI_Lunar pcakge가 설치 되어 있으면, 1582년 10월 15일 이후의 음력 데이터를
+ * oops/KASI_Lunar pcakge가 설치 되어 있으면, 1391-02-05 ~ 2050-12-31 까지의 음력 데이터를
  * 한국 천문 연구소의 데이터를 이용한다.
  */
 require_once 'KASI_Lunar.php';
