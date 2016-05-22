@@ -71,6 +71,11 @@ Discovery of channel "pear.oops.org" succeeded
 [root@host ~]$ pear install oops/Lunar
 ```
 
+* dependency
+  * [myException](http://mirror.oops.org/pub/oops/php/pear/myException/)
+  * [KASI-Lunar](https://github.com/OOPS-ORG-PHP/KASI-Lunar/) (optional)
+  * pear 명령으로 설치시, myException package는 자동으로 설치 됨.
+
 ## Reference
 
 http://pear.oops.org/docs/oops-Lunar/Lunar/Lunar.html
