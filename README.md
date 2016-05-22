@@ -82,6 +82,8 @@ Discovery of channel "pear.oops.org" succeeded
 
 ## dependency
   * PHP >= 5.1.0
+  * PHP extensions
+    * calendar
   * pear packages
     * [myException](https://github.com/OOPS-ORG-PHP/myException/) >= 1.0.1
     * [KASI-Lunar](https://github.com/OOPS-ORG-PHP/KASI-Lunar/) (optional) >= 1.0.0
