@@ -1,6 +1,6 @@
 <?php
 /*
- * Test code for pear_Lunar
+ * Test code for Lunar
  * $Id$
  *
  * 1841-01-0 ~ 2041-01-01

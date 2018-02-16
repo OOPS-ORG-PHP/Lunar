@@ -1,6 +1,6 @@
 <?php
 /*
- * Test code for pear_Lunar_KASI
+ * Test code for Lunar_KASI
  * $Id$
  */
 

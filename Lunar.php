@@ -41,7 +41,7 @@
  *
  * 주의!
  *
- * pear_Lunar package는 2가지 라이센스를 가지고 있다. pear_Lunar 패키지의
+ * Lunar package는 2가지 라이센스를 가지고 있다. Lunar 패키지의
  * Core API (Lunar/Lunar_API.php)는 고영창님의 '진짜만세력' 코드를 PHP로
  * 포팅한 것으로, 고영창님에게 라이센스가 있으며, front end API(Lunar.php)는
  * 김정균이 작성한 코드들로 BSD license를 따른다.
@@ -49,12 +49,11 @@
  * @category    Calendar
  * @package     oops\Lunar
  * @author      JoungKyun.Kim <http://oops.org>
- * @copyright   (c) 2015 OOPS.org
+ * @copyright   (c) 2018, OOPS.org
  * @license     BSD (Lunar.php) And 고영창(Lunar/Lunar_API.php)
- * @version     SVN: $Id$
  * @link        http://pear.oops.org/package/Lunar
  * @since       File available since release 0.0.1
- * @example     pear_Lunar/tests/test.php Sample code
+ * @example     Lunar/tests/test.php Sample code
  * @filesource
  */
 
@@ -116,10 +115,9 @@ require_once 'Lunar/Lunar_API.php';
  *
  * @package     oops\Lunar
  * @author      JoungKyun.Kim <http://oops.org>
- * @copyright   (c) 2015 OOPS.org
+ * @copyright   (c) 2018, OOPS.org
  * @license     BSD (Lunar.php) And 고영창(Lunar/Lunar_API.php)
- * @version     SVN: $Id$
- * @example     pear_Lunar/tests/test.php Sample code
+ * @example     Lunar/tests/test.php Sample code
  */
 Class Lunar extends Lunar_API {
 	private $KASI = null;
@@ -130,7 +128,7 @@ Class Lunar extends Lunar_API {
 	 * 입력된 변수 값은 YYYY-MM-DD 형식으로 변환 된다.
 	 *
 	 * 예제:
-	 * {@example pear_Lunar/tests/sample.php 30 25}
+	 * {@example Lunar/tests/sample.php 30 25}
 	 *
 	 * @access public
 	 * @return array
@@ -193,7 +191,7 @@ Class Lunar extends Lunar_API {
 	 * 연도를 human readable하게 표시
 	 *
 	 * 예제:
-	 * {@example pear_Lunar/tests/sample.php 56 11}
+	 * {@example Lunar/tests/sample.php 56 11}
 	 *
 	 * @access public
 	 * @return string   AD/BC type의 연도
@@ -266,7 +264,7 @@ Class Lunar extends Lunar_API {
 	 * 윤년 체크
 	 *
 	 * 예제:
-	 * {@example pear_Lunar/tests/sample.php 68 14}
+	 * {@example Lunar/tests/sample.php 68 14}
 	 *
 	 * @access public
 	 * @return bool
@@ -677,7 +675,7 @@ Class Lunar extends Lunar_API {
 	 * 천문과학연구원의 데이터를 이용할 수 있도록 지원한다.
 	 *
 	 * 예제:
-	 * {@example pear_Lunar/tests/sample.php 83 35}
+	 * {@example Lunar/tests/sample.php 83 35}
 	 *
 	 * @access public
 	 * @return stdClass    음력 날자 정보 반환
@@ -792,7 +790,7 @@ Class Lunar extends Lunar_API {
 	 * 한다.
 	 *
 	 * 예제:
-	 * {@example pear_Lunar/tests/sample.php 119 42}
+	 * {@example Lunar/tests/sample.php 119 42}
 	 *
 	 * @access public
 	 * @return stdClass    양력 날자 정보 object 반환
@@ -914,7 +912,7 @@ Class Lunar extends Lunar_API {
 	 * 세차(년)/월건(월)/일진(일) 데이터를 구한다.
 	 *
 	 * 예제:
-	 * {@example pear_Lunar/tests/sample.php 163 56}
+	 * {@example Lunar/tests/sample.php 163 56}
 	 *
 	 * @access public
 	 * @return stdClass
@@ -969,7 +967,7 @@ Class Lunar extends Lunar_API {
 	 * 특정일의 28수를 구한다.
 	 *
 	 * 예제:
-	 * {@example pear_Lunar/tests/sample.php 221 35}
+	 * {@example Lunar/tests/sample.php 221 35}
 	 *
 	 * @access public
 	 * @return stdClass
@@ -1021,7 +1019,7 @@ Class Lunar extends Lunar_API {
 	 * 해당 양력일에 대한 음력 월의 절기 시간 구하기
 	 *
 	 * 예제:
-	 * {@example pear_Lunar/tests/sample.php 257 52}
+	 * {@example Lunar/tests/sample.php 257 52}
 	 *
 	 * @access public
 	 * @return stdClass   현달 초입/중기와 다음달 초입 데이터 반환
@@ -1181,7 +1179,7 @@ Class Lunar extends Lunar_API {
 	 * 양력일에 대한 음력월 합삭/망 데이터 구하기
 	 *
 	 * 예제:
-	 * {@example pear_Lunar/tests/sample.php 311 56}
+	 * {@example Lunar/tests/sample.php 311 56}
 	 *
 	 * @access public
 	 * @return stdClass	합삭/망 object
@@ -1293,7 +1291,7 @@ Class Lunar extends Lunar_API {
 	 * 값을 구함
 	 *
 	 * 예제:
-	 * {@example pear_Lunar/tests/sample.php 163 56}
+	 * {@example Lunar/tests/sample.php 163 56}
 	 *
 	 * @access public
 	 * @return string

@@ -67,10 +67,10 @@ $s28  = $lunar->s28day ($cdate);
 $season = $lunar->seasondate ($cdate);
 
 /*
- * pear_Lunar 1.0.0에서는 is_leap method가 연도만으로 율리우스력
+ * Lunar 1.0.0에서는 is_leap method가 연도만으로 율리우스력
  * 판단을 하지 않으며로 아래과 같이 조건을 체크해야 한다.
  * if ( $lunar->is_leap ($year, $year < 1583 ? true : false) )
- * pear_Lunar 1.0.1 부터는 2번째 인자가 없어도, 연도만으로
+ * Lunar 1.0.1 부터는 2번째 인자가 없어도, 연도만으로
  * 율리우스력 판단을 한다.
  */
 if ( $lunar->is_leap ($year) )
@@ -481,7 +481,7 @@ EOF;
 				<li>위의 이유는 <span class="label label-warning">진짜만세력</span>의
 					계산은 그레고리력으로 하기 때문에 율리우스력을 그레고리력으로
 					변환하기 위한 알고리즘의 제약 때문이다.</li>
-				<li>2.0 부터는 <a href="http://pear.oops.org/">oops/KASI_Lunar pear package</a>가
+				<li>2.0 부터는 <a href="https://github.com/OOPS-ORG-PHP/KASI-Lunar/">oops/KASI_Lunar pear package</a>가
 					설치되어 있을 경우, 1391-02-05 ~ 2050-12-31 까지는 한국천문연구원의 음양력
 					DB를 지원한다.</li>
 			</ol>
@@ -532,7 +532,7 @@ EOF;
 			<span class="label">Original Site</span>
 			<a href="http://afnmp3.homeip.net:81/~kohyc/calendar/index.cgi">http://afnmp3.homeip.net:81/~kohyc/calendar/index.cgi</a><br>
 			<span class="label">PHP Source</span>
-			<a href="http://svn.oops.org/wsvn/PHP.pear_Lunar/trunk/">OOPS.org SVN</a><br>
+			<a href="https://github.com/OOPS-ORG-PHP/Lunar">GitHUB</a><br>
 			<span class="label">Download &amp; Installation</span>
 			<a href="http://pear.oops.org/">pear.oops.org</a>
 			</p>
