@@ -200,8 +200,8 @@ Class Lunar_API {
 	 */
 	protected $ganji = array (
 		'갑자', '을축', '병인', '정묘', '무진', '기사', '경오', '신미', '임신', '계유', '갑술', '을해',
-		'병자', '정축', '무인', '기묘', '경진', '신사', '임오', '계미', '갑신', '을유', '병술', '정해', 
-		'무자', '기축', '경인', '신묘', '임진', '계사', '갑오', '을미', '병신', '정유', '무술', '기해', 
+		'병자', '정축', '무인', '기묘', '경진', '신사', '임오', '계미', '갑신', '을유', '병술', '정해',
+		'무자', '기축', '경인', '신묘', '임진', '계사', '갑오', '을미', '병신', '정유', '무술', '기해',
 		'경자', '신축', '임인', '계묘', '갑진', '을사', '병오', '정미', '무신', '기유', '경술', '신해',
 		'임자', '계축', '갑인', '을묘', '병진', '정사', '무오', '기미', '경신', '신유', '임술', '계해'
 	);
@@ -332,7 +332,30 @@ Class Lunar_API {
 			$ppp2 = $pp2 - 1;
 
 			for ( $k = $ppp1; $k <= $ppp2; $k++ ) {
-				if ( $k == -2000 && $ppp2 > 1990 ) {
+				# 0.93 diff {{{
+				if ( $k == -9000 && $ppp2 > 1990 ) {
+					$dis += 4014377;
+					$k = 1991;
+				} else if ( $k == -8000 && $ppp2 > 1990 ) {
+					$dis += 3649135;
+					$k = 1991;
+				} else if ( $k == -7000 && $ppp2 > 1990 ) {
+					$dis += 3283893;
+					$k = 1991;
+				} else if ( $k == -6000 && $ppp2 > 1990 ) {
+					$dis += 2918651;
+					$k = 1991;
+				} else if ( $k == -5000 && $ppp2 > 1990 ) {
+					$dis += 2553408;
+					$k = 1991;
+				} else if ( $k == -4000 && $ppp2 > 1990 ) {
+					$dis += 2188166;
+					$k = 1991;
+				} else if ( $k == -3000 && $ppp2 > 1990 ) {
+					$dis += 1822924;
+					$k = 1991;
+				# 0.93 diff }}}
+				} else if ( $k == -2000 && $ppp2 > 1990 ) {
 					$dis += 1457682;
 					$k = 1991;
 				} else if ( $k == -1750 && $ppp2 > 1990 ) {
@@ -396,7 +419,7 @@ Class Lunar_API {
 	// {{{ +-- protected (int) getminbytime ($uy, $umm, $ud, $uh, $umin, $y1, $mo1, $d1, $h1, $mm1)
 	/**
 	 * uy,umm,ud,uh,umin과 y1,mo1,d1,h1,mm1사이의 시간(분)
-	 * 
+	 *
 	 * @access protected
 	 * @return int 분
 	 * @param int
@@ -436,7 +459,6 @@ Class Lunar_API {
 	 */
 	protected function getdatebymin ($tmin, $uyear, $umonth, $uday, $uhour, $umin) {
 		$y1 = $mo1 = $d1 = $h1 = $mi1 = $t = 0;
-
 		$y1 = $uyear - $this->div ($tmin, 525949);
 
 		if ( $tmin > 0 ) {
@@ -483,7 +505,7 @@ Class Lunar_API {
 			$mo1--;
 			$d1 = 0;
 			do {
-				$d1 = $d1 + 1;
+				$d1++;
 				$t = $this->getminbytime ($uyear, $umonth, $uday, $uhour, $umin, $y1, $mo1, $d1, 0, 0);
 			} while ( $t >= $tmin );
 
@@ -521,7 +543,7 @@ Class Lunar_API {
 	 *       [4] => 20   // 60간지의 시 배열 index
 	 *   )
 	 *   </pre>
-	 * 
+	 *
 	 * @param int
 	 * @param int
 	 * @param int
@@ -564,7 +586,7 @@ Class Lunar_API {
 			$j = $i * 2;
 			if ( ($this->month[$j] <= $monthmin100) && ($monthmin100 < $this->month[$j+2]))
 				$so24month = $i;
-		};
+		}
 
 		// 월주 구하기
 		$i = $so24month;
@@ -572,12 +594,11 @@ Class Lunar_API {
 		$t %= 5 ;
 		$t = $t * 12 + 2 + $i;
 		$so24month = $t ;
-		if ( $so24month > 59 ) 
+		if ( $so24month > 59 )
 			$so24month -= 60;
 
-		$so24day = $displ2day % 60;
-
 		// 일주 구하기
+		$so24day = $displ2day % 60;
 		$so24day *= -1;
 		$so24day += 7;
 		if ( $so24day < 0 )
@@ -632,12 +653,11 @@ Class Lunar_API {
 			|| ($solorhour == 23 && $solormin < 30) )
 			$i = 11;
 
-		else if ( $solorhour == 23 && $solormin >= 30 )
-		{
+		else if ( $solorhour == 23 && $solormin >= 30 ) {
 			$so24day++;
 			if ( $so24day == 60 )
 				$so24day = 0;
-			$i=0;
+			$i = 0;
 		}
 
 		$t = $so24day % 10;
@@ -674,6 +694,7 @@ Class Lunar_API {
 		);
 
 		# 이거 고민좀 해 봐야 할 듯!!
+		# perl 과 php 의 음수의 나머지 결과값이 다르다! --;
 		#$monthmin100 = $displ2min % 525949;
 		#$monthmin100 = 525949 - $monthmin100;
 		$monthmin100 = ($displ2min % 525949) * -1;
@@ -681,7 +702,7 @@ Class Lunar_API {
 		if ( $monthmin100 < 0 )
 			$monthmin100 += 525949;
 		else if ( $monthmin100 >= 525949 )
-			$monthmin100 = $monthmin - 525949;
+			$monthmin100 -= 525949;
 
 		$i = $so24month % 12 - 2;
 		if ( $i == -2 ) $i = 10;
@@ -834,17 +855,17 @@ Class Lunar_API {
 		while ( $de > 13.5 ) {
 			$d--;
 			$de = $this->moonsundegree ($d);
-		};
+		}
 
 		while ( $de > 1 ) {
 			$d -= 0.04166666666;
 			$de = $this->moonsundegree ($d);
-		};
+		}
 
 		while ( $de < 359.99 ) {
 			$d -= 0.000694444;
 			$de = $this->moonsundegree ($d);
-		};
+		}
 
 		$d += 0.375;
 		$d *= 1440;
@@ -857,17 +878,17 @@ Class Lunar_API {
 		while ( $de < 346.5 ) {
 			$d++;
 			$de = $this->moonsundegree ($d);
-		};
+		}
 
 		while ( $de < 359 ) {
 			$d += 0.04166666666;
 			$de = $this->moonsundegree ($d);
-		};
+		}
 
 		while ( $de > 0.01 ) {
 			$d += 0.000694444;
 			$de = $this->moonsundegree ($d);
-		};
+		}
 
 		$pd = $d;
 		$d  += 0.375;
@@ -882,46 +903,57 @@ Class Lunar_API {
 			$hour  = $hour2;
 			$min   = $min2;
 
+			# {{{ for 0.93 diff
 			$d = $pd + 26;
 
-			$de = $this->moonsundegree ($d);      
-			while ( $de < 346.5) {
+			$de = $this->moonsundegree ($d);
+			while ( $de < 346.5 ) {
 				$d++;
 				$de = $this->moonsundegree ($d);
-			};
+			}
+			# 위의 라인 부분이 pascal(0.93) 버전에서는 아래와 같이 처리 되어 있음.
+			# 함수 반환 값의 차이가 없는 것으로 보아 성능 개선 코드일까?
+			#$d = $pd;
+			#while ( $de < 347 ) {
+			#	$d++;
+			#	$de = $this->moonsundegree ($d);
+			#}
+			# 0.93 diff }}}
 
 			while ( $de < 359 ) {
 				$d += 0.04166666666;
 				$de = $this->moonsundegree ($d);
-			};
+			}
 
 			while ( $de > 0.01 ) {
 				$d += 0.000694444;
 				$de = $this->moonsundegree ($d);
-			};
+			}
 
 			$d += 0.375;
 			$d *= 1440;
 			$i = (int) $d * -1;
 			list ($year2, $month2, $day2, $hour2, $min2) = $this->getdatebymin ($i, 1995, 12, 31, 0, 0);
-		};
+		}
 
+		# 음력 초하루
 		$d = $this->disp2days ($year, $month, $day, 1995, 12, 31);
+		# 음력 12월
 		$d += 12;
 
 		$de = $this->moonsundegree ($d);
 		while ( $de < 166.5 ) {
 			$d++;
 			$de = $this->moonsundegree ($d);
-		};
+		}
 		while ( $de < 179 ) {
 			$d += 0.04166666666;
 			$de = $this->moonsundegree ($d);
-		};
+		}
 		while ( $de < 179.999 ) {
 			$d += 0.000694444;
 			$de = $this->moonsundegree ($d);
-		};
+		}
 
 		$d += 0.375;
 		$d *= 1440;
@@ -963,12 +995,12 @@ Class Lunar_API {
 			$y0, $mo0, $d0, $h0, $mi0, $y1, $mo1, $d1, $h1, $mi1)
 			= $this->getlunarfirst ($solyear, $solmon, $solday);
 
-		$lday = $this->disp2days ($solyear, $solmon, $solday, $smoyear, $smomonth, $smoday)+1;
+		$lday = $this->disp2days ($solyear, $solmon, $solday, $smoyear, $smomonth, $smoday) + 1;
 
-		$i=abs ($this->disp2days ($smoyear, $smomonth, $smoday, $y1, $mo1, $d1));
-		if ( $i==30 )
+		$i = abs ($this->disp2days ($smoyear, $smomonth, $smoday, $y1, $mo1, $d1));
+		if ( $i == 30 )
 			$largemonth = 1; # 대월
-		if ( $i==29 )
+		if ( $i == 29 )
 			$largemonth = 0; # 소월
 
 		list ($inginame, $ingiyear, $ingimonth, $ingiday, $ingihour, $ingimin,
@@ -978,7 +1010,7 @@ Class Lunar_API {
 
 		$midname2 = $midname1 + 2;
 		if ( $midname2 > 24 )
-			$midname2=1;
+			$midname2 = 1;
 		$s0 = $this->month[$midname2] - $this->month[$midname1];
 		if ( $s0 < 0 )
 			$s0 += 525949;
@@ -996,11 +1028,11 @@ Class Lunar_API {
 				$leap = 0;
 			} else {
 				if (  $smomonth < $midmonth2 && $midmonth2 < $mo1 ) {
-					$lmonth   = ($midname2 - 1) /2 + 1;
+					$lmonth   = ($midname2 - 1) / 2 + 1;
 					$leap = 0;
 				} else {
 					$lmonth   = ($midname1 - 1) / 2 + 1;
-					$leap =1;
+					$leap = 1;
 				}
 			}
 		}
@@ -1031,9 +1063,9 @@ Class Lunar_API {
 						if ( $lmonth == 0 ) { 
 							$lyear--;
 							$lmonth = 12;
-						};
+						}
 						$leap = 0;
-					};
+					}
 				} else {
 					if ( $lmonth == $outgimonth ) {
 						$leap = 1;
@@ -1110,7 +1142,7 @@ Class Lunar_API {
 				}
 			}
 		} else {
-			// ㅈ우기가 두번든 달의 전후
+			// 중기가 두번든 달의 전후
 			list ($lyear2, $lmonth2, $lday2, $lnp, $lnp2)
 				= $this->solartolunar ($year1, $month1, $day1);
 			if ( $lyear2 == $lyear && $lmonth == $lmonth2 ) {
@@ -1183,8 +1215,12 @@ Class Lunar_API {
 				$d += 28;
 		}
 
+		# {{{ for 0.93 diff
+		# parscal(0.93) 버전에서는 이 2라인이 제거 되어 있음.
+		# 실행의 값은 차이가 없는데, 성능 개선인가?
 		if ( $d < 0 )
 			$d += 7;
+		# 0.93 diff }}}
 
 		$d -= 11;
 

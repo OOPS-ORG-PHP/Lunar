@@ -1136,7 +1136,8 @@ Class Lunar extends Lunar_API {
 			$outgiday   = $r->day;
 		}
 
-		return (object) array (
+		unset ($r);
+		$r = (object) array (
 			'center'  => (object) array (
 				'name'   => $this->month_st[$inginame],
 				'hname'  => $this->hmonth_st[$inginame],
@@ -1171,6 +1172,38 @@ Class Lunar extends Lunar_API {
 				'julian' => $j_ne
 			)
 		);
+
+		# KASI-Lunar package 가 있으면, 한국 천문 연구원의 2004~2026년도 절기 데이터를
+		# 이용한다.
+		if ( class_exists ('oops\KASI\Lunar') ) {
+			if ( $this->KASI == null )
+				$this->KASI = new \oops\KASI\Lunar;
+
+			# KASI-Lunar > 2.0.0 부터 사용 가능하다.
+			# season method 가 없으면 진짜만세력 절기 데이터를 그냥 반환한다.
+			if ( ! method_exists ($this->KASI, 'season') )
+				return $r;
+
+			foreach ( $r as $k => $v ) {
+				$kv = $this->KASI->season ($r->{$k}->name, $r->{$k}->year);
+				if ( $kv != false ) {
+					$r->{$k}->month  = $kv->month;
+					$r->{$k}->day    = $kv->day;
+					$r->{$k}->hour   = $kv->hour;
+					$r->{$k}->min    = $kv->min;
+					$r->{$k}->julian = $this->to_utc_julian (
+						sprintf (
+							'%s %s:%s:00',
+							$this->regdate (array ($r->{$k}->year, $r->{$k}->month, $r->{$k}->day)),
+							$r->{$k}->hour < 10 ? '0' . $r->{$k}->hour : $r->{$k}->hour,
+							$r->{$k}->min < 10 ? '0' . $r->{$k}->min : $r->{$k}->min
+						)
+					);
+				}
+			}
+		}
+
+		return $r;
 	}
 	// }}}
 
