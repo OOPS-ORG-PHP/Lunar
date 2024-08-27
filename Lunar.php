@@ -115,7 +115,7 @@ require_once 'Lunar/Lunar_API.php';
  *
  * @package     oops\Lunar
  * @author      JoungKyun.Kim <http://oops.org>
- * @copyright   (c) 2018, OOPS.org
+ * @copyright   (c) 2024, OOPS.org
  * @license     BSD (Lunar.php) And 고영창(Lunar/Lunar_API.php)
  * @example     Lunar/tests/test.php Sample code
  */
