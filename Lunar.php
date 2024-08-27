@@ -36,7 +36,7 @@
  * 참고!
  *
  * oops\KASI_Lunar pear package를 설치한 후에, KASI_Lunar.php 를 include 하면,
- * 내부적으로 1391-02-05 ~ 2050-12-31 기간은 한국천문연구원의 음양력 DB를 이용하여
+ * 내부적으로 1391-02-05 ~ 2050-12-31 기간은 천문과학연구원의 음양력 DB를 이용하여
  * 처리를 한다.
  *
  * 주의!
@@ -49,9 +49,9 @@
  * @category    Calendar
  * @package     oops\Lunar
  * @author      JoungKyun.Kim <http://oops.org>
- * @copyright   (c) 2018, OOPS.org
+ * @copyright   (c) 2024, OOPS.org
  * @license     BSD (Lunar.php) And 고영창(Lunar/Lunar_API.php)
- * @link        http://pear.oops.org/package/Lunar
+ * @link        https://github.com/OOPS-ORG-PHP/Lunar
  * @since       File available since release 0.0.1
  * @example     Lunar/tests/test.php Sample code
  * @filesource
@@ -110,7 +110,7 @@ require_once 'Lunar/Lunar_API.php';
  * 참고!
  *
  * oops\KASI_Lunar pear package를 설치한 후에, KASI_Lunar.php 를 include 하면,
- * 내부적으로 1391-02-05 ~ 2050-12-31 기간은 한국천문연구원의 음양력 DB를 이용하여
+ * 내부적으로 1391-02-05 ~ 2050-12-31 기간은 천문과학연구원의 음양력 DB를 이용하여
  * 처리를 한다.
  *
  * @package     oops\Lunar
@@ -1018,6 +1018,9 @@ Class Lunar extends Lunar_API {
 	/**
 	 * 해당 양력일에 대한 음력 월의 절기 시간 구하기
 	 *
+	 * 2.0.1 부터는 KASI-Lunar 2.0.0 이상이 설치 되어 있을 경우,
+	 * 천문과학연구원의 2004~2026 의 절기 데이터를 이용한다.
+	 *
 	 * 예제:
 	 * {@example Lunar/tests/sample.php 257 52}
 	 *
@@ -1173,7 +1176,7 @@ Class Lunar extends Lunar_API {
 			)
 		);
 
-		# KASI-Lunar package 가 있으면, 한국 천문 연구원의 2004~2026년도 절기 데이터를
+		# KASI-Lunar package 가 있으면, 천문과학연구원의 2004~2026년도 절기 데이터를
 		# 이용한다.
 		if ( class_exists ('oops\KASI\Lunar') ) {
 			if ( $this->KASI == null )

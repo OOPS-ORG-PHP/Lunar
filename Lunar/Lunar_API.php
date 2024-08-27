@@ -24,9 +24,9 @@
  * @package     oops\Lunar
  * @subpackage	Lunar Core API
  * @author      JoungKyun.Kim <http://oops.org>
- * @copyright   (c) 2018, OOPS.org
+ * @copyright   (c) 2024, OOPS.org
  * @license     고영창 (http://afnmp3.homeip.net/~kohyc/calendar/index.cgi)
- * @link        http://pear.oops.org/package/Lunar
+ * @link        https://github.com/OOPS-ORG-PHP/Lunar
  * @filesource
  */
 
@@ -58,7 +58,7 @@ namespace oops;
  * @package     oops\Lunar
  * @subpackage	Lunar Core API
  * @author      JoungKyun.Kim <http://oops.org>
- * @copyright   (c) 2018, OOPS.org
+ * @copyright   (c) 2024, OOPS.org
  * @license     고영창 (http://afnmp3.homeip.net/~kohyc/calendar/index.cgi)
  * @filesource
  */
