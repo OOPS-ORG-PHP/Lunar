@@ -735,6 +735,10 @@ Class Lunar extends Lunar_API {
 				$kasi = true;
 				if ( $this->KASI == null )
 					$this->KASI = new \oops\KASI\Lunar;
+
+				# Lunar_KASI::tolunar method 는 1391-02-05 ~ 2050-12-31 구간을 벗어나면 Exception 을
+				# 발생 시킨다. 그러므로 예외 처리가 필요하다. 하지만 여기서는 상단에 이미 에외 구간을
+				# 제한하고 있어, 딱히 예외 처리를 할 필요는 없다.
 				$r = $this->KASI->tolunar ($v);
 				if ( $r === false )
 					return false;
@@ -852,6 +856,10 @@ Class Lunar extends Lunar_API {
 				$kasi = true;
 				if ( $this->KASI == null )
 					$this->KASI = new \oops\KASI\Lunar;
+
+				# Lunar_KASI::tosolar method 는 1391-01-01 ~ 2050-12-31 구간을 벗어나면 Exception 을
+				# 발생 시킨다. 그러므로 예외 처리가 필요하다. 하지만 여기서는 상단에 이미 에외 구간을
+				# 제한하고 있어, 딱히 예외 처리를 할 필요는 없다.
 				$r = $this->KASI->tosolar ($v, $leap);
 				if ( $r === false )
 					return false;
@@ -1201,21 +1209,26 @@ Class Lunar extends Lunar_API {
 				return $r;
 
 			foreach ( $r as $k => $v ) {
-				$kv = $this->KASI->season ($r->{$k}->name, $r->{$k}->year);
-				if ( $kv != false ) {
-					$r->{$k}->month  = $kv->month;
-					$r->{$k}->day    = $kv->day;
-					$r->{$k}->hour   = $kv->hour;
-					$r->{$k}->min    = $kv->min;
-					$r->{$k}->julian = $this->to_utc_julian (
-						sprintf (
-							'%s %s:%s:00',
-							$this->regdate (array ($r->{$k}->year, $r->{$k}->month, $r->{$k}->day)),
-							$r->{$k}->hour < 10 ? '0' . $r->{$k}->hour : $r->{$k}->hour,
-							$r->{$k}->min < 10 ? '0' . $r->{$k}->min : $r->{$k}->min
-						)
-					);
-				}
+				# 2004-01 ~ 2026-12 이 후의 범위에서 Exception 이 발생하므로 예외 처리를 해 줘야 한다.
+				# KASI_Lunar 2.0.1 부터는 KASI_Lunar::is_exception = false; 설정으로 Exception 를
+				# 발생하지 않게 할 수 있다.
+				try {
+					$kv = $this->KASI->season ($r->{$k}->name, $r->{$k}->year);
+					if ( $kv != false ) {
+						$r->{$k}->month  = $kv->month;
+						$r->{$k}->day    = $kv->day;
+						$r->{$k}->hour   = $kv->hour;
+						$r->{$k}->min    = $kv->min;
+						$r->{$k}->julian = $this->to_utc_julian (
+							sprintf (
+								'%s %s:%s:00',
+								$this->regdate (array ($r->{$k}->year, $r->{$k}->month, $r->{$k}->day)),
+								$r->{$k}->hour < 10 ? '0' . $r->{$k}->hour : $r->{$k}->hour,
+								$r->{$k}->min < 10 ? '0' . $r->{$k}->min : $r->{$k}->min
+							)
+						);
+					}
+				} catch ( \myException $e ) { /* no action */ }
 			}
 		}
 
