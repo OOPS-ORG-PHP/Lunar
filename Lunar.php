@@ -122,6 +122,19 @@ require_once 'Lunar/Lunar_API.php';
 Class Lunar extends Lunar_API {
 	private $KASI = null;
 
+	// {{{ +-- public version (void)
+	/**
+	 * oops\Lunar package 의 버전을 반환.
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function version () {
+		# 관리를 위하여 single quote 를 사용할 것!
+		return '2.0.2';
+	}
+	// }}}
+
 	// {{{ +-- public (array) toargs ($v, $lunar = fasle)
 	/**
 	 * 입력된 날자 형식을 연/월/일의 멤버를 가지는 배열로 반환한다.
