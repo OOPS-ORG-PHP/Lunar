@@ -16,6 +16,11 @@ curtime=$(date +'%H:%M:%S')
 perl -pi -e "s!\@curdate\@!${curdate}!g" ./package.xml
 perl -pi -e "s!\@curtime\@!${curtime}!g" ./package.xml
 
+version="$(
+    cat ./package.xml | grep "<release>" | head -n 1 | sed -r 's/[[:space:]]*<[^>]+>//g'
+)"
+perl -pi -e "s/return '[0-9]+\.[0-9]+\.[0-9]+';/return '${version}';/g" ./KASI_Lunar.php
+
 #phpdoc -s on -o HTML:Smarty:PHP -f edb.php,EDB/*.php -t docs
 
 [ -z "$1" ] && pear package

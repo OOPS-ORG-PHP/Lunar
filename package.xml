@@ -10,10 +10,10 @@
 		<email>joungkyun@gmail.com</email>
 		<active>yes</active>
 	</lead>
-	<date>2024-08-28</date>
-	<time>01:10:00</time>
+	<date>2024-08-30</date>
+	<time>06:04:29</time>
 	<version>
-		<release>2.0.1</release>
+		<release>2.0.2</release>
 		<api>2.0.0</api>
 	</version>
 	<stability>
@@ -21,14 +21,13 @@
 		<api>stable</api>
 	</stability>
 	<license>BSD(Lunar.php) And 고영창(Lunar/Lunar_API.php)</license>
-	<notes>- 천문과학연구원의 절기 데이터 연동
-- original 진짜만세력 0.93 Pascal 버전 변경 사항 적용
-- fixed typo in oops\Lunar::sydtoso24yd method
+	<notes>* oops\Lunar::version method :: oops\Lunar 의 버전을 반환
+* oops\Lunar::seasondate() method :: KASI_Lunar 의 절기 데이트 범위를 벗어날 경우 Fatal Error 발생 이슈 수정
 </notes>
 	<contents>
 		<dir name="/">
 			<file role="php" md5sum="bf017956e45277c75dea43b2e124b5ef" name="Lunar/Lunar_API.php" />
-			<file role="php" md5sum="5709bb7e926fb21797b6c7c5d81912bf" name="Lunar.php" />
+			<file role="php" md5sum="e467ce8303430e6807ac23e9595738e4" name="Lunar.php" />
 		</dir>
 	</contents>
 	<dependencies>
@@ -54,6 +53,21 @@
 	</dependencies>
 	<phprelease />
 	<changelog>
+		<release>
+			<version>
+				<release>2.0.2</release>
+				<api>2.0.0</api>
+			</version>
+			<stability>
+				<release>stable</release>
+				<api>stable</api>
+			</stability>
+			<date>2024-08-30</date>
+			<license>BSD(Lunar.php) And 고영창(Lunar/Lunar_API.php)</license>
+			<notes>* oops\Lunar::version method :: oops\Lunar 의 버전을 반환
+* oops\Lunar::seasondate() method :: KASI_Lunar 의 절기 데이트 범위를 벗어날 경우 Fatal Error 발생 이슈 수정
+</notes>
+		</release>
 		<release>
 			<version>
 				<release>2.0.1</release>
